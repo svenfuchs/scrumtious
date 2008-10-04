@@ -1,0 +1,26 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %>
+</p>
+
+<h1>New release</h1>
+
+<% form_for(@release) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :project_id %>
+  <p>
+    <%= f.label :remote_id, 'Lighthouse milestone id' %><br />
+    <%= f.text_field :remote_id %>
+  </p>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.label :body %><br />
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit "Create" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>

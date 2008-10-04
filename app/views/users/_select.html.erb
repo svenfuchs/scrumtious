@@ -1,0 +1,6 @@
+<% unless (users = User.all).empty? %>
+  <form action="<%= login_path %>">
+    <%= hidden_field_tag :return_to, request.url %>
+    <%= collection_select :current_user, :id, users, :id, :first_name, {:prompt => 'Current user'}, :onchange => "this.form.submit()" %>
+  </form>
+<% end %>

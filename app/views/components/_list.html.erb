@@ -1,0 +1,9 @@
+<h2>Components</h2>
+
+<p><%= link_to 'new component', new_component_path(:component => {:project_id => @project.id}) %></p>
+
+<ul>
+<% for component in components %>
+  <li><%= link_to h(component.name), edit_component_path(component) %></li>
+<% end %>
+</ul>

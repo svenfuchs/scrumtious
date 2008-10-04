@@ -1,0 +1,5 @@
+<h1>Activities log</h1>
+
+<p><%= link_to 'new activity', new_activity_path %></p>
+
+<%= render :partial => 'list', :locals => {:activities => @activities} %>

@@ -1,0 +1,36 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= link_to(h(@release.name), @release) + ' »' if @release %>
+  <%= link_to(h(@sprint.name), @sprint) + ' »' if @sprint %>
+  <%= h(@ticket.title) %>
+</p>
+
+<h1>Editing ticket</h1>
+
+<%= link_to 'split out child ticket', tickets_path(:ticket => @ticket.to_params.merge(:parent_id => @ticket.id)), :method => :post %> &middot;
+<%= link_to 'delete', @ticket, :method => :delete, :confirm => 'Are you sure?' %>
+
+<% form_for(@ticket) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :user_id, 'Assigned to' %><br />
+    <%= f.collection_select :user_id, User.all, :id, :first_name, :include_blank => true %>
+  </p>
+  <p>
+    <%= f.label :scheduled %><br />
+    <%= f.text_field :scheduled %>
+  </p>
+  <p>
+    <%= f.label :estimated %><br />
+    <%= f.text_field :estimated %>
+  </p>
+  <p>
+    <%= f.label :actual %><br />
+    <%= f.text_field :actual %>
+  </p>
+  <p>
+    <%= f.submit "Update" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>
+

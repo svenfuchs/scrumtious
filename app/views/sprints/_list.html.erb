@@ -1,0 +1,9 @@
+<% if sprints.size > 0 %>
+  <h2>Sprints</h2>
+
+  <ul>
+  <% for sprint in sprints %>
+    <li><%= link_to h(sprint.name), sprint %></li>
+  <% end %>
+  </ul>
+<% end %>

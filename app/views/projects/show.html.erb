@@ -1,0 +1,12 @@
+<div id="breadcrumbs">
+  <%= link_to 'Projects', projects_path %> »
+  <%=h @project.name %>
+</div>
+
+<div id="action">
+  <%= link_to 'pull', synchronizers_path(:project_id => @project.id), :method => :post %> &middot;
+  <%= link_to 'edit', edit_project_path(@project) %> &middot;
+  <%= link_to 'destroy', @project, :confirm => 'Are you sure?', :method => :delete %>
+</div>
+
+<%= render :partial => "tickets/list", :locals => {:tickets => @project.tickets, :tracking => false, :headline => 'Project backlog' } %>

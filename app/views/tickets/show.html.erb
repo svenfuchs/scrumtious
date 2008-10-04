@@ -1,0 +1,41 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= h @ticket.title %>
+</p>
+
+<h1><%=h @ticket.title %></h1>
+<p>
+  <%= link_to 'edit', edit_ticket_path(@ticket) %>
+</p>
+
+
+<p>
+  <b>Release:</b>
+  <%=h @ticket.release.name if @ticket.release %>
+</p>
+<p>
+  <b>Sprint:</b>
+  <%=h @ticket.sprint.name if @ticket.sprint %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%=h @ticket.state %>
+</p>
+<p>
+  <b>Scheduled:</b>
+  <%=h @ticket.scheduled.to_i %> hours
+</p>
+<!-- <p>
+  <b>Estimated:</b>
+  <%=h @ticket.estimated.to_i %> hours
+</p> -->
+<p>
+  <b>Actual:</b>
+  <%=h @ticket.actual.to_i %> hours
+</p>
+
+<p><%=h @ticket.body %></p>
+
+

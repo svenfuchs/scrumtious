@@ -1,0 +1,30 @@
+<h1>Activity</h1>
+
+<% form_for(@activity) do |f| %>
+  <%= f.error_messages %>
+  <p>
+    <%= f.label :ticket_id, 'Ticket' %><br />
+    <%= f.collection_select :ticket_id, Ticket.all(:order => :remote_id), :id, :number_and_title, :include_blank => true %>
+  </p>
+  <p>
+    <%= f.label :user_id, 'User' %><br />
+    <%= f.collection_select :user_id, User.all, :id, :first_name, :include_blank => true %>
+  </p>
+  <p>
+    <%= f.label :date %><br />
+    <%= f.date_select :date %>
+  </p>
+  <p>
+    <%= f.label :hours %><br />
+    <%= f.text_field :hours %>
+  </p>
+  <p>
+    <%= f.label :text, 'Note' %><br />
+    <%= f.text_area :text, :size => "50x5" %>
+  </p>
+  <p>
+    <%= f.submit "Update" %> or <%= link_to 'back', activities_path %>
+  </p>
+<% end %>
+    
+

@@ -1,0 +1,23 @@
+<h2>Releases and Sprints</h2>
+<table>
+  <tr>
+    <th>Release</th>
+    <th>Sprints</th>
+  </tr>
+  <% @project.releases.each do |release| %>
+  <tr>
+    <td><%= link_to h(release.name), release %></td>
+    <td>
+      <%= release.sprints.map{|sprint| link_to h(sprint.name), sprint}.join ', ' %>
+    </td>
+  </tr>
+  <% end %>
+  <% if @project.sprints.unassigned.any? %>
+  <tr>
+    <td>-</td>
+    <td>
+      <%= @project.sprints.unassigned.map{|sprint| link_to h(sprint.name), sprint}.join(', ') %>
+    </td>
+  </tr>
+  <% end %>
+</table>

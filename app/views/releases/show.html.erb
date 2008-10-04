@@ -1,0 +1,8 @@
+<div id="breadcrumbs">
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= h "Release #{@release.name}" %>
+</div>
+
+<%= render :partial => "tickets/list", :locals => {:tickets => @release.tickets, :tracking => false } %>
+

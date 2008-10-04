@@ -1,0 +1,20 @@
+<div id="breadcrumbs">
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= link_to(h("Release #{@release.name}"), @release) + ' »' if @release %>
+  <%= h "Sprint #{@sprint.name}" %>
+</div>
+
+<div id="action">
+  <% if @sprint.start_at %>
+    <%=h "#{@sprint.start_at.strftime('%A, %e.%m.')} - #{@sprint.end_at.strftime('%A, %e.%m.')}" %>
+  <% else %>
+    not scheduled
+  <% end %>
+  &middot;
+  <%= link_to 'edit', edit_sprint_path(@sprint) %> 
+</div>
+
+<%= render :partial => "tickets", :locals => {:tickets => @sprint.tickets, :tracking => true } %>
+
+

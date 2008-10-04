@@ -1,0 +1,22 @@
+<% if tickets.size > 0 %>
+  <table id="tickets">
+  <tr>
+    <th>Release</th>
+    <th>Sprint</th>
+    <th>Assigned</th>
+    <th>Hours</th>
+    <th>URL</th>
+    <th>Ticket</th>    
+  </tr>
+  <% for ticket in tickets %>
+    <tr class="state-<%= ticket.state %>">
+      <td><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
+      <td><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
+      <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
+      <td id="ticket-scheduled-<%= ticket.id %>" class="edit"><%= ticket.scheduled.to_i %></td>
+      <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
+      <td><%= link_to h(ticket.title), edit_ticket_path(ticket) %></td>
+    </tr>
+  <% end %>
+  </table>
+<% end %>

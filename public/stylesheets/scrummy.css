@@ -1,0 +1,149 @@
+* {
+  padding: 0px;
+  margin: 0px;
+}
+p {
+  margin: 1em 0;
+}
+ul {
+  list-style-type: none;
+}
+body {
+  padding: 0px;
+  margin: 0px;
+}
+#header {
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 0px;
+  height: 36px;
+  width: 100%;
+  color: #ccc;
+  border-bottom: 4px solid #ccc;
+}
+h1 {
+  font-size: 18px;
+  line-height: 36px;
+}
+#flash {
+	z-index: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 36px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: bold;
+  text-align: center;
+  line-height: auto;
+  color: #555;
+  border-bottom: 4px solid #ccc;
+}
+#flash.notice {
+  background-color: #3f5;
+}
+#flash.error {
+  background-color: #f60;
+}
+#flash p {
+  padding: 10px;
+  margin: 0px;
+}
+#main {
+  margin-top: 36px;
+  width: 74%;
+  padding: 10px;
+  background-color: white;
+}
+#sidebar {      
+  position: absolute;
+  right: 0px;
+  width: 23%;
+  padding: 7px 0px 0px 10px;
+  background-color: #eee;
+  min-height: 94%;
+}
+#sidebar h4 {
+  margin-bottom: 1em;
+}
+
+a, a:visited { 
+  color: #009; 
+  text-decoration: none;
+}
+a:hover { 
+  color: #fff; 
+  background-color:#000; 
+}
+.state-resolved, .state-resolved a {
+  color: #aaa;
+  text-decoration: none;
+}
+table {
+  border-collapse: collapse;
+}
+tr, td {
+  vertical-align: top;
+}
+
+#header form {
+	float: right;
+	margin: 9px 10px;
+}
+
+#main #breadcrumbs {
+  float: left;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+#main #action {
+  float: right;
+  margin-top: 0.5em;
+  margin-bottom: 1em;
+}
+#main table {
+  clear: both;
+  width: 100%;
+}
+#main tr, #main td {
+  border: 1px solid #ddd;
+}
+#main th {
+  padding: 2px 5px;
+  font-weight: normal;
+  font-size: 11px;
+  background-color: #eee;
+}
+#main td {
+  padding: 2px 10px;
+}
+#activities {
+  font-size: 11px;
+  margin: 10px;
+}
+#activities li li {
+  margin-bottom: 1em;
+}
+#activities th {
+  text-align: left;
+}  
+#tickets .toggle {
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-top: 1px;
+	overflow: hidden;
+	text-indent: -200%;
+}
+#tickets .start {
+	background: url(/images/icons/accept.png);
+}
+#tickets .stop {
+	background: url(/images/icons/delete.png);
+}
+
+
+
+
+

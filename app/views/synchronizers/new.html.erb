@@ -1,0 +1,13 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %>
+</p>
+
+<h1>Synchronize project</h1>
+
+<% form_for(@synchronizer) do |f| %>
+  <%= f.hidden_field :project_id %>
+  <p>
+    <%= f.submit "Synchronize" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>

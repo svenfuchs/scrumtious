@@ -1,0 +1,25 @@
+RedirectLove
+============
+
+some simple return_to helpers
+
+
+redirect_back_or_default( posts_url )
+checks if session[:return_to] or params[:return_to] is set otherwise it redirects to the provided URL
+
+adds some helpers to set return_to
+
+methods:
+
+	redirect_back_or_default  (= redirect_back and = redirect_bod)
+	redirect_away: saves the current path and redirects
+	save_return_to: used in a before_filter to save the params[:return_to] in the session
+	link_away: view link helper which adds the return_to params
+
+
+THANKS TO:
+http://ethilien.net/archives/better-redirects-in-rails/
+who provided most of this code!
+
+
+Copyright (c) 2008 Michael Bumann - railslove.com, released under the MIT license

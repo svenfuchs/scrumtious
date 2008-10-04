@@ -1,0 +1,9 @@
+<h2>Categories</h2>
+
+<p><%= link_to 'new category', new_category_path(:category => {:project_id => @project.id}) %></p>
+
+<ul>
+<% for category in categories %>
+  <li><%= link_to h(category.name), edit_category_path(category) %></li>
+<% end %>
+</ul>

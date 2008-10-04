@@ -1,0 +1,17 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %>
+</p>
+
+<h2>Settings</h2>
+
+<% form_for(@project) do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <p>
+    <%= f.submit "Update" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>
+
+<%= render :partial => "releases/list", :locals => {:components => @project.components } %>
+<%= render :partial => "components/list", :locals => {:components => @project.components } %>
+<%= render :partial => "categories/list", :locals => {:categories => @project.categories } %>

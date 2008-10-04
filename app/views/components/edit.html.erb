@@ -1,0 +1,20 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= h(@component.name) %>
+</p>
+
+<h1>Editing component</h1>
+
+<% form_for(@component) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit "Update" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>
+

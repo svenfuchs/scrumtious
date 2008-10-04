@@ -1,0 +1,12 @@
+<p>
+  <%= link_to 'Projects', projects_path %>
+</p>
+
+<h1>New project</h1>
+
+<% form_for(@project) do |f| %>
+  <%= render :partial => 'form', :locals => {:f => f} %>
+  <p>
+    <%= f.submit "Create" %> or <%= link_to 'back', projects_path %>
+  </p>
+<% end %>

@@ -1,0 +1,18 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), project_path(@project) %>
+</p>
+
+<h1>New category</h1>
+
+<% form_for(@category) do |f| %>
+  <%= f.error_messages %>
+  <%= f.hidden_field :project_id %>
+  <p>
+    <%= f.label :name %><br />
+    <%= f.text_field :name %>
+  </p>
+  <p>
+    <%= f.submit "Update" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>

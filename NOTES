@@ -1,0 +1,32 @@
+http://github.com/hpoydar/lighthouse-pm
+
+rename category to bin (?)
+make modules nested_sets
+
+Activity
+  belongs_to ticket
+  note
+  time       # can be entered manually and
+  started_at # can be started and stopped, then just adds to time
+
+ScheduledDay
+  belongs_to user
+  date
+  hours
+
+User
+
+
+
+# Browse tickets
+
+List tickets directly from Lighthouse. 
+Be able to assign tickets to a sprint.
+
+
+# pull from lighthouse: 
+#  fetch all tickets, save new tickets locally, mark missing tickets deleted locally
+#
+# push to lighthouse: 
+#  merge: fetch all tickets from lighthouse, check if any ticket has been changed
+#  since last pull, complain about conflicts if any
