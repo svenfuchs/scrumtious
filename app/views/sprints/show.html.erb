@@ -12,7 +12,8 @@
     not scheduled
   <% end %>
   &middot;
-  <%= link_to 'edit', edit_sprint_path(@sprint) %> 
+  <%= link_to 'edit', edit_sprint_path(@sprint) %>  &middot;
+  <%= link_to 'destroy', @sprint, :confirm => 'Are you sure?', :method => :delete %>
 </div>
 
 <%= render :partial => "tickets", :locals => {:tickets => @tickets, :tracking => true } %>

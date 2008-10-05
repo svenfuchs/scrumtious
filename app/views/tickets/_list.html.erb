@@ -18,9 +18,9 @@
       <% if (t = tickets_by_component(tickets, component)).size > 0 %>
         <% t.each do |ticket| %>
           <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
-            <td><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
+            <td class="release"><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
             <td class="sprint"><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
-            <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
+            <td class="assigned"><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
             <td id="ticket-estimated-<%= ticket.id %>" class="hours"><%= ticket.estimated.to_i %></td>
             <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
             <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>

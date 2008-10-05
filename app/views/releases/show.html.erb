@@ -4,5 +4,10 @@
   <%= h "Release #{@release.name}" %>
 </div>
 
+<div id="action">
+  <%= link_to 'edit', edit_release_path(@release) %>  &middot;
+  <%= link_to 'destroy', @release, :confirm => 'Are you sure?', :method => :delete %>
+</div>
+
 <%= render :partial => "tickets/list", :locals => {:tickets => @release.tickets, :tracking => false } %>
 
