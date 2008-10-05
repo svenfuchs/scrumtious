@@ -9,7 +9,7 @@ module Lighthouse
     end
   
     def updated_tickets(since)
-      if false and since
+      if since
         tickets :q => "updated:\"since #{time_ago_in_words(since - 1.minute)} ago\""
       else
         all_tickets
