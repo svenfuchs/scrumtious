@@ -1,22 +1,35 @@
 <% if tickets.size > 0 %>
-  <table id="tickets">
-  <tr>
-    <th>Release</th>
-    <th>Sprint</th>
-    <th>Assigned</th>
-    <th>Hours</th>
-    <th>URL</th>
-    <th>Ticket</th>    
-  </tr>
-  <% for ticket in tickets %>
-    <tr class="state-<%= ticket.state %>">
-      <td><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
-      <td><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
-      <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
-      <td id="ticket-scheduled-<%= ticket.id %>" class="edit"><%= ticket.scheduled.to_i %></td>
-      <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
-      <td><%= link_to h(ticket.title), edit_ticket_path(ticket) %></td>
+  <table id="tickets" class="project">
+  <thead>
+    <tr>
+      <th>Release</th>
+      <th>Sprint</th>
+      <th>Assigned</th>
+      <th>Hrs</th>
+      <th>URL</th>
+      <th>Ticket</th>
     </tr>
+  </thead>
+  <% (Component.all(:order => 'name') << Component.new(:name => '(no component)')).each do |component| %>
+    <tbody id="component-<%= component.id %>">
+      <tr>
+        <th colspan="6"><%= component.name %></th>
+      </tr>
+      <% if (t = tickets_by_component(tickets, component)).size > 0 %>
+        <% t.each do |ticket| %>
+          <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
+            <td><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
+            <td class="sprint"><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
+            <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
+            <td id="ticket-estimated-<%= ticket.id %>" class="hours"><%= ticket.estimated.to_i %></td>
+            <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
+            <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
+          </tr>
+        <% end %>
+      <% else %>
+        <tr class="empty"><td colspan="6">empty</td></tr>
+      <% end %>
+    </tbody>
   <% end %>
   </table>
 <% end %>

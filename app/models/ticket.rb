@@ -3,6 +3,8 @@ class Ticket < ActiveRecord::Base
   belongs_to :project
   belongs_to :release
   belongs_to :sprint
+  belongs_to :component
+  belongs_to :category
   belongs_to :user
   has_many :activities, :dependent => :destroy
   
@@ -30,7 +32,7 @@ class Ticket < ActiveRecord::Base
   
   def activity_minutes(from_day = nil, to_day = nil)
     acts = from_day.nil? ? activities : activities_in_range(from_day, to_day)
-    acts.map(&:minutes).compact.sum
+    acts.map(&:total_minutes).compact.sum
   end
   
   def activities_in_range(from_day, to_day = nil)

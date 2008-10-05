@@ -1,13 +1,14 @@
 http://github.com/hpoydar/lighthouse-pm
 
-rename category to bin (?)
-make modules nested_sets
+make tickets versioned (git://github.com/technoweenie/acts_as_versioned.git)
+  * only track changes to the "estimated" column
+  * overwrite it so that it creates a new version per day and 
+    updates existing versions from the same day
+  * make the burndown chart use versioned estimated values per day
+  
 
-Activity
-  belongs_to ticket
-  note
-  time       # can be entered manually and
-  started_at # can be started and stopped, then just adds to time
+rename category to bin (?)
+make modules nested_sets (?)
 
 ScheduledDay
   belongs_to user

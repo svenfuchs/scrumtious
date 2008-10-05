@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081003120623) do
+ActiveRecord::Schema.define(:version => 20081005083905) do
 
   create_table "activities", :force => true do |t|
     t.integer  "ticket_id"
@@ -17,9 +17,10 @@ ActiveRecord::Schema.define(:version => 20081003120623) do
     t.string   "text"
     t.date     "date"
     t.integer  "minutes"
-    t.datetime "started"
+    t.datetime "started_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "stopped_at"
   end
 
   create_table "categories", :force => true do |t|
@@ -71,12 +72,12 @@ ActiveRecord::Schema.define(:version => 20081003120623) do
     t.integer  "user_id"
     t.string   "title"
     t.text     "body"
-    t.float    "scheduled"
     t.float    "estimated"
     t.float    "actual"
     t.string   "state"
     t.integer  "closed"
     t.integer  "local"
+    t.integer  "priority"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -8,7 +8,7 @@ class TicketsController < ApplicationController
   def create
     if @ticket.save
       flash[:notice] = 'Ticket has been created.'
-      redirect_to @ticket.project
+      redirect_back_or_default @ticket.project
     else
       # render :action => "new"
     end
@@ -23,6 +23,15 @@ class TicketsController < ApplicationController
       redirect_back_or_default @ticket
     else
       render :action => "edit"
+    end
+  end
+  
+  def update_all
+    if params[:tickets]
+      params[:tickets].each{|id, attrs| Ticket.update(id, attrs) }
+      head :ok
+    else
+      
     end
   end
 

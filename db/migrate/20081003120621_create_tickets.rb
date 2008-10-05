@@ -17,6 +17,7 @@ class CreateTickets < ActiveRecord::Migration
       t.string :state
       t.integer :closed
       t.integer :local
+      t.integer :priority
       t.timestamps
     end
   end

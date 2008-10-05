@@ -1,32 +1,34 @@
 <table id="tickets">
-<tr>
-  <th></th>
-  <th>Assigned</th>
-  <th>URL</th>
-  <th>Ticket</th>    
-  <% if tracking  %>
-    <th colspan="3">Hours</th>
-    <% @sprint.scheduled_days.each do |day| %>
-      <th><%= day.strftime('%d.%m.') %></th>
+<thead>
+  <tr>
+    <th></th>
+    <th><%= link_to 'Assigned', sprint_path(@sprint, :sort => :assigned) %></th>
+    <th><%= link_to 'URL', sprint_path(@sprint, :sort => :url) %></th>
+    <th><%= link_to 'Ticket', @sprint %></th>
+    <% if tracking  %>
+      <th><%= link_to 'Hours', sprint_path(@sprint, :sort => :hours) %></th>
+      <th>Actual</th>
+      <% @sprint.scheduled_days(Date.today).each do |day| %>
+        <th><%= day.strftime('%d.%m.') %></th>
+      <% end %>
+    <% else %>
+      <th>Hours</th>
     <% end %>
-  <% else %>
-    <th>Hours</th>
-  <% end %>
-</tr>
+  </tr>
+</thead>
+<tbody>
 <% for ticket in tickets %>
   <tr class="state-<%= ticket.state %>">
-    <td><%= toggle_ticket_activity_link(ticket) unless ticket.closed? %></td>
+    <td><%= toggle_ticket_activity_link(ticket) %></td>
     <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
     <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
-    <td><%= link_to h(ticket.title), edit_ticket_path(ticket) %></td>
-    <td id="ticket-scheduled-<%= ticket.id %>" class="edit"><%= ticket.scheduled.to_i %></td>
-    <% if tracking %>
-      <td id="ticket-estimated-<%= ticket.id %>" class="edit"><%= ticket.estimated.to_i %></td>
-      <td><%= ticket.actual_hours(@sprint).round(1) if ticket.actual_hours(@sprint) > 0 %></td>
-      <% tickets.first.sprint.scheduled_days.each do |day| %>
-        <td><%= activity_hours_on(ticket, day) %></td>
-      <% end %>
+    <td><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
+    <td id="ticket-estimated-<%= ticket.id %>" class="edit hours"><%= ticket.estimated.to_i %></td>
+    <td class="hours"><%= ticket.actual_hours(@sprint).round(1) if ticket.actual_hours(@sprint) > 0 %></td>
+    <% tickets.first.sprint.scheduled_days(Date.today).each do |day| %>
+      <td><%= activity_hours_on(ticket, day) %></td>
     <% end %>
   </tr>
 <% end %>
+</tbody>
 </table>

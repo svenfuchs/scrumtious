@@ -6,14 +6,17 @@
   <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
   <title><%= controller.controller_name.titleize %>: <%= controller.action_name %></title>
   <%= stylesheet_link_tag 'scaffold', 'scrummy', :cache => true %>
-  <%= javascript_include_tag 'jquery-1.2.6.min', 'jquery.jeditable.mini', :cache => true %>
+  <%= javascript_include_tag 'jquery-1.2.6.min', 'jquery.jeditable.mini', 'jquery.tablednd_0_5.js', :cache => true %>
 
   <style>
-  .td-edit {
+  .sprint-select {
+    position: absolute;
+  }
+  .hours-edit {
     width: 20px;
     position: absolute;
   }
-  .td-edit input {
+  .hours-edit input {
     width: 100% !important;
     border: 0px;
     font-size: 13px;
@@ -21,27 +24,87 @@
     padding-top: 1px;
     padding-left: 7px;
   }
+  #tickets .dragging,
+  #tickets .dragging td {
+    background-color: #ffffdd !important;
+  }
+  #tickets .ticket {
+    cursor: move;
+  }
   </style>
 
   <script>
     var authenticity_token = '<%= form_authenticity_token %>';
 
-    save_edit = function(value, settings) {
+    save_hours = function(value, settings) {
       var tokens = this.id.split('-');
-      var html = '<form action="/tickets/' + tokens[2] + '" method="post">' +
-        '<input type="hidden" name="_method" value="put">' +
-        '<input type="hidden" name="ticket[' + tokens[1] + ']" value="' + value + '">' +
-        '<input type="hidden" name="authenticity_token" value="' + authenticity_token + '">' +
-        '<input type="hidden" name="return_to" value="' + location.href + '">' +
-        '</form>'
-      var form = $(html).appendTo("body");
-      form.submit();
+      var params = { 
+        '_method': 'put', 
+        'authenticity_token': authenticity_token,
+        'return_to': location.href,
+      }
+      params["ticket[" + tokens[1] + "]"] = value;
+      $.post("/tickets/" + tokens[2], params);
       return value;
+    }
+    
+    save_sprint = function(sprint_id, settings) {
+      var ticket_id = this.parentNode.id.split('-')[1];
+      $.post("/tickets/" + ticket_id  , {
+        'ticket[sprint_id]': sprint_id,
+        '_method': 'put', 
+        'authenticity_token': authenticity_token,
+        'return_to': location.href
+      });
+      eval("var sprint_name = " + settings.data + "[sprint_id]");
+      return '<a href="/sprints/' + sprint_id + '">' + sprint_name + '</a>'
+    }
+    
+    can_drop_ticket = function(drag, drop) {
+      return drop.id || (drop.className == "empty") ;
+    }
+
+    drop_ticket = function(table, row) {
+      update_empty_components(table);
+      table_sort_order(table);
+      var id = row.id.split('-')[1];
+      var component_id = row.parentNode.id.split('-')[1];
+      params = { 
+        '_method': 'put', 
+        'authenticity_token': authenticity_token,
+        'return_to': location.href
+      }
+      params['tickets[' + id + '][component_id]'] = component_id;
+      $.extend(params, table_sort_order(table));
+      $.post("/tickets/", params);
+    }
+    
+    function update_empty_components(table) {
+      $("tbody", table).each(function(){
+        if(this.rows.length > 1) {
+          $('tr', this).remove('.empty');
+        } else {
+          $(this).append('<tr class="empty"><td colspan="6">empty</td></tr>');
+        }
+      });
+    }
+    
+    function table_sort_order(table) {
+      var ids = $.map(table.rows, function(row){
+        if(row.id){ return row.id.split('-')[1] }
+      });
+      var order = {};
+      for(var i = 0; i < ids.length; i++) {
+        order['tickets[' + ids[i] + '][priority]'] = i;
+      }
+      return order;
     }
 
     $(document).ready(function () {
       $("#flash").animate({opacity: 1.0}, 3000).fadeOut(1000);
-      $(".edit").editable(save_edit, { cssclass: "td-edit" });
+      $("#tickets .hours").editable(save_hours, { cssclass: "hours-edit" });
+      $("#tickets .sprint").editable(save_sprint, { data: '<%= sprint_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'sprint-select' });
+      $("#tickets.project").tableDnD({ onDrop: drop_ticket, onAllowDrop: can_drop_ticket, onDragClass: 'dragging', dragHandle: 'ticket' });
     });
   </script>
 

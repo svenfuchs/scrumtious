@@ -42,6 +42,6 @@ class ActivitiesController < ApplicationController
     end
     
     def activity_msg_state
-      params[:activity].has_key?(:started) ? (params[:activity][:started].blank? ? 'stopped' : 'started') : 'updated'
+      params[:activity][:state] ? params[:activity][:state] : 'updated'
     end
 end

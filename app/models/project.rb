@@ -10,6 +10,6 @@ class Project < ActiveRecord::Base
   end
   
   has_many :tickets, :include => [:project, :release, :user], 
-                     :order => 'milestones.name DESC, sprint_id DESC, tickets.state, tickets.remote_id DESC, tickets.parent_id', 
+                     :order => 'milestones.name DESC, sprint_id DESC, tickets.state, tickets.priority, tickets.remote_id DESC, tickets.parent_id', 
                      :dependent => :destroy
 end

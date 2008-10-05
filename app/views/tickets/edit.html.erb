@@ -12,22 +12,19 @@
 <%= link_to 'delete', @ticket, :method => :delete, :confirm => 'Are you sure?' %>
 
 <% form_for(@ticket) do |f| %>
+  <%= hidden_field_tag :return_to, params[:return_to] %>
   <%= f.error_messages %>
+  <p>
+    <%= f.label :component_id, 'Component' %><br />
+    <%= f.collection_select :component_id, Component.all(:order => 'name'), :id, :name, :include_blank => true %>
+  </p>
   <p>
     <%= f.label :user_id, 'Assigned to' %><br />
     <%= f.collection_select :user_id, User.all, :id, :first_name, :include_blank => true %>
   </p>
   <p>
-    <%= f.label :scheduled %><br />
-    <%= f.text_field :scheduled %>
-  </p>
-  <p>
     <%= f.label :estimated %><br />
     <%= f.text_field :estimated %>
-  </p>
-  <p>
-    <%= f.label :actual %><br />
-    <%= f.text_field :actual %>
   </p>
   <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @project %>

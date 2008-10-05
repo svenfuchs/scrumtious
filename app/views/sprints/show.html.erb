@@ -15,6 +15,6 @@
   <%= link_to 'edit', edit_sprint_path(@sprint) %> 
 </div>
 
-<%= render :partial => "tickets", :locals => {:tickets => @sprint.tickets, :tracking => true } %>
+<%= render :partial => "tickets", :locals => {:tickets => @tickets, :tracking => true } %>
 
 

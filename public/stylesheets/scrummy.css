@@ -113,10 +113,26 @@ tr, td {
   padding: 2px 5px;
   font-weight: normal;
   font-size: 11px;
+	font-style: italic;
+}
+#main thead th {
   background-color: #eee;
+}
+#main tbody th {
+	font-style: normal;
+	font-size: 11px;
+	color: #666;
+	background-color: white;
+	text-align: left;
 }
 #main td {
   padding: 2px 10px;
+}
+#main td.hours {
+  background-color: #f9f9f9;
+}
+#main tr.empty td {
+	font-size: 11px;
 }
 #activities {
   font-size: 11px;
@@ -125,10 +141,18 @@ tr, td {
 #activities li li {
   margin-bottom: 1em;
 }
-#activities th {
-  text-align: left;
+#activities li.stopped,
+#activities li.stopped a {
+  color: #999;
+}
+#activities p {
+  margin: 0px;
 }  
-#tickets .toggle {
+#activities p.info {
+  font-size: 11px;
+}  
+.toggle {
+	float: left;
 	display: block;
 	width: 16px;
 	height: 16px;
@@ -136,10 +160,10 @@ tr, td {
 	overflow: hidden;
 	text-indent: -200%;
 }
-#tickets .start {
+.start {
 	background: url(/images/icons/accept.png);
 }
-#tickets .stop {
+.stop {
 	background: url(/images/icons/delete.png);
 }
 

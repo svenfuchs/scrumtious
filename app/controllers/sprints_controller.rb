@@ -4,6 +4,7 @@ class SprintsController < ApplicationController
   before_filter :set_project
   
   def show
+    @tickets = @sprint.tickets.ordered params[:sort]
   end
 
   def new

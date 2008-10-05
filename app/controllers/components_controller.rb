@@ -8,7 +8,7 @@ class ComponentsController < ApplicationController
   def create
     if @component.save
       flash[:notice] = 'Component was successfully created.'
-      redirect_to @component.project
+      redirect_to edit_project_path(@component.project)
     else
       render :action => "new"
     end
@@ -20,7 +20,7 @@ class ComponentsController < ApplicationController
   def update
     if @component.update_attributes(params[:component])
       flash[:notice] = 'Component was successfully updated.'
-      redirect_to @component.project
+      redirect_to edit_project_path(@component.project)
     else
       render :action => "edit"
     end

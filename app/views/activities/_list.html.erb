@@ -4,13 +4,21 @@
     <h4><%=h date.strftime('%A, %e.%m.') %></h4>
     <ul>
     <% activities.each do |activity| %>
-      <li>
-        <%=h activity.user ? activity.user.first_name : '?' %>:
-        <%= link_to activity_time_in_words(activity), edit_activity_path(activity, :return_to => request.path) %> &middot;
-        <%= toggle_activity_link(activity) %><br>
-        <%= activity_lighthouse_link(activity) %>
-        <%= activity_ticket_link(activity) %><br>
-        <%= activity.text %>
+      <li class="<%= activity.state %>">
+        <p>
+          <%=h activity.user ? activity.user.first_name : '?' %>:
+          <%= activity_lighthouse_link(activity) %>
+          <%= activity_ticket_link(activity) %>
+        </p>
+        <p class="info">
+          <%= activity.text ? activity.text + '<br />' : '' %>
+          <%= activity.state %>: <%= activity_distance_of_state_changed_in_words(activity) %> ago
+          <%= toggle_activity_link(activity) %>
+          <% if activity.minutes.to_i > 0 %>
+            <br>total: <%= activity_total_time_in_words(activity) %>
+          <% end %>
+          <%= link_to 'edit', edit_activity_path(activity, :return_to => request.path) %>
+        </p>
       </li>
     <% end %>
     </ul>
