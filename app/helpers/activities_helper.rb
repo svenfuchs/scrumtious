@@ -12,7 +12,7 @@ module ActivitiesHelper
   end
   
   def toggle_ticket_activity_link(ticket)
-    return unless current_user or ticket.state == 'resolved'
+    return if current_user.blank? or ticket.state == 'resolved'
     attributes = {:ticket_id => ticket.id, :user_id => current_user.id, :date => Time.zone.today}
     activity = Activity.find :first, :conditions => attributes, :order => 'id DESC'
     if !activity
