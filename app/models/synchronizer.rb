@@ -17,7 +17,15 @@ module Lighthouse
     end
     
     def all_tickets
-      tickets :q => :all
+      page = 1
+      result = paged = []
+      while page == 1 or !paged.empty?
+        paged = tickets(:q => :all, :page => page)
+        result += paged
+        page += 1
+      end
+      p result
+      result.compact
     end
   end
   
