@@ -10,7 +10,7 @@
       <th>Ticket</th>
     </tr>
   </thead>
-  <% (Component.all(:order => 'name') << Component.new(:name => '(no component)')).each do |component| %>
+  <% (@project.components.all << Component.new(:name => '(no component)')).each do |component| %>
     <tbody id="component-<%= component.id %>">
       <tr>
         <th colspan="6"><%= component.name %></th>
