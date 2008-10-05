@@ -35,20 +35,20 @@
 
   <script>
     var authenticity_token = '<%= form_authenticity_token %>';
-
-    save_hours = function(value, settings) {
-      var tokens = this.id.split('-');
-      var params = { 
+    
+    update_release = function(release_id, settings) {
+      var ticket_id = this.parentNode.id.split('-')[1];
+      $.post("/tickets/" + ticket_id  , {
+        'ticket[release_id]': release_id,
         '_method': 'put', 
         'authenticity_token': authenticity_token,
-        'return_to': location.href,
-      }
-      params["ticket[" + tokens[1] + "]"] = value;
-      $.post("/tickets/" + tokens[2], params);
-      return value;
+        'return_to': location.href
+      });
+      eval("var release_name = " + settings.data + "[release_id]");
+      return '<a href="/releases/' + release_id + '">' + release_name + '</a>'
     }
     
-    save_sprint = function(sprint_id, settings) {
+    update_sprint = function(sprint_id, settings) {
       var ticket_id = this.parentNode.id.split('-')[1];
       $.post("/tickets/" + ticket_id  , {
         'ticket[sprint_id]': sprint_id,
@@ -58,6 +58,30 @@
       });
       eval("var sprint_name = " + settings.data + "[sprint_id]");
       return '<a href="/sprints/' + sprint_id + '">' + sprint_name + '</a>'
+    }
+    
+    update_assigned_user = function(user_id, settings) {
+      var ticket_id = this.parentNode.id.split('-')[1];
+      $.post("/tickets/" + ticket_id  , {
+        'ticket[user_id]': user_id,
+        '_method': 'put', 
+        'authenticity_token': authenticity_token,
+        'return_to': location.href
+      });
+      eval("var user_name = " + settings.data + "[user_id]");
+      return user_name;
+    }
+
+    update_hours = function(value, settings) {
+      var tokens = this.id.split('-');
+      var params = { 
+        '_method': 'put', 
+        'authenticity_token': authenticity_token,
+        'return_to': location.href,
+      }
+      params["ticket[" + tokens[1] + "]"] = value;
+      $.post("/tickets/" + tokens[2], params);
+      return value;
     }
     
     can_drop_ticket = function(drag, drop) {
@@ -102,10 +126,10 @@
 
     $(document).ready(function () {
       $("#flash").animate({opacity: 1.0}, 3000).fadeOut(1000);
-      $("#tickets .hours").editable(save_hours, { cssclass: "hours-edit" });
-      $("#tickets .release").editable(save_sprint, { data: '<%= release_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
-      $("#tickets .sprint").editable(save_sprint, { data: '<%= sprint_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
-      $("#tickets .assigned").editable(save_sprint, { data: '<%= user_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
+      $("#tickets .hours").editable(update_hours, { cssclass: "hours-edit" });
+      $("#tickets .release").editable(update_release, { data: '<%= release_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
+      $("#tickets .sprint").editable(update_sprint, { data: '<%= sprint_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
+      $("#tickets .assigned").editable(update_assigned_user, { data: '<%= user_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
       $("#tickets.project").tableDnD({ onDrop: drop_ticket, onAllowDrop: can_drop_ticket, onDragClass: 'dragging', dragHandle: 'ticket' });
     });
   </script>
