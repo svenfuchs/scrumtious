@@ -23,8 +23,8 @@
     <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
     <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
     <td><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
-    <td id="ticket-estimated-<%= ticket.id %>" class="edit hours"><%= ticket.estimated.to_i %></td>
-    <td class="hours"><%= ticket.actual_hours(@sprint) > 0 ? ticket.actual_hours(@sprint).round(1) : 0 %></td>
+    <td id="ticket-estimated-<%= ticket.id %>" class="hours"><%= ticket.estimated.to_i %></td>
+    <td class="actual"><%= ticket.actual_hours(@sprint) > 0 ? ticket.actual_hours(@sprint).round(1) : 0 %></td>
     <% tickets.first.sprint.scheduled_days(Date.today).each do |day| %>
       <td><%= activity_hours_on(ticket, day) %></td>
     <% end %>
