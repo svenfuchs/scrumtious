@@ -2,6 +2,8 @@ class TicketsController < ApplicationController
   before_filter :set_ticket
   before_filter :set_project
   
+  cache_sweeper :ticket_pusher
+  
   def show
   end
   

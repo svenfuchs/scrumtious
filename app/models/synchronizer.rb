@@ -67,6 +67,15 @@ end
 
 class Synchronizer
   attr_accessor :project
+  @@sync = true
+  
+  class << self
+    def with_no_sync
+      @@sync = false # TODO not threadsafe
+      yield
+      @@sync = true
+    end
+  end
 
   def initialize(project_id)
     @project = ::Project.find(project_id) if project_id
@@ -75,6 +84,7 @@ class Synchronizer
   end
   
   def run!
+    return unless @@sync
     sync_users
     sync_milestones
     sync_tickets
@@ -83,6 +93,22 @@ class Synchronizer
   
   def project_id
     @project.id
+  end
+  
+  def push_ticket(ticket)
+    return unless @@sync
+    attributes = { :number => ticket.remote_id, :project_id => @project.remote_id }
+    ticket.changes.each do |name, values|
+      case name
+      when 'user_id'
+        attributes['assigned_user_id'] = ticket.user.remote_id
+      end
+    end
+    return unless attributes.keys.size > 2
+    ticket = ::Lighthouse::Ticket.new(attributes)
+    ::Lighthouse::Ticket.logger = RAILS_DEFAULT_LOGGER
+    RAILS_DEFAULT_LOGGER.info(ticket.inspect)
+    ticket.save
   end
   
   def id; end; def new_record?; true end # make form_for happy
