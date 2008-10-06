@@ -17,7 +17,7 @@
           <% if activity.minutes.to_i > 0 %>
             <br>total: <%= activity_total_time_in_words(activity) %>
           <% end %>
-          <%= link_to 'edit', edit_activity_path(activity, :return_to => request.path) %>
+          <%= link_to 'edit', edit_activity_path(activity, :return_to => request.request_uri) %>
         </p>
       </li>
     <% end %>

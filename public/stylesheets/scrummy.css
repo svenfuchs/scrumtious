@@ -86,7 +86,12 @@ a:hover {
   color: #fff; 
   background-color:#000; 
 }
-.state-resolved, .state-resolved a {
+.state-hold, .state-hold a {
+  color: #cc6;
+  text-decoration: none;
+}
+.state-resolved, .state-resolved a,
+.state-invalid, .state-invalid a {
   color: #aaa;
   text-decoration: none;
 }

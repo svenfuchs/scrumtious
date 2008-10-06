@@ -25,25 +25,25 @@ module ActivitiesHelper
   end
   
   def stop_activity_link(activity, attributes)
-    path = activity_path(activity, :activity => attributes.update(:state => 'stopped'), :return_to => request.path)
+    path = activity_path(activity, :activity => attributes.update(:state => 'stopped'), :return_to => request.request_uri)
     link_to "stop", path, :method => :put, :class => "toggle stop"
   end
   
   def restart_activity_link(activity, attributes)
-    path = activity_path(activity, :activity => attributes.update(:state => 'started'), :return_to => request.path)
+    path = activity_path(activity, :activity => attributes.update(:state => 'started'), :return_to => request.request_uri)
     link_to "start", path, :method => :put, :class => "toggle start"
   end
   
   def create_activity_link(attributes)
-    path = activities_path(:activity => attributes.update(:state => 'started'), :return_to => request.path)
+    path = activities_path(:activity => attributes.update(:state => 'started'), :return_to => request.request_uri)
     link_to "start", path, :method => :post, :class => "toggle start"
   end
   
   def toggle_activity_link(activity)
     if activity.started?
-      link_to "stop", activity_path(activity, :activity => {:state => 'stopped'}, :return_to => request.path), :method => :put
+      link_to "stop", activity_path(activity, :activity => {:state => 'stopped'}, :return_to => request.request_uri), :method => :put
     else
-      link_to "start", activity_path(activity, :activity => {:state => 'started'}, :return_to => request.path), :method => :put
+      link_to "start", activity_path(activity, :activity => {:state => 'started'}, :return_to => request.request_uri), :method => :put
     end
   end
   
