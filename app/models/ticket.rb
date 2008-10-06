@@ -22,6 +22,20 @@ class Ticket < ActiveRecord::Base
     end
   end
   
+  # def sprint_id=(sprint_id)
+  #   sprint = Sprint.find(sprint_id)
+  #   self.release_id = sprint.release_id if sprint
+  #   write_attribute(:sprint_id, sprint_id)
+  # end
+  
+  def update_attributes(attributes)
+    if attributes.has_key?(:sprint_id)
+      sprint = Sprint.find(sprint_id)
+      attributes[:release_id] = sprint ? sprint.release_id : nil
+    end
+    super
+  end
+  
   def lighthouse_url
     "http://artweb-design.lighthouseapp.com/projects/#{project.remote_id}/tickets/#{remote_id}"
   end

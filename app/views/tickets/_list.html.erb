@@ -1,35 +1,33 @@
-<% if tickets.size > 0 %>
-  <table id="tickets" class="project">
-  <thead>
+<table id="tickets" class="project">
+<thead>
+  <tr>
+    <th>Release</th>
+    <th>Sprint</th>
+    <th>Assigned</th>
+    <th>Hrs</th>
+    <th>URL</th>
+    <th>Ticket</th>
+  </tr>
+</thead>
+<% (@project.components.all << Component.new(:name => '(no component)')).each do |component| %>
+  <tbody id="component-<%= component.id %>">
     <tr>
-      <th>Release</th>
-      <th>Sprint</th>
-      <th>Assigned</th>
-      <th>Hrs</th>
-      <th>URL</th>
-      <th>Ticket</th>
+      <th colspan="6"><%= component.name %></th>
     </tr>
-  </thead>
-  <% (@project.components.all << Component.new(:name => '(no component)')).each do |component| %>
-    <tbody id="component-<%= component.id %>">
-      <tr>
-        <th colspan="6"><%= component.name %></th>
-      </tr>
-      <% if (t = tickets_by_component(tickets, component)).size > 0 %>
-        <% t.each do |ticket| %>
-          <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
-            <td class="release"><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
-            <td class="sprint"><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
-            <td class="assigned"><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
-            <td class="estimated"><%= ticket.estimated.to_i %></td>
-            <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
-            <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
-          </tr>
-        <% end %>
-      <% else %>
-        <tr class="empty"><td colspan="6">empty</td></tr>
+    <% if (t = tickets_by_component(tickets, component)).size > 0 %>
+      <% t.each do |ticket| %>
+        <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
+          <td class="release"><%= ticket.release ? link_to(h(ticket.release.name), ticket.release) : '-' %></td>
+          <td class="sprint"><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
+          <td class="assigned"><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
+          <td class="estimated"><%= ticket.estimated.to_i %></td>
+          <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
+          <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
+        </tr>
       <% end %>
-    </tbody>
-  <% end %>
-  </table>
+    <% else %>
+      <tr class="empty"><td colspan="6">empty</td></tr>
+    <% end %>
+  </tbody>
 <% end %>
+</table>

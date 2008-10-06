@@ -68,6 +68,7 @@ h1 {
   margin-bottom: 1em;
 }
 #footer {
+	clear: both;
   padding: 10px;
   width: 74%;
 	text-align: right;

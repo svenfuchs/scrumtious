@@ -9,16 +9,8 @@
 <% form_for(@release) do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :remote_id, 'Lighthouse milestone id' %><br />
-    <%= f.text_field :remote_id %>
-  </p>
-  <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
   </p>
   <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @release %>

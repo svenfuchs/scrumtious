@@ -5,6 +5,7 @@
 </div>
 
 <div id="action">
+  <%= link_to 'new', new_release_path(:release => {:project_id => @project.id}) %>  &middot;
   <%= link_to 'edit', edit_release_path(@release) %>  &middot;
   <%= link_to 'destroy', @release, :confirm => 'Are you sure?', :method => :delete %>
 </div>

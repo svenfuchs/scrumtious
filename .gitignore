@@ -3,3 +3,4 @@ config/deploy.rb
 db/*.sqlite3
 log/*.log
 tmp/*
+vendor/rails/*
