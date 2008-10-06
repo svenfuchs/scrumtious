@@ -85,9 +85,9 @@ class Synchronizer
   
   def run!
     return unless @@sync
-    sync_users
-    sync_milestones
-    sync_tickets
+    pull_users
+    pull_milestones
+    pull_tickets
     project.update_attributes! :synced_at => Time.now
   end
   
@@ -106,8 +106,8 @@ class Synchronizer
     end
     return unless attributes.keys.size > 2
     ticket = ::Lighthouse::Ticket.new(attributes)
-    ::Lighthouse::Ticket.logger = RAILS_DEFAULT_LOGGER
-    RAILS_DEFAULT_LOGGER.info(ticket.inspect)
+    # ::Lighthouse::Ticket.logger = RAILS_DEFAULT_LOGGER
+    # RAILS_DEFAULT_LOGGER.info(ticket.inspect)
     ticket.save
   end
   
@@ -115,19 +115,19 @@ class Synchronizer
   
   protected
   
-    def sync_users
+    def pull_users
       lighthouse.users.each do |remote_user|
         User.sync_from_remote_user!(remote_user)
       end
     end
   
-    def sync_tickets
+    def pull_tickets
       lighthouse.updated_tickets(project.synced_at).each do |remote_ticket|
         Ticket.sync_from_remote_ticket!(@project, remote_ticket)
       end
     end
   
-    def sync_milestones
+    def pull_milestones
       lighthouse.milestones.each do |remote_milestone|
         Milestone.sync_from_remote_milestone!(@project, remote_milestone)
       end

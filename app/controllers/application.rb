@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   layout 'default'
   helper :all # include all helpers, all the time
   before_filter :set_current_user
+  before_filter :authenticate
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
@@ -22,5 +23,14 @@ class ApplicationController < ActionController::Base
   helper_method :current_user
   def current_user
     @current_user
+  end
+  
+  @@http_auth = YAML.load_file RAILS_ROOT + '/config/http_auth.yml'
+  def authenticate    
+    authenticate_or_request_with_http_basic do |user_name, password|
+      p user_name, password
+      p @@http_auth[user_name]
+      !user_name.nil? and !password.nil? and @@http_auth[user_name] == password
+    end
   end
 end

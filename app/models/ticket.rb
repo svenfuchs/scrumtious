@@ -73,7 +73,6 @@ class Ticket < ActiveRecord::Base
     def set_remote_milestone(milestone)
       return unless milestone
       type = milestone.title =~ /sprint/i ? Sprint : Release
-      # self.send "#{type.name.underscore}=", type.find_by_remote_id(milestone.id)
       self.send "#{type.name.underscore}=", Milestone.find_by_remote_id(milestone.id)
     end
   

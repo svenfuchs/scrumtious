@@ -1,5 +1,6 @@
 Capfile
 config/deploy.rb
+config/http_auth.yml
 db/*.sqlite3
 log/*.log
 tmp/*
