@@ -67,6 +67,16 @@ h1 {
 #sidebar h4 {
   margin-bottom: 1em;
 }
+#footer {
+  padding: 10px;
+  width: 74%;
+	text-align: right;
+	font-size: 11px;
+	color: #999;
+}
+#footer a {
+	color: #999;
+}
 
 a, a:visited { 
   color: #009; 
