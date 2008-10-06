@@ -22,14 +22,8 @@ class Ticket < ActiveRecord::Base
     end
   end
   
-  # def sprint_id=(sprint_id)
-  #   sprint = Sprint.find(sprint_id)
-  #   self.release_id = sprint.release_id if sprint
-  #   write_attribute(:sprint_id, sprint_id)
-  # end
-  
   def update_attributes(attributes)
-    if attributes.has_key?(:sprint_id)
+    unless attributes[:sprint_id].blank?
       sprint = Sprint.find(sprint_id)
       attributes[:release_id] = sprint ? sprint.release_id : nil
     end

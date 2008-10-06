@@ -101,10 +101,14 @@ class Synchronizer
     ticket.changes.each do |name, values|
       case name
       when 'user_id'
-        attributes['assigned_user_id'] = ticket.user.remote_id
+        attributes['assigned_user_id'] = ticket.user.remote_id if ticket.user 
+      when 'sprint_id'
+        attributes['milestone_id'] = ticket.sprint.remote_id if ticket.sprint
+      when 'release_id'
+        attributes['milestone_id'] = ticket.release.remote_id if ticket.release
       end
     end
-    return unless attributes.keys.size > 2
+    return if attributes.keys.size == 2
     ticket = ::Lighthouse::Ticket.new(attributes)
     # ::Lighthouse::Ticket.logger = RAILS_DEFAULT_LOGGER
     # RAILS_DEFAULT_LOGGER.info(ticket.inspect)

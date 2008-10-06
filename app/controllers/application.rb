@@ -28,8 +28,6 @@ class ApplicationController < ActionController::Base
   @@http_auth = YAML.load_file RAILS_ROOT + '/config/http_auth.yml'
   def authenticate    
     authenticate_or_request_with_http_basic do |user_name, password|
-      p user_name, password
-      p @@http_auth[user_name]
       !user_name.nil? and !password.nil? and @@http_auth[user_name] == password
     end
   end
