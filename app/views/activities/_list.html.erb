@@ -11,7 +11,7 @@
           <%= activity_ticket_link(activity) %>
         </p>
         <p class="info">
-          <%= activity.text ? activity.text + '<br />' : '' %>
+          <%= activity.text.blank? ? '' : activity.text + '<br />' %>
           <%= activity.state %>: <%= activity_distance_of_state_changed_in_words(activity) %> ago
           <%= toggle_activity_link(activity) %>
           <% if activity.minutes.to_i > 0 %>
