@@ -1,2 +1,17 @@
-<br>
-<%= image_tag burndown.gchart.to_url %>
+<%= image_tag burndown.gchart.to_url, :style => "margin-top: 2em" %>
+
+<table style="margin-top: 2em">
+  <thead>
+    <tr>
+      <td></td>
+      <%= burndown.days.map{|day| "<td>#{day.strftime('%d.%m.')}</td>"} %>
+    </tr>
+  </thead>
+  <tbody>
+  <% (burndown.data.unshift ['estimated', 'actual', 'remaining']).transpose.each do |data| %>
+    <tr>
+      <%= data.map{|value| "<td>#{value}</td>"} %>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

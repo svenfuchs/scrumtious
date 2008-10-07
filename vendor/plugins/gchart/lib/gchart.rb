@@ -13,34 +13,34 @@ module GChart
   class << self
     # Convenience constructor for GChart::Line.
     def line(*args, &block); Line.new(*args, &block) end
-    
+
     # Convenience constructor for GChart::XYLine.
     def xyline(*args, &block); XYLine.new(*args, &block) end
-    
+
     # Convenience constructor for GChart::Bar.
-    def bar(*args, &block); Bar.new(*args, &block) end    
-    
+    def bar(*args, &block); Bar.new(*args, &block) end
+
     # Convenience constructor for GChart::Map.
-    def map(*args, &block); Map.new(*args, &block) end    
+    def map(*args, &block); Map.new(*args, &block) end
 
     # Convenience constructor for GChart::Meter.
-    def meter(*args, &block); Meter.new(*args, &block) end    
+    def meter(*args, &block); Meter.new(*args, &block) end
 
     # Convenience constructor for GChart::Pie.
-    def pie(*args, &block); Pie.new(*args, &block) end    
-    
+    def pie(*args, &block); Pie.new(*args, &block) end
+
     # Convenience constructor for GChart::Pie3D.
-    def pie3d(*args, &block); Pie3D.new(*args, &block) end    
-    
+    def pie3d(*args, &block); Pie3D.new(*args, &block) end
+
     # Convenience constructor for GChart::Line.
     def sparkline(*args, &block); Sparkline.new(*args, &block) end
 
     # Convenience constructor for GChart::Venn.
-    def venn(*args, &block); Venn.new(*args, &block) end    
-    
+    def venn(*args, &block); Venn.new(*args, &block) end
+
     # Convenience constructor for GChart::Scatter.
     def scatter(*args, &block); Scatter.new(*args, &block) end
-    
+
     # Encode +n+ as a string. +n+ is normalized based on +max+.
     # +encoding+ can currently only be :extended.
     def encode(encoding, n, max)

@@ -1,63 +1,59 @@
 class Burndown
-  def initialize(scope, start_at, end_at)
-    @scope, @start_at, @end_at = scope, start_at, end_at
-    raise "start_at and end_at must be not nil" if  @start_at.nil? or @end_at.nil?
+  class Row
+    attr_reader :day, :estimated, :actual
+    
+    def initialize(day, estimated = nil, actual = nil)
+      @day, @estimated, @actual = day, estimated, actual.round(1)
+    end
+    
+    def remaining
+      (estimated - actual).round(1)
+    end
+    
+    def values
+      [estimated, actual, remaining]
+    end
   end
   
-  # def data
-  #   @data ||= begin
-  #     data = []
-  #     e, a = collect_estimated, collect_actual
-  #     until e.empty?
-  #       day, estimated, day, actual = *(e.shift + a.shift)
-  #       remaining = (estimated - actual).round(1)
-  #       data << [day, {:estimated => estimated, :actual => actual, :remaining => remaining}]
-  #     end
-  #     data
-  #   end
-  # end
+  attr_reader :rows
+  
+  def initialize(scope, start_at, end_at)
+    raise "start_at and end_at must be not nil" if  start_at.nil? or end_at.nil?
+    @scope, @start_at, @end_at = scope, start_at, end_at
+    @rows = []
+    collect!
+  end
+  
+  def days
+    @days ||= rows.map(&:day)
+  end
   
   def data
-    @data ||= begin
-      data = [[], [], []]
-      e, a = collect_estimated, collect_actual
-      until e.empty?
-        day, estimated, day, actual = *(e.shift + a.shift)
-        data[0] << estimated
-        data[1] << actual.round(1)
-        data[2] << (estimated - actual).round(1)
-      end
-      data
-    end
+    @data ||= rows.map(&:values)
   end
   
   def gchart
     require 'gchart'
-    GChart.line :title => "Burndown chart", 
-                :data => data, 
-                :legend => ['estimated', 'actual', 'remaining'],
-                :colors => ["ff4400", "0066ff", "00ff00"]
+    data = self.data.transpose << [0,0,0,0,0,1]
+    p data
+    GChart.xyline :title => "Burndown chart", 
+                  :data => data, 
+                  :legend => ['estimated', 'actual', 'remaining'],
+                  :colors => ["ff4400", "0066ff", "00ff00"]
   end
   
   protected
   
-    def collect_actual
+    def collect!
+      rows.clear
       end_at = [Time.zone.today, @end_at].min
-      remaining = (@start_at..end_at).to_a.map do |day|
-        [day, Array(@scope).map do |ticket|
-          ticket.actual_at(day)
-        end.sum]
+      remaining = (@start_at..end_at).to_a.each do |day|
+        estimated, actual = collect_attribute(:estimated_at, day), collect_attribute(:actual_at, day)
+        @rows << Row.new(day, estimated, actual)
       end
-      @scope.is_a?(Array) ? remaining : remaining.first
     end
-  
-    def collect_estimated
-      end_at = [Time.zone.today, @end_at].min
-      estimated = (@start_at..end_at).to_a.map do |day|
-        [day, Array(@scope).map do |ticket|
-          ticket.estimated_at(day)
-        end.sum]
-      end
-      @scope.is_a?(Array) ? estimated : estimated.first
+    
+    def collect_attribute(attribute, day)
+      Array(@scope).map{|ticket| ticket.send(attribute, day) }.sum
     end
 end
