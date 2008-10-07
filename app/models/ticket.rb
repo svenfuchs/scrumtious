@@ -54,10 +54,21 @@ class Ticket < ActiveRecord::Base
     activities.select{|a| range.include? a.date }
   end
   
-  def actual_hours(sprint = nil)
-    range = sprint ? [sprint.start_at, sprint.end_at] : []
-    minutes = activity_minutes *range
+  def actual_hours(*period)
+    minutes = activity_minutes *period
     minutes.to_f / 60
+  end
+  
+  def actual_at(day)
+    (sprint.start_at..day).map{|d| actual_hours(d) }.sum
+  end
+  
+  def estimated_at(day)
+    @versions ||= self.versions.all(:order => 'id DESC')
+    @versions.each{|v| return v.estimated.to_f if v.created_at.to_date <= day }
+    @versions.first.estimated.to_f
+    # version = versions.find(:first, :conditions => ["date(created_at) <= ?", day], :order => "created_at DESC")
+    # version.estimated.to_f
   end
   
   def children
@@ -81,14 +92,10 @@ class Ticket < ActiveRecord::Base
     end
     
     def save_version?
-      estimated_changed? and sprint_running? and !latest_version_from_today? or false
+      estimated_changed? and sprint_running?
     end
     
     def sprint_running?
       sprint and sprint.running?
-    end
-    
-    def latest_version_from_today?
-      versions.latest and (versions.latest.created_at != Time.zone.today) or false
     end
 end

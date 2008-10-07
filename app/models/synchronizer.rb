@@ -24,7 +24,6 @@ module Lighthouse
         result += paged
         page += 1
       end
-      p result
       result.compact
     end
   end

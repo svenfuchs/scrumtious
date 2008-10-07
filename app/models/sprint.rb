@@ -15,6 +15,10 @@ class Sprint < Milestone
     end
   end
   
+  def period
+    [start_at, end_at]
+  end
+  
   def release_id=(release_id)
     tickets.update_all :release_id => release_id
     self[:release_id] = release_id
@@ -28,5 +32,9 @@ class Sprint < Milestone
   
   def running?
     start_at <= Time.zone.today and Time.zone.today <= end_at
+  end
+
+  def burndown
+    Burndown.new(tickets, start_at, end_at)
   end
 end

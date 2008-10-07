@@ -18,4 +18,4 @@
 
 <%= render :partial => "tickets", :locals => {:tickets => @tickets, :tracking => true } %>
 
-
+<%= render :partial => "burndown/chart", :locals => {:burndown => @sprint.burndown} %>
