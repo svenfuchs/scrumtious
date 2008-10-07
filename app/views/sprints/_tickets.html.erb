@@ -21,7 +21,7 @@
   <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
     <td><%= toggle_ticket_activity_link(ticket) %></td>
     <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
-    <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
+    <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
     <td><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
     <td class="estimated"><%= ticket.estimated.to_i %></td>
     <td class="actual"><%= ticket.actual_hours(@sprint) > 0 ? ticket.actual_hours(@sprint).round(1) : 0 %></td>

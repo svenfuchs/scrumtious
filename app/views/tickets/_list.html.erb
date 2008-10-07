@@ -21,7 +21,7 @@
           <td class="sprint"><%= ticket.sprint ? link_to(h(ticket.sprint.name), ticket.sprint)  : '-' %></td>
           <td class="assigned"><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
           <td class="estimated"><%= ticket.estimated.to_i %></td>
-          <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url %></td>
+          <td><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
           <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
         </tr>
       <% end %>

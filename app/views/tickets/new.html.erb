@@ -1,0 +1,53 @@
+<p>
+  <%= link_to 'Projects', projects_path %> »
+  <%= link_to h(@project.name), @project %> »
+  <%= link_to(h(@release.name), @release) + ' »' if @release %>
+  <%= link_to(h(@sprint.name), @sprint) + ' »' if @sprint %>
+</p>
+
+<h1>New ticket</h1>
+
+<% form_for(@ticket) do |f| %>
+  <%= hidden_field_tag :project_id, @project.id %>
+  <%= hidden_field_tag :return_to, params[:return_to] %>
+  <%= f.error_messages %>
+  
+  <% unless @project.releases.empty? %>
+    <p>
+      <%= f.label :release_id, 'Release' %><br />
+      <%= f.collection_select :release_id, @project.releases, :id, :name, :include_blank => true %>
+    </p>
+  <% end %>
+  <% unless @project.sprints.empty? %>
+    <p>
+      <%= f.label :sprint_id, 'Sprint' %><br />
+      <%= f.collection_select :sprint_id, @project.sprints, :id, :name, :include_blank => true %>
+    </p>
+  <% end %>
+  <% unless @project.components.empty? %>
+    <p>
+      <%= f.label :component_id, 'Component' %><br />
+      <%= f.collection_select :component_id, @project.components, :id, :name, :include_blank => true %>
+    </p>
+  <% end %>
+  <p>
+    <%= f.label :user_id, 'Assigned to' %><br />
+    <%= f.collection_select :user_id, User.all, :id, :first_name, :include_blank => true %>
+  </p>
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :estimated %><br />
+    <%= f.text_field :estimated %>
+  </p>
+  <p>
+    <%= f.label :local %><br />
+    <%= f.check_box :local %>
+  </p>
+  <p>
+    <%= f.submit "Create" %> or <%= link_to 'back', @project %>
+  </p>
+<% end %>
+
