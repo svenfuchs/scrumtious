@@ -34,10 +34,10 @@ class Burndown
   
   def gchart
     require 'gchart'
-    GChart.xyline :title => "Burndown chart", 
-                  :data => data.transpose, 
-                  :legend => ['estimated', 'actual', 'remaining'],
-                  :colors => ["ff4400", "0066ff", "00ff00"]
+    GChart.line :title => "Burndown chart", 
+                :data => data.transpose, 
+                :legend => ['estimated', 'actual', 'remaining'],
+                :colors => ["ff4400", "0066ff", "00ff00"]
   end
   
   protected
