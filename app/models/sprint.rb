@@ -14,7 +14,6 @@ class Sprint < Milestone
       find :all, :order => order
     end
   end
-#                     :order => 
   
   def release_id=(release_id)
     tickets.update_all :release_id => release_id
@@ -25,5 +24,9 @@ class Sprint < Milestone
     return [] unless start_at
     to_date ||= end_at
     (0..(to_date - start_at).to_i).collect{|i| start_at + i.days }
+  end
+  
+  def running?
+    start_at <= Time.zone.today and Time.zone.today <= end_at
   end
 end

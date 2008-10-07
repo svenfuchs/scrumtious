@@ -5,6 +5,7 @@ class SprintsController < ApplicationController
   
   def show
     @tickets = @sprint.tickets.ordered params[:sort]
+    @tickets.each do |ticket| p ticket.versions end
   end
 
   def new

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081005083905) do
+ActiveRecord::Schema.define(:version => 20081007133049) do
 
   create_table "activities", :force => true do |t|
     t.integer  "ticket_id"
@@ -61,6 +61,14 @@ ActiveRecord::Schema.define(:version => 20081005083905) do
     t.datetime "updated_at"
   end
 
+  create_table "ticket_versions", :force => true do |t|
+    t.integer  "ticket_id"
+    t.integer  "version"
+    t.float    "estimated"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "tickets", :force => true do |t|
     t.integer  "remote_id"
     t.integer  "parent_id"
@@ -80,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20081005083905) do
     t.integer  "priority"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "version"
   end
 
   create_table "users", :force => true do |t|

@@ -8,7 +8,13 @@ class Ticket < ActiveRecord::Base
   belongs_to :user
   has_many :activities, :dependent => :destroy
   
+  acts_as_versioned :if => :save_version?
+  
   class << self
+    def versioned_columns
+      @versioned_columns ||= columns.select{|c| c.name == 'estimated' }
+    end
+    
     def sync_from_remote_ticket!(project, remote_ticket)
       ticket = find_or_initialize_by_remote_id remote_ticket.id
       ticket.title = remote_ticket.title
@@ -24,7 +30,7 @@ class Ticket < ActiveRecord::Base
   
   def update_attributes(attributes)
     unless attributes[:sprint_id].blank?
-      sprint = Sprint.find(sprint_id)
+      sprint = Sprint.find(attributes[:sprint_id])
       attributes[:release_id] = sprint ? sprint.release_id : nil
     end
     super
@@ -72,5 +78,17 @@ class Ticket < ActiveRecord::Base
   
     def set_remote_user(assigned_user_id)
       self.user = User.find_by_remote_id(assigned_user_id) if assigned_user_id
+    end
+    
+    def save_version?
+      estimated_changed? and sprint_running? and !latest_version_from_today? or false
+    end
+    
+    def sprint_running?
+      sprint and sprint.running?
+    end
+    
+    def latest_version_from_today?
+      versions.latest and (versions.latest.created_at != Time.zone.today) or false
     end
 end
