@@ -6,6 +6,9 @@ class TicketsController < ApplicationController
   
   def show
   end
+
+  def new
+  end
   
   def create
     if @ticket.save

@@ -8,6 +8,7 @@
 
 <h1>Editing ticket</h1>
 
+<!-- <%= link_to 'new', new_ticket_path(:ticket => {:project_id => @project.id}) %> &middot; -->
 <%= link_to 'split out child ticket', tickets_path(:ticket => @ticket.to_params.merge(:parent_id => @ticket.id)), :method => :post %> &middot;
 <%= link_to 'delete', @ticket, :method => :delete, :confirm => 'Are you sure?' %>
 
@@ -39,6 +40,10 @@
   <p>
     <%= f.label :estimated %><br />
     <%= f.text_field :estimated %>
+  </p>
+  <p>
+    <%= f.label :local %><br />
+    <%= f.check_box :local %>
   </p>
   <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @project %>
