@@ -6,6 +6,14 @@ require 'spec'
 require 'spec/rails'
 require 'rspec_on_rails_on_crack'
 
+Synchronizer.no_sync!
+
+class Spec::Rails::Example::ControllerExampleGroup
+  before :each do 
+    controller.stub!(:authenticate)
+  end
+end
+
 Spec::Runner.configure do |config|
   # If you're not using ActiveRecord you should remove these
   # lines, delete config/database.yml and disable :active_record

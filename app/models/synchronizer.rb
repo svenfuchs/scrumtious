@@ -67,13 +67,20 @@ end
 
 class Synchronizer
   attr_accessor :project
+  cattr_accessor :sync
   @@sync = true
   
   class << self
     def with_no_sync
-      @@sync = false # TODO not threadsafe
+      old_sync, self.sync = self.sync, false # TODO not threadsafe
       yield
-      @@sync = true
+      self.sync = old_sync
+    end
+    
+    alias :sync? :sync
+    
+    def no_sync!
+      self.sync = false
     end
   end
 
@@ -84,7 +91,7 @@ class Synchronizer
   end
   
   def run!
-    return unless @@sync
+    return unless self.class.sync?
     pull_users
     pull_milestones
     pull_tickets
@@ -96,7 +103,7 @@ class Synchronizer
   end
   
   def push_ticket(ticket)
-    return unless @@sync
+    return unless self.class.sync?
     attributes = { :number => ticket.remote_id, :project_id => @project.remote_id }
     ticket.changes.each do |name, values|
       case name

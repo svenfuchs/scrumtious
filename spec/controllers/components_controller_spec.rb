@@ -30,7 +30,7 @@ describe ComponentsController, "POST #create" do
     end
     
     it_assigns :component, :flash => { :notice => :not_nil }
-    it_redirects_to { project_path(@component.project) }
+    it_redirects_to { edit_project_path(@component.project) }
   end
 end
 
@@ -63,7 +63,7 @@ describe ComponentsController, "PUT #update" do
     end
     
     it_assigns :component, :flash => { :notice => :not_nil }
-    it_redirects_to { project_path(@project) }
+    it_redirects_to { edit_project_path(@project) }
   end
 
   describe ComponentsController, "(unsuccessful save)" do

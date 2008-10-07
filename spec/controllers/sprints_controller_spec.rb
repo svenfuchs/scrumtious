@@ -4,7 +4,7 @@ describe SprintsController, "GET #show" do
   act! { get :show, :id => 1 }
 
   before do
-    @sprint  = sprints(:default)
+    @sprint  = milestones(:sprint_1)
     Sprint.stub!(:find).with('1').and_return(@sprint)
   end
   
@@ -65,7 +65,7 @@ describe SprintsController, "GET #edit" do
   act! { get :edit, :id => 1 }
   
   before do
-    @sprint  = sprints(:default)
+    @sprint  = milestones(:sprint_1)
     Sprint.stub!(:find).with('1').and_return(@sprint)
   end
 
@@ -76,7 +76,7 @@ end
 describe SprintsController, "PUT #update" do
   before do
     @attributes = {}
-    @sprint = sprints(:default)
+    @sprint = milestones(:sprint_1)
     Sprint.stub!(:find).with('1').and_return(@sprint)
   end
   
@@ -107,7 +107,7 @@ describe SprintsController, "DELETE #destroy" do
   act! { delete :destroy, :id => 1 }
   
   before do
-    @sprint = sprints(:default)
+    @sprint = milestones(:sprint_1)
     @sprint.stub!(:destroy)
     Sprint.stub!(:find).with('1').and_return(@sprint)
   end

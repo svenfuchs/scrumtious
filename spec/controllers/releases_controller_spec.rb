@@ -4,7 +4,7 @@ describe ReleasesController, "GET #show" do
   act! { get :show, :id => 1 }
 
   before do
-    @release  = releases(:default)
+    @release = milestones(:release_001)
     Release.stub!(:find).with('1').and_return(@release)
   end
 
@@ -65,7 +65,7 @@ describe ReleasesController, "GET #edit" do
   act! { get :edit, :id => 1 }
 
   before do
-    @release  = releases(:default)
+    @release  = milestones(:release_001)
     Release.stub!(:find).with('1').and_return(@release)
   end
 
@@ -76,7 +76,7 @@ end
 describe ReleasesController, "PUT #update" do
   before do
     @attributes = {}
-    @release = releases(:default)
+    @release = milestones(:release_001)
     Release.stub!(:find).with('1').and_return(@release)
   end
 
@@ -107,7 +107,7 @@ describe ReleasesController, "DELETE #destroy" do
   act! { delete :destroy, :id => 1 }
 
   before do
-    @release = releases(:default)
+    @release = milestones(:release_001)
     @release.stub!(:destroy)
     Release.stub!(:find).with('1').and_return(@release)
   end

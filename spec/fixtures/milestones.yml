@@ -1,3 +1,6 @@
-default:
-  name: name
-  body: body
+release_001:
+  name: release_001
+  type: Release
+sprint_1:
+  name: sprint_1
+  type: Sprint
