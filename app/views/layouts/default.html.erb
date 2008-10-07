@@ -113,7 +113,7 @@
 
     $(document).ready(function () {
       $("#flash").animate({opacity: 1.0}, 3000).fadeOut(1000);
-      $("#tickets .estimated").editable(update_estimated, { cssclass: "estimated-edit" });
+      $("#tickets tbody .estimated").editable(update_estimated, { cssclass: "estimated-edit" });
       $("#tickets .release").editable(update_release, { data: '<%= release_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
       $("#tickets .sprint").editable(update_sprint, { data: '<%= sprint_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });
       $("#tickets .assigned").editable(update_assigned_user, { data: '<%= user_select_data_json %>', type: 'select', submit: 'OK', event: 'click', cssclass: 'inline-select' });

@@ -31,4 +31,12 @@
   </tr>
 <% end %>
 </tbody>
+<tfoot>
+  <tr>
+    <td colspan="4"></td>
+    <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
+    <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
+    <td colspan="2"></td>
+  </tr>
+</tfoot>
 </table>
