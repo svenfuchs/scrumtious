@@ -8,7 +8,7 @@
     <% if tracking  %>
       <th><%= link_to 'Hours', sprint_path(@sprint, :sort => :hours) %></th>
       <th>Actual</th>
-      <% @sprint.scheduled_days(Date.today).each do |day| %>
+      <% @sprint.scheduled_days(Time.zone.today).each do |day| %>
         <th><%= day.strftime('%d.%m.') %></th>
       <% end %>
     <% else %>
@@ -25,7 +25,7 @@
     <td><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
     <td class="estimated"><%= ticket.estimated.to_i %></td>
     <td class="actual"><%= ticket.actual_hours(*@sprint.period) > 0 ? ticket.actual_hours(*@sprint.period).round(1) : 0 %></td>
-    <% tickets.first.sprint.scheduled_days(Date.today).each do |day| %>
+    <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
       <td><%= activity_hours_on(ticket, day) %></td>
     <% end %>
   </tr>
@@ -36,7 +36,6 @@
     <td colspan="4"></td>
     <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
     <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
-    <td colspan="2"></td>
   </tr>
 </tfoot>
 </table>
