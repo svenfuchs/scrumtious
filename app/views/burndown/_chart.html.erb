@@ -3,14 +3,17 @@
 <table style="margin-top: 2em">
   <thead>
     <tr>
-      <td></td>
-      <%= burndown.days.map{|day| "<td>#{day.strftime('%d.%m.')}</td>"} %>
+      <th></th>
+      <th>estimated</th>
+      <th>actual</th>
+      <th>remaining</th>
     </tr>
   </thead>
   <tbody>
-  <% (burndown.data.unshift ['estimated', 'actual', 'remaining']).transpose.each do |data| %>
+  <% burndown.rows.each do |row| %>
     <tr>
-      <%= data.map{|value| "<td>#{value}</td>"} %>
+      <td><%= row.day.strftime('%a, %d.%m.') %></td>
+      <%= row.values.map{|value| "<td>#{value}</td>"} %>
     </tr>
   <% end %>
   </tbody>

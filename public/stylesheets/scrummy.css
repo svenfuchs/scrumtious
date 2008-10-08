@@ -144,12 +144,25 @@ tr, td {
 #main td {
   padding: 2px 10px;
 }
+#main td.activity-toggle {
+	width: 16px;
+}
+#main td.remote-url {
+	width: 20px;
+}
+#main td.ticket {
+	width: 100%;
+}
 #main td.estimated,
 #main td.actual {
   background-color: #f9f9f9;
 }
 #main tr.empty td {
 	font-size: 11px;
+}
+#main tfoot th {
+	text-align: left;
+	font-style: italic;
 }
 #main tfoot td {
 	font-style: italic;
