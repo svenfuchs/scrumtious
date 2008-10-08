@@ -46,7 +46,7 @@
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
       <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
-        <td><%= tickets.map{|t| activity_hours_on(t, day).to_i }.sum %></td>
+        <td><%= tickets.map{|t| activity_hours_on(t, day).to_f }.sum %></td>
       <% end %>
       <td></td>
     </tr>
