@@ -1,4 +1,10 @@
 class User < ActiveRecord::Base
+  has_many :activities, :order => "id DESC" do
+    def current
+      first
+    end
+  end
+  
   class << self
     def sync_from_remote_user!(remote_user)
       user = find_or_initialize_by_remote_id remote_user.id

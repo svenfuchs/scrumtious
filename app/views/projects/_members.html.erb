@@ -1,0 +1,12 @@
+<h2>Memberships</h2>
+<% form_for @project do |f| %>
+  <% @users.each do |user| %>
+    <p>
+      <%= check_box_tag "project[member_ids][]", user.id, @project.members.include?(user), :id => "project_member_ids_#{user.id}" %>
+      <label id="project_member_ids_#{user.id}"><%= user.name %></label>
+    </p>
+  <% end %>
+  <p class="buttons">
+    <%= f.submit 'Save memberships' %>
+  </p>
+<% end %>
