@@ -3,9 +3,11 @@ class Activity < ActiveRecord::Base
   belongs_to :user
   
   def update_attributes(attributes)
-    state = attributes.delete[:state]
-    super
-    self.state = state # make sure state is set last
+    state = attributes.delete :state
+    super and begin
+      self.state = state # make sure state is set last
+      save # TODO figure out how to save just once
+    end
   end
   
   def state
@@ -20,7 +22,7 @@ class Activity < ActiveRecord::Base
   end
   
   def stop!
-    self.minutes = self.minutes.to_i + (Time.zone.now - self.started_at) / 60
+    self.minutes = self.minutes.to_i + (Time.zone.now - self.started_at) / 60 if self.started_at
     self.started_at = nil
     self.stopped_at = Time.zone.now
   end
