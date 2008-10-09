@@ -161,6 +161,15 @@ tr, td {
 #main tr.empty td {
 	font-size: 11px;
 }
+#main tr.totals th {
+	font-style: italic;
+	text-align: right;
+}
+#main tr.totals td {
+	font-style: italic;
+	font-size: 11px;
+	color: #666;
+}
 #main tfoot th {
 	text-align: left;
 	font-style: italic;

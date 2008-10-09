@@ -1,0 +1,27 @@
+<h1>Team schedule</h1>
+<table id="schedule">
+  <thead>
+    <tr>
+      <th></th>
+      <% @members.each do |member| %>
+        <th><%= member.first_name %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% @schedule.days.each do |day| %>
+      <tr>
+        <td><%= day.strftime('%d.%m.') %></td>
+        <% @members.each do |member| %>
+          <td id="<%= schedule_id(@schedule, member, day) %>" class="scheduled_hours"><%= @schedule.hours(member, day) || 0 %></td>
+        <% end %>
+      </tr>
+    <% end %>
+    <tr>
+      <td>total</td>
+      <% @members.each do |member| %>
+        <td class="scheduled_hours"><%= @schedule.hours(member) || 0 %></td>
+      <% end %>
+    </tr>
+  </tbody>
+</table>

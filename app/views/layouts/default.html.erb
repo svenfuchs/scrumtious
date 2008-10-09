@@ -87,8 +87,8 @@
     update_scheduled_hours = function(hours, settings) {
       var tokens = this.id.split('-');
       var project_id = tokens[1];
-      var day = tokens.slice(2, 5).join('-');
-      var user_id = tokens[5];
+      var user_id = tokens[2];
+      var day = tokens.slice(3, 6).join('-');
       var params = { '_method': 'put', 'authenticity_token': authenticity_token, user_id: user_id, hours: hours };
       $.post("/projects/" + project_id + "/schedule/" + day, params);
       return hours;
