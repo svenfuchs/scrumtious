@@ -130,6 +130,7 @@ tr, td {
   font-weight: normal;
   font-size: 11px;
 	font-style: italic;
+  border: 1px solid #ddd;
 }
 #main thead th {
   background-color: #eee;

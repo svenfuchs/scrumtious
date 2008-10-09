@@ -1,5 +1,3 @@
-require 'synchronizer/lighthouse'
-
 module Lighthouse  
   class Project
     include ActionView::Helpers::DateHelper

@@ -15,11 +15,9 @@ module ApplicationHelper
   private
 
     def jsonify_objects_for_select(objects, key, value, include_blank = true)
-      objects.sort!{|l, r| l.send(value) <=> r.send(value)}
-      p objects
       returning result = '{' do 
-        result << objects.map do |obj| 
-          # result << "'': ''" if include_blank
+        result << objects.sort{|l, r| l.send(value) <=> r.send(value)}.map do |obj| 
+          # result << "'': ''" if include_blank # WTF
           "#{ActiveSupport::JSON.encode(obj.send(key))}: #{ActiveSupport::JSON.encode(obj.send(value))}"
         end * ', ' << '}'
       end

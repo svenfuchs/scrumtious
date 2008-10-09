@@ -6,6 +6,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :categories
   map.resources :synchronizers
   map.resources :activities
+  map.resources :schedule, :path_prefix => "projects/:project_id"
+  
+  # map.update_schedule "/projects/:project_id/schedule/:day", 
+  #                     :controller => 'scheduled_days', :action => 'update', :conditions => {:method => :put}
 
   map.tickets_update_all "/tickets", :controller => 'tickets', :action => 'update_all', :conditions => {:method => :put}
   map.resources :tickets
