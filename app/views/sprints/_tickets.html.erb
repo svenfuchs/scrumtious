@@ -42,7 +42,9 @@
     </tr>
   <% end %>
     <tr class="totals">
-      <th colspan="<%= params[:sort] == 'assigned' ? 2 : 3 %>"></th>
+      <th colspan="<%= params[:sort] == 'assigned' ? 2 : 3 %>">
+        total
+      </th>
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
       <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
