@@ -2,6 +2,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :releases
   map.resources :projects
   map.resources :sprints
+  # map.burndown "sprints/:id/burndown.xml", :controller => 'sprints', :action => 'burndown'
+  
   map.resources :components
   map.resources :categories
   map.resources :synchronizers

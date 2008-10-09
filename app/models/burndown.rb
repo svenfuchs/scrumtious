@@ -40,6 +40,24 @@ class Burndown
                 :colors => ["ff4400", "0066ff", "00ff00"]
   end
   
+  def amchart_data
+    colors = %w{#B40000 #F7941D #0265AC}
+    chart = Ambling::Data::ColumnChart.new
+    
+    chart.graphs << estimated = Ambling::Data::LineGraph.new([], :title => "estimated", :color => colors[0])
+    chart.graphs << actual = Ambling::Data::LineGraph.new([], :title => "actual", :color => colors[1])
+    chart.graphs << remaining = Ambling::Data::LineGraph.new([], :title => "remaining", :color => colors[2])
+    
+    rows.each do |row|
+      chart.series << Ambling::Data::Value.new(row.day.strftime('%a, %d.%m.'), :xid => row.day)
+      
+      estimated << Ambling::Data::Value.new(row.estimated, :xid => row.day)
+      actual << Ambling::Data::Value.new(row.actual, :xid => row.day)
+      remaining << Ambling::Data::Value.new(row.remaining, :xid => row.day)
+    end
+    chart
+  end
+  
   protected
   
     def collect!

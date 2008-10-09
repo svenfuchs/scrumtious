@@ -39,6 +39,12 @@ class SprintsController < ApplicationController
     redirect_to release_url(@sprint.release)
   end
   
+  # def burndown
+  #   respond_to do |format|
+  #     format.xml { render :xml => @sprint.burndown.amchart_data.to_xml }
+  #   end
+  # end
+  
   protected
   
     def set_sprint

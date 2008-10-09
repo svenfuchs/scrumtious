@@ -1,0 +1,42 @@
+<script type="text/javascript" src="/amline/swfobject.js"></script>
+<div id="burndown"></div>
+  
+<% 
+  am_settings = Ambling::Line::Settings.new({ # WTF
+    # :grid => {
+    #   :category => {:alpha => 100}, :value => {:alpha => 10}
+    # },
+    # :values => {
+    #   :category => {:enabled => true, :frequency => 3}
+    # },
+    :plot_area => {
+      :margins => {:left => 30, :top => 40, :right => 100, :bottom => 40}
+    },
+    # :legend => {
+    #   :enabled => true, :x => 805, :y => 20, :width => 100, :text_color => '#000',
+    #   :max_columns => 1, :spacing => 2, :text_size => 10,
+    #   :key => {:size => 10}
+    # },
+    # :labels => {
+    #   :label => [
+    #     {:x => 350, :y => 5, :text => cdata_section("<b>Movie Attendence</b>"),
+    #       :text_size => 16, :text_color => '#0265AC'}
+    #   ]
+    # },
+    # :graphs => {
+    #   :graph => [
+    #     {:type => 'line', :gid => 1, :width => 3}
+    #   ]
+    # }
+  }).to_xml
+%>
+
+<script type="text/javascript">
+  $(document).ready(function () {
+  	var so = new SWFObject("/amline/amline.swf", "burndown", "520", "400", "8", "#FFFFFF");
+    so.addVariable("chart_data", encodeURIComponent('<%= @sprint.burndown.amchart_data.to_xml %>'));
+  	so.addVariable("chart_settings", encodeURIComponent('<%= am_settings %>'));
+  	so.write("burndown");
+	});
+</script>
+
