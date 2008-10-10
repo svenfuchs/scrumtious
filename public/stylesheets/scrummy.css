@@ -131,6 +131,7 @@ tr, td {
   font-size: 11px;
 	font-style: italic;
   border: 1px solid #ddd;
+	white-space: nowrap;
 }
 #main thead th {
   background-color: #eee;
@@ -193,7 +194,16 @@ tr, td {
 }  
 #activities p.info {
   font-size: 11px;
-}  
+}
+#schedule tbody th {
+	text-align: right;
+}
+#schedule tr.total th,
+#schedule tr.total td {
+	background-color: #f6f6e6;
+	font-size: 11px;
+	font-style: italic;
+}
 .toggle {
 	float: left;
 	display: block;
@@ -204,10 +214,10 @@ tr, td {
 	text-indent: -200%;
 }
 .start {
-	background: url(/images/icons/accept.png);
+	background: url(/images/icons/control_play.png);
 }
 .stop {
-	background: url(/images/icons/delete.png);
+	background: url(/images/icons/control_stop_blue.png);
 }
 
 

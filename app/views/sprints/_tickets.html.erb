@@ -2,14 +2,14 @@
 <thead>
   <tr>
     <% unless params[:sort] == 'assigned' %>
-      <th><%= link_to 'Assigned', sprint_path(@sprint, :sort => :assigned) %></th>
+      <th><%= link_to 'Assigned', sorted_sprint_path(:assigned) %></th>
     <% end %>
-    <th><%= link_to 'URL', sprint_path(@sprint, :sort => :url) %></th>
-    <th><%= link_to 'Ticket', @sprint %></th>
+    <th><%= link_to 'URL', sorted_sprint_path(:url) %></th>
+    <th><%= link_to 'Ticket', sorted_sprint_path(:ticket) %></th>
     <% if tracking  %>
-      <th><%= link_to 'Hours', sprint_path(@sprint, :sort => :hours) %></th>
+      <th><%= link_to 'Hours', sorted_sprint_path(:hours) %></th>
       <th>Actual</th>
-      <% @sprint.scheduled_days(Time.zone.today).each do |day| %>
+      <% @sprint.scheduled_days.each do |day| %>
         <th><%= day.strftime('%d.%m.') %></th>
       <% end %>
     <% else %>
@@ -21,21 +21,29 @@
 
 <% tickets.each do |user, tickets| %>
   <tbody>
-  <% if user %>
-    <tr>
+    <% if user %>
+    <tr class="totals">
       <th><%= user.first_name %></th>
+      <th colspan="<%= user ? '1' : '2' %>"><%= link_to 'scheduled', schedule_index_path(@project) %></th>
+      <td class="scheduled" colspan="2"><%= @sprint.schedule.hours(user) %></td>
+      <% tickets.first.sprint.scheduled_days.each do |day| %>
+        <% if day <= Time.zone.today %>
+          <td class="scheduled"><%= @sprint.schedule.hours(user, day).to_i %></td>
+        <% end %>
+      <% end %>
+      <td></td>
     </tr>
-  <% end %>
+    <% end %>
   <% tickets.each do |ticket| %>
     <tr id="ticket-<%= ticket.id %>" class="state-<%= ticket.state %>">
       <% unless params[:sort] == 'assigned' %>
         <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
       <% end %>
-      <td class="remote-url"><%= link_to "##{h ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
-      <td class="ticket"><%= link_to h(ticket.title), edit_ticket_path(ticket, :return_to => request.url) %></td>
+      <td class="remote-url"><%= link_to "##{ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
+      <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
       <td class="estimated"><%= ticket.estimated.to_i %></td>
       <td class="actual"><%= ticket.actual_hours(*@sprint.period) > 0 ? ticket.actual_hours(*@sprint.period).round(1) : 0 %></td>
-      <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
+      <% tickets.first.sprint.scheduled_days.each do |day| %>
         <td><%= activity_hours_on(ticket, day) %></td>
       <% end %>
       <td class="activity-toggle"><%= toggle_ticket_activity_link(ticket) %></td>
@@ -47,20 +55,8 @@
       </th>
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
-      <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
+      <% tickets.first.sprint.scheduled_days.each do |day| %>
         <td><%= tickets.map{|t| activity_hours_on(t, day).to_f }.sum %></td>
-      <% end %>
-      <td></td>
-    </tr>
-    <tr class="totals">
-      <th colspan="<%= params[:sort] == 'assigned' ? 2 : 3 %>">
-        <%= link_to 'scheduled', schedule_index_path(@project) %>
-      </th>
-      <td class="scheduled" colspan="2"><%= @schedule.hours(user) %></td>
-      <% tickets.first.sprint.scheduled_days(Time.zone.today).each do |day| %>
-        <% if day <= Time.zone.today %>
-          <td class="scheduled"><%= @schedule.hours(user, day).to_i %></td>
-        <% end %>
       <% end %>
       <td></td>
     </tr>

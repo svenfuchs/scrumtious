@@ -8,22 +8,33 @@ class Schedule
   end
   
   def start_at
-    first_week_day
+    first_week_day.to_date
   end
   
   def end_at
-    (start_at + 6.days).to_date
+    (start_at + (days_count - 1).days).to_date
+  end
+  
+  def days_count
+    @weeks * 7
   end
   
   def days
     (start_at..end_at).to_a
   end
   
-  def hours(user, day = nil)
-    scheduled_days.select{|d| (day.nil? or d.day == day) and d.user_id == user.id }.map(&:hours).sum
+  def hours(user, start_at = nil, end_at = nil)
+    range = days_range(start_at, end_at)
+    days = scheduled_days.select{|s| range.include?(s.day) and s.user_id == user.id }
+    days.map(&:hours).sum
   end
   
   private
+  
+    def days_range(start_at, end_at)
+      start_at ? (end_at = start_at) : (start_at, end_at = self.start_at, self.end_at) if end_at.blank?
+      start_at..end_at
+    end
   
     def first_week_day
       Time.zone.local(@day.year, @day.month, @day.day - day_of_week).to_date

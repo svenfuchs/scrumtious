@@ -11,17 +11,20 @@
   <tbody>
     <% @schedule.days.each do |day| %>
       <tr>
-        <td><%= day.strftime('%d.%m.') %></td>
+        <th><%= day.strftime('%a, %d.%m.') %></th>
         <% @members.each do |member| %>
           <td id="<%= schedule_id(@schedule, member, day) %>" class="scheduled_hours"><%= @schedule.hours(member, day) || 0 %></td>
         <% end %>
       </tr>
-    <% end %>
-    <tr>
-      <td>total</td>
-      <% @members.each do |member| %>
-        <td class="scheduled_hours"><%= @schedule.hours(member) || 0 %></td>
+      <% if day.strftime('%A').downcase == 'sunday' %>
+        <tr class="total">
+          <td>total</td>
+          <% @members.each do |member| %>
+            <td class="scheduled_hours"><%= @schedule.hours(member, day, day - 7.days) || 0 %></td>
+          <% end %>
+        </tr>
+        <tr><td colspan="<%= 1 + @members.size %>">&nbsp;</td></tr>
       <% end %>
-    </tr>
+    <% end %>
   </tbody>
 </table>

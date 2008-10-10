@@ -4,10 +4,7 @@ class SprintsController < ApplicationController
   before_filter :set_project
   
   def show
-    params[:sort] ||= 'assigned'
-    @tickets = @sprint.tickets.ordered params[:sort]
-    @tickets = (params[:sort] == 'assigned') ? @tickets.group_by(&:user) : {nil => @tickets}
-    @schedule = Schedule.new @project
+    @tickets = @sprint.tickets.grouped(params[:sort] || 'assigned')
   end
 
   def new
