@@ -17,7 +17,7 @@ class Sprint < Milestone
     
     def grouped(order)
       tickets = sorted(order)
-      (order.to_sym == :assigned) ? tickets.group_by(&:user) : {nil => tickets}
+      (order.to_sym == :assigned) ? tickets.group_by(&:user) : [[nil, tickets]]
     end
   end
   

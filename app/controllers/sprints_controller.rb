@@ -5,7 +5,7 @@ class SprintsController < ApplicationController
   
   def show
     params[:sort] ||= 'assigned'
-    @tickets = @sprint.tickets.grouped params[:sort]
+    @groups = @sprint.tickets.grouped params[:sort]
   end
 
   def new
