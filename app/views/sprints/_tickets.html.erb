@@ -24,9 +24,9 @@
     <% if user %>
     <tr class="totals">
       <th><%= user.first_name %></th>
+      <th colspan="2"><%= link_to 'scheduled', schedule_index_path(@project) %></th>
       <th></th>
-      <th><%= link_to 'scheduled', schedule_index_path(@project) %></th>
-      <td class="scheduled" colspan="2"><%= @sprint.schedule.hours(user) %></td>
+      <td class="scheduled"><%= @sprint.schedule.hours(user) %></td>
       <% @sprint.scheduled_days.each do |day| %>
         <% if day <= Time.zone.today %>
           <td class="scheduled"><%= @sprint.schedule.hours(user, day).to_i %></td>
