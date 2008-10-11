@@ -24,7 +24,7 @@
     <% if user %>
     <tr class="totals">
       <th><%= user.first_name %></th>
-      <th colspan="2"><%= link_to 'scheduled', schedule_index_path(@project) %></th>
+      <th><%= link_to 'scheduled', schedule_index_path(@project) %></th>
       <th></th>
       <td class="scheduled"><%= @sprint.schedule.hours(user) %></td>
       <% @sprint.scheduled_days.each do |day| %>
