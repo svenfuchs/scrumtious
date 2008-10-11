@@ -22,7 +22,11 @@ class Sprint < Milestone
   end
   
   def schedule
-    Schedule.new project, start_at #, end_at
+    @schedule ||= Schedule.new project, start_at #, end_at
+  end
+  
+  def scheduled_hours(user)
+    schedule.hours(user, start_at, end_at)
   end
   
   def period
