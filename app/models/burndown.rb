@@ -3,7 +3,7 @@ class Burndown
     attr_reader :day, :estimated, :actual
     
     def initialize(day, estimated = nil, actual = nil)
-      @day, @estimated, @actual = day, estimated, actual.round(1)
+      @day, @estimated, @actual = day, estimated, actual.to_f.round(1)
     end
     
     def remaining

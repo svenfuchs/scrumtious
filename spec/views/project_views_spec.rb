@@ -18,6 +18,5 @@ describe "projects :edit page" do
         tags.first.attributes['checked'].should be_nil
       end
     end
-    puts response.body
   end
 end

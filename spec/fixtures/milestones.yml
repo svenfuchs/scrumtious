@@ -4,3 +4,10 @@ release_001:
 sprint_1:
   name: sprint_1
   type: Sprint
+  start_at: 2008-10-01
+  end_at: 2008-10-07
+sprint_2:
+  name: sprint_2
+  type: Sprint
+  start_at: 2008-10-08
+  end_at: 2008-10-15

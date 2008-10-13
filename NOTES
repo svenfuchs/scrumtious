@@ -1,3 +1,16 @@
+convert everything to use minutes then use a helper in views: <%= hrs ticket.estimated %>
+
+spec everything about syncs
+
+Ticket#lighthouse_url » helper
+Ticket#number_and_title » helper
+
+
+
+
+
+
+
 http://github.com/hpoydar/lighthouse-pm
 
 make tickets versioned (git://github.com/technoweenie/acts_as_versioned.git)

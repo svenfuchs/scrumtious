@@ -6,7 +6,7 @@
 </div>
 
 <div id="action">
-  <% if @sprint.start_at %>
+  <% if @sprint.start_at and @sprint.end_at %>
     <%=h "#{@sprint.start_at.strftime('%A, %e.%m.')} - #{@sprint.end_at.strftime('%A, %e.%m.')}" %>
   <% else %>
     not scheduled
@@ -18,4 +18,4 @@
 
 <%= render :partial => "tickets", :locals => {:groups => @groups, :tracking => true } %>
 
-<%= render :partial => "burndown/amchart", :locals => {:burndown => @sprint.burndown} %>
+<%= render :partial => "burndown/amchart", :locals => {:burndown => @sprint.burndown} if @sprint.start_at and @sprint.end_at %>

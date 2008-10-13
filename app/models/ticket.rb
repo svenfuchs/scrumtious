@@ -12,7 +12,7 @@ class Ticket < ActiveRecord::Base
   
   class << self
     def versioned_columns
-      @versioned_columns ||= columns.select{|c| c.name == 'estimated' }
+      @versioned_columns ||= columns.select{|c| %w(sprint_id estimated).include? c.name }
     end
     
     def sync_from_remote_ticket!(project, remote_ticket)
@@ -64,11 +64,14 @@ class Ticket < ActiveRecord::Base
   end
   
   def estimated_at(day)
-    @versions ||= self.versions.all(:order => 'id DESC')
-    @versions.each{|v| return v.estimated.to_f if v.created_at.to_date <= day }
-    @versions.first.estimated.to_f
-    # version = versions.find(:first, :conditions => ["date(created_at) <= ?", day], :order => "created_at DESC")
-    # version.estimated.to_f
+    versions = self.current_sprint_versions_at(day, :order => 'id DESC')
+#    versions = self.versions.all(:order => 'id DESC')
+    versions.each{|v| return v.estimated.to_f if v.created_at.to_date <= day }
+    versions.first ? versions.first.estimated.to_f : 0
+  end
+  
+  def current_sprint_versions_at(day, options = {})
+    versions.all options.update(:conditions => ['sprint_id = ? AND DATE(updated_at) <= ?', sprint_id, day])
   end
   
   def children
@@ -92,7 +95,7 @@ class Ticket < ActiveRecord::Base
     end
     
     def save_version?
-      estimated_changed? and sprint_running?
+      (sprint_id_changed? or estimated_changed?) and sprint_running?
     end
     
     def sprint_running?

@@ -22,11 +22,11 @@ class Sprint < Milestone
   end
   
   def schedule
-    @schedule ||= Schedule.new project, start_at #, end_at
+    @schedule ||= Schedule.new project, start_at
   end
   
   def scheduled_hours(user)
-    schedule.hours(user, start_at, end_at)
+    start_at && end_at ? schedule.hours(user, start_at, end_at) : []
   end
   
   def period
@@ -38,9 +38,9 @@ class Sprint < Milestone
     self[:release_id] = release_id
   end
   
-  def scheduled_days(to_date = nil)
+  def scheduled_days(to_date = Time.zone.today)
     return [] unless start_at
-    to_date ||= Time.zone.today
+    to_date = end_at if end_at and end_at < to_date
     (0..(to_date - start_at).to_i).collect{|i| start_at + i.days }
   end
   
