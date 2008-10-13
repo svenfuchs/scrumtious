@@ -1,13 +1,15 @@
 release_001:
-  name: release_001
   type: Release
+  name: release_001
 sprint_1:
-  name: sprint_1
   type: Sprint
+  name: sprint_1
+  release: release_001
   start_at: 2008-10-01
   end_at: 2008-10-07
 sprint_2:
-  name: sprint_2
   type: Sprint
+  name: sprint_2
+  release: release_001
   start_at: 2008-10-08
   end_at: 2008-10-15

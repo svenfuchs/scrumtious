@@ -26,11 +26,35 @@ class Ticket < ActiveRecord::Base
       ticket.send :set_remote_user, remote_ticket.assigned_user_id
       ticket.save!
     end
+    
+    def find_every_with_at_scope(*args)
+      if at = args.last.try(:delete, :at)
+        with_at(at) do
+          find_every_without_at_scope(*args).select do |ticket|
+            ticket.revert_to(ticket.versions.last) if ticket.versions.last
+          end
+        end
+      else
+        find_every_without_at_scope *args
+      end
+    end
+    alias_method_chain :find_every, :at_scope
+    
+    def with_at(at, &block)
+      conditions = ["#{versioned_table_name}.updated_at <= ?", at]
+      with_scope({:find => {:conditions => conditions, :include => :versions}}, :merge, &block)
+    end
+
+    def validate_find_options_with_at_scope(options)
+      validate_find_options_without_at_scope options.except(:at)
+    end
+    alias_method_chain :validate_find_options, :at_scope
   end
   
   def update_attributes(attributes)
-    unless attributes[:sprint_id].blank?
-      sprint = Sprint.find(attributes[:sprint_id])
+    sprint_id, sprint = attributes.values_at :sprint_id, :sprint
+    if sprint_id or sprint
+      sprint ||= Sprint.find(sprint_id)
       attributes[:release_id] = sprint ? sprint.release_id : nil
     end
     super

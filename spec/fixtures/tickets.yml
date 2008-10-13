@@ -1,0 +1,32 @@
+ticket_1:
+  project: default
+  release: release_001
+  sprint: sprint_1
+  title: "Ticket 1"
+  estimated: 1
+  created_at: 2008-10-01
+  updated_at: 2008-10-03
+ticket_2:
+  project: default
+  release: release_001
+  sprint: sprint_1
+  title: "Ticket 2"
+  estimated: 3
+  created_at: 2008-10-01
+  updated_at: 2008-10-01
+ticket_3:
+  project: default
+  release: release_001
+  sprint: sprint_1
+  title: "Ticket 3"
+  estimated: 1
+  created_at: 2008-10-01
+  updated_at: 2008-10-01
+ticket_4:
+  project: default
+  release: release_001
+  sprint: sprint_1
+  title: "Ticket 3"
+  estimated: 1
+  created_at: 2008-10-01
+  updated_at: 2008-10-01
