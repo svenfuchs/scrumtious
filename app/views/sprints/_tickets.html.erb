@@ -43,9 +43,9 @@
         <td class="remote-url"><%= link_to "##{ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
         <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
         <td class="estimated"><%= ticket.estimated.to_i %></td>
-        <td class="actual"><%= ticket.actual_hours(*@sprint.period) > 0 ? ticket.actual_hours(*@sprint.period).round(1) : 0 %></td>
+        <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period) %></td>
         <% @sprint.scheduled_days.each do |day| %>
-          <td><%= activity_hours_on(ticket, day) %></td>
+          <td><%= to_hours ticket.activities.total(day) %></td>
         <% end %>
         <td class="activity-toggle"><%= toggle_ticket_activity_link(ticket) %></td>
       </tr>
@@ -55,9 +55,9 @@
         total
       </th>
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
-      <td class="actual"><%= tickets.map{|t| t.actual_hours(*@sprint.period).to_f }.sum.round(1) %></td>
+      <td class="actual"><%= to_hours tickets.map{|t| t.activities.total(*@sprint.period) }.sum %></td>
       <% @sprint.scheduled_days.each do |day| %>
-        <td><%= tickets.map{|t| activity_hours_on(t, day).to_f }.sum %></td>
+        <td><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
       <% end %>
       <td></td>
     </tr>

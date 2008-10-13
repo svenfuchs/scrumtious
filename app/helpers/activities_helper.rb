@@ -55,9 +55,8 @@ module ActivitiesHelper
     distance_of_time_in_words Time.now + activity.total_minutes.minutes, Time.now, false
   end
   
-  def activity_hours_on(ticket, day)
-    minutes = ticket.activity_minutes(day)
+  def to_hours(minutes)
     hours = (minutes.to_f / 60).round(1)
-    minutes > 0 ? hours : ''
+    hours > 0 ? hours : ''
   end
 end

@@ -64,12 +64,19 @@ class Burndown
       rows.clear
       end_at = [Time.zone.today, @end_at].min
       remaining = (@start_at..end_at).to_a.each do |day|
-        estimated, actual = collect_attribute(:estimated_at, day), collect_attribute(:actual_at, day)
-        @rows << Row.new(day, estimated, actual)
+        @rows << Row.new(day, estimated_at(day), actual_at(day))
       end
     end
     
+    def estimated_at(day)
+      Array(@scope).map{|ticket| ticket.estimated_at day }.sum
+    end
+    
+    def actual_at(day)
+      Array(@scope).map{|ticket| ticket.activities.total(day) / 60 }.sum
+    end
+    
     def collect_attribute(attribute, day)
-      Array(@scope).map{|ticket| ticket.send(attribute, day) }.sum
+      
     end
 end

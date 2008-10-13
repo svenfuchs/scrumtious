@@ -6,7 +6,17 @@ class Ticket < ActiveRecord::Base
   belongs_to :component
   belongs_to :category
   belongs_to :user
-  has_many :activities, :dependent => :destroy
+  has_many :activities, :dependent => :destroy do
+    def in_range(from_day, to_day = nil)
+      return self.to_a if from_day.nil?
+      range = from_day..(to_day || from_day)
+      self.select{|a| range.include? a.date }
+    end
+  
+    def total(from_day = nil, to_day = nil)
+      in_range(from_day, to_day).map(&:total_minutes).compact.sum.to_f
+    end
+  end
   
   acts_as_versioned :if => :save_version?
   
@@ -68,28 +78,8 @@ class Ticket < ActiveRecord::Base
     "##{remote_id} - #{title}"
   end
   
-  def activity_minutes(from_day = nil, to_day = nil)
-    acts = from_day.nil? ? activities : activities_in_range(from_day, to_day)
-    acts.map(&:total_minutes).compact.sum
-  end
-  
-  def activities_in_range(from_day, to_day = nil)
-    range = from_day..(to_day || from_day)
-    activities.select{|a| range.include? a.date }
-  end
-  
-  def actual_hours(*period)
-    minutes = activity_minutes *period
-    minutes.to_f / 60
-  end
-  
-  def actual_at(day)
-    (sprint.start_at..day).map{|d| actual_hours(d) }.sum
-  end
-  
   def estimated_at(day)
     versions = self.current_sprint_versions_at(day, :order => 'id DESC')
-#    versions = self.versions.all(:order => 'id DESC')
     versions.each{|v| return v.estimated.to_f if v.created_at.to_date <= day }
     versions.first ? versions.first.estimated.to_f : 0
   end

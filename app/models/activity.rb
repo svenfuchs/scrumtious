@@ -28,7 +28,7 @@ class Activity < ActiveRecord::Base
   end
 
   def start!
-    user.activities.current.stop! if user
+    user.activities.current.stop! if user and user.activities.current
     self.started_at = Time.zone.now
     self.stopped_at = nil
   end
