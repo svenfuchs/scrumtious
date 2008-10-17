@@ -18,7 +18,7 @@ class Burndown
   attr_reader :rows
   
   def initialize(scope, start_at, end_at)
-    raise "start_at and end_at must be not nil" if  start_at.nil? or end_at.nil?
+    raise "start_at and end_at must be not nil" if start_at.nil? or end_at.nil?
     @scope, @start_at, @end_at = scope, start_at, end_at
     @rows = []
     collect!
@@ -40,7 +40,7 @@ class Burndown
                 :colors => ["ff4400", "0066ff", "00ff00"]
   end
   
-  def amchart_data
+  def amchart
     colors = %w{#B40000 #F7941D #0265AC}
     chart = Ambling::Data::ColumnChart.new
     
@@ -74,9 +74,5 @@ class Burndown
     
     def actual_at(day)
       Array(@scope).map{|ticket| ticket.activities.total(day) / 60 }.sum
-    end
-    
-    def collect_attribute(attribute, day)
-      
     end
 end

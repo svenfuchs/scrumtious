@@ -6,6 +6,7 @@ class Ticket < ActiveRecord::Base
   belongs_to :component
   belongs_to :category
   belongs_to :user
+
   has_many :activities, :dependent => :destroy do
     def in_range(from_day, to_day = nil)
       return self.to_a if from_day.nil?
@@ -37,28 +38,29 @@ class Ticket < ActiveRecord::Base
       ticket.save!
     end
     
-    def find_every_with_at_scope(*args)
-      if at = args.last.try(:delete, :at)
-        with_at(at) do
-          find_every_without_at_scope(*args).select do |ticket|
+    def find_every_with_time_range(*args)
+      if to = args.last.try(:delete, :to)
+        with_time_range(args.last.try(:delete, :from), to) do
+          find_every_without_time_range(*args).select do |ticket|
             ticket.revert_to(ticket.versions.last) if ticket.versions.last
           end
         end
       else
-        find_every_without_at_scope *args
+        find_every_without_time_range *args
       end
     end
-    alias_method_chain :find_every, :at_scope
+    alias_method_chain :find_every, :time_range
     
-    def with_at(at, &block)
-      conditions = ["#{versioned_table_name}.updated_at <= ?", at]
-      with_scope({:find => {:conditions => conditions, :include => :versions}}, :merge, &block)
+    def with_time_range(from, to, &block)
+      c = from && to ? {"#{versioned_table_name}.updated_at" => from..to} :
+                       ["#{versioned_table_name}.updated_at <= ?", to]
+      with_scope({:find => {:conditions => c, :include => :versions}}, :merge, &block)
     end
 
-    def validate_find_options_with_at_scope(options)
-      validate_find_options_without_at_scope options.except(:at)
+    def validate_find_options_with_time_range(options)
+      validate_find_options_without_time_range options.except(:from, :to)
     end
-    alias_method_chain :validate_find_options, :at_scope
+    alias_method_chain :validate_find_options, :time_range
   end
   
   def update_attributes(attributes)

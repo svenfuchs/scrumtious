@@ -1,27 +1,21 @@
 class Schedule
-  attr_reader :project
+  attr_reader :project, :start_at, :end_at
   
-  def initialize(project, day = Time.zone.today, weeks = 4)
+  def initialize(project, start_at = nil, end_at = nil)
     @project = project
-    @day = day
-    @weeks = weeks
+    @start_at = start_at || Time.zone.today
+    @end_at = end_at || (@start_at + 27.days)
+  end
+    
+  def days(end_at = nil)
+    return [] unless start_at
+    end_at ||= self.end_at
+    (0..(end_at - start_at).to_i).collect{|i| start_at + i.days } # TODO hu?
   end
   
-  def start_at
-    first_week_day.to_date
-  end
-  
-  def end_at
-    (start_at + (days_count - 1).days).to_date
-  end
-  
-  def days_count
-    @weeks * 7
-  end
-  
-  def days
-    (start_at..end_at).to_a
-  end
+  # def days
+  #   (start_at..end_at).to_a
+  # end
   
   def hours(user, start_at = nil, end_at = nil)
     range = days_range(start_at, end_at)
@@ -34,15 +28,6 @@ class Schedule
     def days_range(start_at, end_at)
       start_at ? (end_at = start_at) : (start_at, end_at = self.start_at, self.end_at) if end_at.blank?
       start_at..end_at
-    end
-  
-    def first_week_day
-      Time.zone.local(@day.year, @day.month, @day.day - day_of_week).to_date
-    end
-  
-    def day_of_week
-      day = @day.strftime('%w').to_i
-      day == 0 ? 6 : day - 1
     end
     
     def scheduled_days

@@ -9,7 +9,7 @@
     <% if tracking  %>
       <th><%= link_to 'Hours', sorted_sprint_path(:hours) %></th>
       <th>Actual</th>
-      <% @sprint.scheduled_days.each do |day| %>
+      <% @sprint.schedule.days.each do |day| %>
         <th><%= day.strftime('%d.%m.') %></th>
       <% end %>
     <% else %>
@@ -19,15 +19,15 @@
   </tr>
 </thead>
 
-<% groups.each do |user, tickets| %>
+<% @ticket_groups.each do |user, tickets| %>
   <tbody>
     <% if user %>
     <tr class="totals">
       <th><%= user.first_name %></th>
       <th><%= link_to 'scheduled', schedule_index_path(@project) %></th>
       <th></th>
-      <td class="scheduled"><%= @sprint.scheduled_hours(user) %></td>
-      <% @sprint.scheduled_days.each do |day| %>
+      <td class="scheduled"><%= @sprint.schedule.hours(user) %></td>
+      <% @sprint.schedule.days.each do |day| %>
         <% if day <= Time.zone.today %>
           <td class="scheduled"><%= @sprint.schedule.hours(user, day).to_i %></td>
         <% end %>
@@ -44,7 +44,7 @@
         <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
         <td class="estimated"><%= ticket.estimated.to_i %></td>
         <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period) %></td>
-        <% @sprint.scheduled_days.each do |day| %>
+        <% @sprint.schedule.days.each do |day| %>
           <td><%= to_hours ticket.activities.total(day) %></td>
         <% end %>
         <td class="activity-toggle"><%= toggle_ticket_activity_link(ticket) %></td>
@@ -56,13 +56,13 @@
       </th>
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= to_hours tickets.map{|t| t.activities.total(*@sprint.period) }.sum %></td>
-      <% @sprint.scheduled_days.each do |day| %>
+      <% @sprint.schedule.days.each do |day| %>
         <td><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
       <% end %>
       <td></td>
     </tr>
-    <% if user and groups.last.first != user %>
-      <tr><td colspan="<%= 5 + @sprint.scheduled_days.size %>">&nbsp;</td></tr>
+    <% if user and @ticket_groups.last.first != user %>
+      <tr><td colspan="<%= 5 + @sprint.schedule.days.size %>">&nbsp;</td></tr>
     <% end %>
   </tbody>
 <% end %>

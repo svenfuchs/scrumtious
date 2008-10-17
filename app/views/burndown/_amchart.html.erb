@@ -34,7 +34,7 @@
 <script type="text/javascript">
   $(document).ready(function () {
   	var so = new SWFObject("/amline/amline.swf", "burndown", "520", "400", "8", "#FFFFFF");
-    so.addVariable("chart_data", encodeURIComponent('<%= @sprint.burndown.amchart_data.to_xml %>'));
+    so.addVariable("chart_data", encodeURIComponent('<%= @sprint.burndown.amchart.to_xml %>'));
   	so.addVariable("chart_settings", encodeURIComponent('<%= am_settings %>'));
   	so.write("burndown");
 	});

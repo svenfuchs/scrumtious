@@ -5,7 +5,7 @@ class SprintsController < ApplicationController
   
   def show
     params[:sort] ||= 'assigned'
-    @groups = @sprint.tickets.grouped params[:sort]
+    @ticket_groups = @sprint.ticket_groups params[:sort]
   end
 
   def new
@@ -36,12 +36,6 @@ class SprintsController < ApplicationController
     @sprint.destroy
     redirect_to release_url(@sprint.release)
   end
-  
-  # def burndown
-  #   respond_to do |format|
-  #     format.xml { render :xml => @sprint.burndown.amchart_data.to_xml }
-  #   end
-  # end
   
   protected
   

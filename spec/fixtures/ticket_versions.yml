@@ -26,6 +26,13 @@ ticket_4_version_1:
   estimated: 1
   created_at: 2008-10-01
   updated_at: 2008-10-01
+ticket_5_version_1:
+  ticket_id: <%= Fixtures.identify(:ticket_5) %>
+  version: 1
+  sprint_id: <%= Fixtures.identify(:sprint_2) %>
+  estimated: 1
+  created_at: 2008-10-01
+  updated_at: 2008-10-01
 ticket_1_version_2:
   ticket_id: <%= Fixtures.identify(:ticket_1) %>
   version: 2

@@ -1,24 +1,46 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Ticket, 'find :at => [date]' do
+describe Ticket, 'find :to => date' do
   before :each do
     @id = tickets(:ticket_1).id
   end
   
-  it "still works without an :at option" do
+  it "still works without a :to option" do
     Ticket.find(@id).id.should == @id
   end
   
   it "returns the latest version at a given day if available (first version)" do
-    Ticket.find(@id, :at => Date.parse('2008-10-01')).version.should == 1
+    Ticket.find(@id, :to => Date.parse('2008-10-01')).version.should == 1
   end
   
   it "returns the latest version at a given day if available (second version)" do
-    Ticket.find(@id, :at => Date.parse('2008-10-02')).version.should == 2
+    Ticket.find(@id, :to => Date.parse('2008-10-02')).version.should == 2
   end
   
   it "returns the latest version at a given day if available (third version)" do
-    Ticket.find(@id, :at => Date.parse('2008-10-03')).version.should == 3
+    Ticket.find(@id, :to => Date.parse('2008-10-03')).version.should == 3
+  end
+end
+
+describe Ticket, 'find :from => date, :to => date' do
+  before :each do
+    @id = tickets(:ticket_1).id
+  end
+  
+  it "still works without a :from and :to option" do
+    Ticket.find(@id).id.should == @id
+  end
+  
+  it "returns the latest version at a given day if available (first version)" do
+    Ticket.find(@id, :from => Date.parse('2008-10-01'), :to => Date.parse('2008-10-01')).version.should == 1
+  end
+  
+  it "returns the latest version at a given day if available (second version)" do
+    Ticket.find(@id, :from => Date.parse('2008-10-01'), :to => Date.parse('2008-10-02')).version.should == 2
+  end
+  
+  it "returns the latest version at a given day if available (third version)" do
+    Ticket.find(@id, :from => Date.parse('2008-10-02'), :to => Date.parse('2008-10-03')).version.should == 3
   end
 end
 

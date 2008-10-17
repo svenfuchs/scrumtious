@@ -16,6 +16,6 @@
   <%= link_to 'destroy', @sprint, :confirm => 'Are you sure?', :method => :delete %>
 </div>
 
-<%= render :partial => "tickets", :locals => {:groups => @groups, :tracking => true } %>
+<%= render :partial => "tickets", :locals => {:tracking => true } %>
 
 <%= render :partial => "burndown/amchart", :locals => {:burndown => @sprint.burndown} if @sprint.start_at and @sprint.end_at %>
