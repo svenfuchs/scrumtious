@@ -1,11 +1,10 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ReleasesController, "GET #show" do
-  act! { get :show, :id => 1 }
+  act! { get :show, :id => @release.id }
 
   before do
-    @release = milestones(:release_001)
-    Release.stub!(:find).with('1').and_return(@release)
+    @release = Factory(:release_001)
   end
 
   it_assigns :release
@@ -13,11 +12,10 @@ describe ReleasesController, "GET #show" do
 end
 
 describe ReleasesController, "GET #new" do
-  act! { get :new, :release => {:project_id => @release.project_id} }
+  act! { get :new, :project_id => @release.project_id }
 
   before do
-    @project = mock_model Project, :new_record? => false, :errors => []
-    @release = Release.new :project_id => @project.id
+    @project, @release = Factory(:scrumtious), Factory(:release_001)
   end
 
   it "assigns @release" do
@@ -30,26 +28,32 @@ end
 
 describe ReleasesController, "POST #create" do
   before do
-    @project = mock_model Project, :new_record? => false, :errors => []
+    @project = Factory :scrumtious
     @release = mock_model Release, :project => @project, :new_record? => false, :errors => []
     @attributes = {'project_id' => @project.id}
-    
+
     Project.stub!(:find).and_return @project
-    Release.stub!(:new).with(@attributes).and_return(@release)
+    Release.stub!(:new).and_return @release
   end
 
-  describe ReleasesController, "(successful creation)" do
+  describe "(successful creation)" do
     act! { post :create, :release => @attributes }
 
     before do
       @release.stub!(:save).and_return(true)
+      @release.stub!(:push!)
     end
 
     it_assigns :release, :flash => { :notice => :not_nil }
     it_redirects_to { release_path(@release) }
+    
+    it "syncs the release to its remote milestone" do
+      @release.should_receive(:push!)
+      act!
+    end
   end
 
-  describe ReleasesController, "(unsuccessful creation)" do
+  describe "(unsuccessful creation)" do
     act! { post :create, :release => @attributes }
   
     before do
@@ -62,11 +66,10 @@ describe ReleasesController, "POST #create" do
 end
 
 describe ReleasesController, "GET #edit" do
-  act! { get :edit, :id => 1 }
+  act! { get :edit, :id => @release.id }
 
   before do
-    @release  = milestones(:release_001)
-    Release.stub!(:find).with('1').and_return(@release)
+    @release = Factory(:release_001)
   end
 
   it_assigns :release
@@ -76,23 +79,29 @@ end
 describe ReleasesController, "PUT #update" do
   before do
     @attributes = {}
-    @release = milestones(:release_001)
-    Release.stub!(:find).with('1').and_return(@release)
+    @release = Factory(:release_001)
+    Release.stub!(:find).and_return @release
   end
 
-  describe ReleasesController, "(successful save)" do
-    act! { put :update, :id => 1, :release => @attributes }
+  describe "(successful save)" do
+    act! { put :update, :id => @release.id, :release => @attributes }
 
     before do
       @release.stub!(:save).and_return(true)
+      @release.stub!(:push!)
     end
 
     it_assigns :release, :flash => { :notice => :not_nil }
     it_redirects_to { release_path(@release) }
+    
+    it "syncs the release to its remote milestone" do
+      @release.should_receive(:push!)
+      act!
+    end
   end
 
-  describe ReleasesController, "(unsuccessful save)" do
-    act! { put :update, :id => 1, :release => @attributes }
+  describe "(unsuccessful save)" do
+    act! { put :update, :id => @release.id, :release => @attributes }
 
     before do
       @release.stub!(:save).and_return(false)
@@ -104,12 +113,12 @@ describe ReleasesController, "PUT #update" do
 end
 
 describe ReleasesController, "DELETE #destroy" do
-  act! { delete :destroy, :id => 1 }
+  act! { delete :destroy, :id => @release.id }
 
   before do
-    @release = milestones(:release_001)
+    @release = Factory(:release_001)
     @release.stub!(:destroy)
-    Release.stub!(:find).with('1').and_return(@release)
+    Release.stub!(:find).and_return @release
   end
 
   it_assigns :release

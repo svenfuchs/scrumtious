@@ -23,6 +23,7 @@ require 'activeresource'
 # This library is a small wrapper around the REST interface.  You should read the docs at
 # http://lighthouseapp.com/api.
 #
+
 module Lighthouse
   class Error < StandardError; end
   class << self

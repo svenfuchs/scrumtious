@@ -16,13 +16,12 @@ end
 
 describe CategoriesController, "POST #create" do
   before do
-    @project = mock_model Project, :new_record? => false, :errors => []
-    @category = mock_model Category, :project => @project, :new_record? => false, :errors => []
-    @attributes = {'project_id' => @project.id}
+    @category = Factory :category_1
+    @attributes = {'project_id' => @category.project_id}
     Category.stub!(:new).with(@attributes).and_return(@category)
   end
   
-  describe CategoriesController, "(successful creation)" do
+  describe "(successful creation)" do
     act! { post :create, :category => @attributes }
 
     before do
@@ -38,8 +37,8 @@ describe CategoriesController, "GET #edit" do
   act! { get :edit, :id => 1 }
   
   before do
-    @category  = categories(:default)
-    Category.stub!(:find).with('1').and_return(@category)
+    @category = Factory :category_1
+    Category.stub!(:find).and_return(@category)
   end
 
   it_assigns :category
@@ -48,14 +47,15 @@ end
 
 describe CategoriesController, "PUT #update" do
   before do
-    @project = mock_model Project, :new_record? => false, :errors => []
-    @category = categories(:default)
-    @attributes = {:project_id => @project.id}
-    Project.stub!(:find).and_return(@project)
-    Category.stub!(:find).with('1').and_return(@category)
+    @category = Factory :category_1
+    Category.stub!(:find).and_return(@category)
+    @attributes = {:project_id => @category.project_id}
+    
+    Project.stub!(:find).and_return(@category.project)
+    Category.stub!(:find).and_return(@category)
   end
   
-  describe CategoriesController, "(successful save)" do
+  describe "(successful save)" do
     act! { put :update, :id => 1, :category => @attributes }
 
     before do
@@ -63,10 +63,10 @@ describe CategoriesController, "PUT #update" do
     end
     
     it_assigns :category, :flash => { :notice => :not_nil }
-    it_redirects_to { project_path(@project) }
+    it_redirects_to { project_path(@category.project) }
   end
 
-  describe CategoriesController, "(unsuccessful save)" do
+  describe "(unsuccessful save)" do
     act! { put :update, :id => 1, :category => @attributes }
 
     before do
@@ -82,9 +82,9 @@ describe CategoriesController, "DELETE #destroy" do
   act! { delete :destroy, :id => 1 }
   
   before do
-    @category = categories(:default)
+    @category = Factory :category_1
     @category.stub!(:destroy)
-    Category.stub!(:find).with('1').and_return(@category)
+    Category.stub!(:find).and_return(@category)
   end
 
   it_assigns :category

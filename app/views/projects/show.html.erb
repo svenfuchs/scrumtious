@@ -4,6 +4,7 @@
 </div>
 
 <div id="action">
+  <%= link_to 'new ticket', new_project_ticket_path(@project) %> &middot;
   <%= link_to 'pull', synchronizers_path(:project_id => @project.id), :method => :post %> &middot;
   <%= link_to 'edit', edit_project_path(@project) %> &middot;
   <%= link_to 'destroy', @project, :confirm => 'Are you sure?', :method => :delete %>

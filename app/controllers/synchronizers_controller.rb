@@ -6,7 +6,7 @@ class SynchronizersController < ApplicationController
   end
 
   def create
-    if @synchronizer.run!
+    if @synchronizer.pull!
       flash[:notice] = 'Synchronizer has successfully run.'
       redirect_to @synchronizer.project
     else

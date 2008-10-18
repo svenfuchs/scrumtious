@@ -1,8 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe ProjectsController, "GET #index" do
-  # fixture definition
-
   act! { get :index }
 
   before do
@@ -15,13 +13,11 @@ describe ProjectsController, "GET #index" do
 end
 
 describe ProjectsController, "GET #show" do
-  # fixture definition
-
   act! { get :show, :id => 1 }
 
   before do
-    @project  = projects(:default)
-    Project.stub!(:find).with('1').and_return(@project)
+    @project = Factory :scrumtious
+    Project.stub!(:find).and_return(@project)
   end
   
   it_assigns :project
@@ -29,7 +25,6 @@ describe ProjectsController, "GET #show" do
 end
 
 describe ProjectsController, "GET #new" do
-  # fixture definition
   act! { get :new }
   before do
     @project  = Project.new
@@ -51,7 +46,6 @@ describe ProjectsController, "POST #create" do
   end
   
   describe ProjectsController, "(successful creation)" do
-    # fixture definition
     act! { post :create, :project => @attributes }
 
     before do
@@ -63,7 +57,6 @@ describe ProjectsController, "POST #create" do
   end
 
   describe ProjectsController, "(unsuccessful creation)" do
-    # fixture definition
     act! { post :create, :project => @attributes }
 
     before do
@@ -76,12 +69,11 @@ describe ProjectsController, "POST #create" do
 end
 
 describe ProjectsController, "GET #edit" do
-  # fixture definition
   act! { get :edit, :id => 1 }
   
   before do
-    @project  = projects(:default)
-    Project.stub!(:find).with('1').and_return(@project)
+    @project = Factory :scrumtious
+    Project.stub!(:find).and_return(@project)
   end
 
   it_assigns :project
@@ -91,13 +83,12 @@ end
 describe ProjectsController, "PUT #update" do
   before do
     @attributes = {}
-    @project = projects(:default)
-    Project.stub!(:find).with('1').and_return(@project)
+    @project = Factory :scrumtious
+    Project.stub!(:find).and_return(@project)
   end
   
   describe ProjectsController, "(successful save)" do
-    # fixture definition
-    act! { put :update, :id => 1, :project => @attributes }
+      act! { put :update, :id => 1, :project => @attributes }
 
     before do
       @project.stub!(:save).and_return(true)
@@ -108,8 +99,7 @@ describe ProjectsController, "PUT #update" do
   end
 
   describe ProjectsController, "(unsuccessful save)" do
-    # fixture definition
-    act! { put :update, :id => 1, :project => @attributes }
+      act! { put :update, :id => 1, :project => @attributes }
 
     before do
       @project.stub!(:save).and_return(false)
@@ -121,13 +111,12 @@ describe ProjectsController, "PUT #update" do
 end
 
 describe ProjectsController, "DELETE #destroy" do
-  # fixture definition
   act! { delete :destroy, :id => 1 }
   
   before do
-    @project = projects(:default)
+    @project = Factory :scrumtious
     @project.stub!(:destroy)
-    Project.stub!(:find).with('1').and_return(@project)
+    Project.stub!(:find).and_return(@project)
   end
 
   it_assigns :project

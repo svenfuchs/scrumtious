@@ -2,8 +2,6 @@ class TicketsController < ApplicationController
   before_filter :set_ticket
   before_filter :set_project
   
-  cache_sweeper :ticket_pusher
-  
   def show
   end
 
@@ -12,10 +10,11 @@ class TicketsController < ApplicationController
   
   def create
     if @ticket.save
+      @ticket.push! unless @ticket.local?
       flash[:notice] = 'Ticket has been created.'
       redirect_back_or_default @ticket.project
     else
-      # render :action => "new"
+      render :action => "new"
     end
   end
 
@@ -24,6 +23,7 @@ class TicketsController < ApplicationController
 
   def update
     if @ticket.update_attributes(params[:ticket])
+      @ticket.push! unless @ticket.local?
       flash[:notice] = 'Ticket has been updated.'
       redirect_back_or_default @ticket
     else
@@ -36,7 +36,7 @@ class TicketsController < ApplicationController
       params[:tickets].each{|id, attrs| Ticket.update(id, attrs) }
       head :ok
     else
-      
+      # TODO ?
     end
   end
 
@@ -52,6 +52,10 @@ class TicketsController < ApplicationController
     end
   
     def set_project
-      @project = @ticket.project if @ticket
+      if params[:project_id]
+        @project = @ticket.project = Project.find(params[:project_id]) 
+      elsif @ticket
+        @project = @ticket.project 
+      end
     end
 end

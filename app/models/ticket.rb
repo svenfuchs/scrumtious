@@ -26,18 +26,6 @@ class Ticket < ActiveRecord::Base
       @versioned_columns ||= columns.select{|c| %w(sprint_id estimated).include? c.name }
     end
     
-    def sync_from_remote_ticket!(project, remote_ticket)
-      ticket = find_or_initialize_by_remote_id remote_ticket.id
-      ticket.title = remote_ticket.title
-      ticket.state = remote_ticket.state
-      ticket.closed = remote_ticket.closed
-      ticket.local = false
-      ticket.project = project
-      ticket.send :set_remote_milestone, remote_ticket.milestone
-      ticket.send :set_remote_user, remote_ticket.assigned_user_id
-      ticket.save!
-    end
-    
     def find_every_with_time_range(*args)
       if to = args.last.try(:delete, :to)
         with_time_range(args.last.try(:delete, :from), to) do
@@ -52,8 +40,8 @@ class Ticket < ActiveRecord::Base
     alias_method_chain :find_every, :time_range
     
     def with_time_range(from, to, &block)
-      c = from && to ? {"#{versioned_table_name}.updated_at" => from..to} :
-                       ["#{versioned_table_name}.updated_at <= ?", to]
+      c = from && to ? ["DATE(#{versioned_table_name}.updated_at) BETWEEN ? AND ?", from, to] :
+                       ["DATE(#{versioned_table_name}.updated_at) <= ?", to]
       with_scope({:find => {:conditions => c, :include => :versions}}, :merge, &block)
     end
 
@@ -61,6 +49,15 @@ class Ticket < ActiveRecord::Base
       validate_find_options_without_time_range options.except(:from, :to)
     end
     alias_method_chain :validate_find_options, :time_range
+  end
+
+  def remote_user_id
+    user.try(:remote_id)
+  end
+  
+  def remote_milestone_id
+    milestone = sprint ? sprint : release
+    milestone.try(:remote_id)
   end
   
   def update_attributes(attributes)
@@ -81,13 +78,13 @@ class Ticket < ActiveRecord::Base
   end
   
   def estimated_at(day)
-    versions = self.current_sprint_versions_at(day, :order => 'id DESC')
+    versions = self.versions_at(day, :order => 'id DESC')
     versions.each{|v| return v.estimated.to_f if v.created_at.to_date <= day }
     versions.first ? versions.first.estimated.to_f : 0
   end
   
-  def current_sprint_versions_at(day, options = {})
-    versions.all options.update(:conditions => ['sprint_id = ? AND DATE(updated_at) <= ?', sprint_id, day])
+  def versions_at(day, options = {})
+    versions.all options.update(:conditions => ['DATE(updated_at) <= ?', day])
   end
   
   def children
@@ -96,6 +93,10 @@ class Ticket < ActiveRecord::Base
   
   def to_params
     attributes.slice 'remote_id', 'title', 'project_id', 'release_id', 'sprint_id', 'category_id', 'component_id', 'state'
+  end
+  
+  def push!
+    project.synchronizer.push! self unless local?
   end
   
   protected

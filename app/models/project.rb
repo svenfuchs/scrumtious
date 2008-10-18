@@ -16,4 +16,8 @@ class Project < ActiveRecord::Base
   has_many :tickets, :include => [:project, :release, :user], 
                      :order => 'milestones.name DESC, sprint_id DESC, tickets.state, tickets.priority, tickets.remote_id DESC, tickets.parent_id', 
                      :dependent => :destroy
+
+  def synchronizer
+    @synchronizer ||= Synchronizer.new self
+  end
 end

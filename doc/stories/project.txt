@@ -1,0 +1,18 @@
+As a product manager
+I want to create a project
+So I can plan it with my team
+
+A scrumtious project maps to a Lighthouse project. To access Lighthouse the scrumtious project needs to know the Lighthouse project id and token.
+
+A scrumtious project has two types of milestones: releases and sprints. Sprints belong to releases. 
+
+When a scrumtious project pulls from Lighthouse 
+
+* it locally creates milestones that are present on Lighthouse. 
+* Doing so it first creates releases and then milestones. 
+* For releases it looks for LH milestones whose titles match the release title pattern (/Release .*/ by default)
+* For sprints it looks for LH milestones whose titles match the sprint title pattern (/Sprint .*/ by default)
+* When a sprint is pulled from LH scrumtious looks for the release with the closest due date after the sprint's due date. When no release is found that has a due date after the sprint's due date it does not assign the sprint to a release.
+
+When a release or sprint is created locally scrumtious looks if a corresponding milestone already exists on Lighthouse and creates it otherwise.
+

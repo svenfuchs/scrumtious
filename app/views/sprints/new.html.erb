@@ -1,18 +1,13 @@
 <p>
   <%= link_to 'Projects', projects_path %> »
-  <%= link_to h(@project.name), @project %> »
-  <%= link_to h(@release.name), @release %>
+  <%= link_to h(@project.name), @project %>
 </p>
 
 <h1>New sprint</h1>
 
 <% form_for(@sprint) do |f| %>
   <%= f.error_messages %>
-  <%= f.hidden_field :release_id %>
-  <p>
-    <%= f.label :remote_id, 'Lighthouse milestone id' %><br />
-    <%= f.text_field :remote_id %>
-  </p>
+  <%= f.hidden_field :project_id %>
   <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>
@@ -30,7 +25,7 @@
     <%= f.date_select :end_at %>
   </p>
   <p>
-    <%= f.submit "Create" %> or <%= link_to 'back', @sprint.release %>
+    <%= f.submit "Create" %> or <%= link_to 'back', edit_project_path(@project) %>
   </p>
 <% end %>
 

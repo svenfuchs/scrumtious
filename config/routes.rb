@@ -2,7 +2,10 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :releases
   map.resources :projects
   map.resources :sprints
-  # map.burndown "sprints/:id/burndown.xml", :controller => 'sprints', :action => 'burndown'
+  
+  map.new_project_release 'projects/:project_id/releases/new', :controller => 'releases', :action => 'new'
+  map.new_project_sprint 'projects/:project_id/sprints/new', :controller => 'sprints', :action => 'new'
+  map.new_project_ticket 'projects/:project_id/tickets/new', :controller => 'tickets', :action => 'new'
   
   map.resources :components
   map.resources :categories
@@ -10,9 +13,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :activities
   map.resources :schedule, :path_prefix => "projects/:project_id"
   
-  # map.update_schedule "/projects/:project_id/schedule/:day", 
-  #                     :controller => 'scheduled_days', :action => 'update', :conditions => {:method => :put}
-
   map.tickets_update_all "/tickets", :controller => 'tickets', :action => 'update_all', :conditions => {:method => :put}
   map.resources :tickets
   

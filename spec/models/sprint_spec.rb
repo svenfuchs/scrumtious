@@ -1,26 +1,41 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Sprint, '#tickets' do
+  include TicketScenarios
+  
   before :each do
-    @sprint = milestones :sprint_1
-    @ticket_1 = tickets(:ticket_1)
-    @ticket_2 = tickets(:ticket_2)
-    @ticket_5 = tickets(:ticket_5)
+    bunch_of_tickets!
   end
   
   it "returns all tickets that belong to the sprint" do
-    @sprint.tickets.include?(@ticket_2).should be_true
+    @sprint_1.tickets.include?(@ticket_2).should be_true
   end
   
   it "returns all tickets that ever belong to the sprint" do
-    @sprint.tickets.include?(@ticket_1).should be_true
+    @sprint_1.tickets.include?(@ticket_1).should be_true
   end
   
   it "does not return tickets that never belonged to the sprint" do
-    @sprint.tickets.include?(@ticket_5).should be_false
+    @sprint_1.tickets.include?(@ticket_5).should be_false
   end
   
-  it "reverts tickets back to the last version from when they belonged to the sprint" do
-    @sprint.tickets.detect{|t| t.id == @ticket_1.id }.version.should == 4
+  it "reverts tickets back to the last version from when they belonged to the sprint (sprint 1)" do
+    @sprint_1.tickets.detect{|t| t.id == @ticket_1.id }.version.should == 4
+  end
+  
+  it "reverts tickets back to the last version from when they belonged to the sprint (sprint 1)" do
+    @sprint_2.tickets.detect{|t| t.id == @ticket_1.id }.version.should == 5
+  end
+end
+
+describe Sprint, '#push!' do
+  before do
+    @project = Factory :scrumtious
+    @sprint = Factory :sprint_1, :project => @project
+  end
+  
+  it "delegates to the projects synchronizer" do
+    @project.synchronizer.should_receive(:push!)
+    @sprint.push!
   end
 end

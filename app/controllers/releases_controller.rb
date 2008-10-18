@@ -10,6 +10,7 @@ class ReleasesController < ApplicationController
 
   def create
     if @release.save
+      @release.push!
       flash[:notice] = 'Release has been created.'
       redirect_to @release
     else
@@ -22,6 +23,7 @@ class ReleasesController < ApplicationController
 
   def update
     if @release.update_attributes(params[:release])
+      @release.push!
       flash[:notice] = 'Release has been updated.'
       redirect_to @release
     else
@@ -41,6 +43,10 @@ class ReleasesController < ApplicationController
     end
     
     def set_project
-      @project = @release.project if @release
+      if params[:project_id]
+        @project = @release.project = Project.find(params[:project_id]) 
+      elsif @release
+        @project = @release.project 
+      end
     end
 end

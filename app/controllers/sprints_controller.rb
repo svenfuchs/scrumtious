@@ -1,6 +1,5 @@
 class SprintsController < ApplicationController
   before_filter :set_sprint
-  before_filter :set_release
   before_filter :set_project
   
   def show
@@ -13,6 +12,7 @@ class SprintsController < ApplicationController
 
   def create
     if @sprint.save
+      @sprint.push!
       flash[:notice] = 'Sprint has been created.'
       redirect_to @sprint
     else
@@ -25,6 +25,7 @@ class SprintsController < ApplicationController
 
   def update
     if @sprint.update_attributes(params[:sprint])
+      @sprint.push!
       flash[:notice] = 'Sprint has been updated.'
       redirect_to @sprint
     else
@@ -43,11 +44,11 @@ class SprintsController < ApplicationController
       @sprint = params[:id] ? Sprint.find(params[:id]) : Sprint.new(params[:sprint])
     end
     
-    def set_release
-      @release = @sprint.release if @sprint
-    end
-    
     def set_project
-      @project = @sprint.project if @sprint
+      if params[:project_id]
+        @project = @sprint.project = Project.find(params[:project_id]) 
+      elsif @sprint
+        @project = @sprint.project 
+      end
     end
 end

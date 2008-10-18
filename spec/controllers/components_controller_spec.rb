@@ -38,8 +38,8 @@ describe ComponentsController, "GET #edit" do
   act! { get :edit, :id => 1 }
   
   before do
-    @component  = components(:default)
-    Component.stub!(:find).with('1').and_return(@component)
+    @component = Factory :component_1
+    Component.stub!(:find).and_return(@component)
   end
 
   it_assigns :component
@@ -48,26 +48,26 @@ end
 
 describe ComponentsController, "PUT #update" do
   before do
-    @project = mock_model Project, :new_record? => false, :errors => []
-    @component = components(:default)
-    @attributes = {:project_id => @project.id}
-    Project.stub!(:find).and_return(@project)
-    Component.stub!(:find).with('1').and_return(@component)
+    @component = Factory :component_1
+    @attributes = {:project_id => @component.project_id}
+
+    Component.stub!(:find).and_return(@component)
+    Project.stub!(:find).and_return(@component.project)
   end
   
   describe ComponentsController, "(successful save)" do
-    act! { put :update, :id => 1, :component => @attributes }
+    act! { put :update, :id => @component.id, :component => @attributes }
 
     before do
       @component.stub!(:save).and_return(true)
     end
     
     it_assigns :component, :flash => { :notice => :not_nil }
-    it_redirects_to { edit_project_path(@project) }
+    it_redirects_to { edit_project_path(@component.project) }
   end
 
   describe ComponentsController, "(unsuccessful save)" do
-    act! { put :update, :id => 1, :component => @attributes }
+    act! { put :update, :id => @component.id, :component => @attributes }
 
     before do
       @component.stub!(:save).and_return(false)
@@ -82,9 +82,9 @@ describe ComponentsController, "DELETE #destroy" do
   act! { delete :destroy, :id => 1 }
   
   before do
-    @component = components(:default)
+    @component = Factory :component_1
     @component.stub!(:destroy)
-    Component.stub!(:find).with('1').and_return(@component)
+    Component.stub!(:find).and_return(@component)
   end
 
   it_assigns :component

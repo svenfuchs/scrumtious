@@ -1,147 +1,108 @@
-module Lighthouse  
-  class Project
-    include ActionView::Helpers::DateHelper
-    
-    def memberships(options = {})
-      Membership.find(:all, :params => options.update(:project_id => id))
-    end
+ActiveResource::Base.logger = RAILS_DEFAULT_LOGGER
+
+require File.dirname(__FILE__) + '/synchronizer/lighthouse.rb'
+
+class Synchronizer
+  attr_reader :project, :lighthouse
+
+  def initialize(project)
+    @project = project.is_a?(::Project) ? project : ::Project.find(project)
+    @lighthouse = Synchronizer::Lighthouse.new(@project)
+  end
   
-    def updated_tickets(since)
-      if since
-        tickets :q => "updated:\"since #{time_ago_in_words(since - 1.minute)} ago\""
+  def push!(local)
+    if local.remote_id.blank?
+      # TODO only update relevant changes to Lighthouse
+      remote = lighthouse.from_local(local)
+      if remote.save
+        local.update_attributes :remote_id => remote.id
       else
-        all_tickets
+        # TODO raise remote.errors
       end
-    end
-    
-    def all_tickets
-      page = 1
-      result = paged = []
-      while page == 1 or !paged.empty?
-        paged = tickets(:q => :all, :page => page)
-        result += paged
-        page += 1
-      end
-      result.compact
+    else
+      type = local.is_a?(Milestone) ? 'Milestone' : local.class.name
+      remote = lighthouse.send type.downcase, local.remote_id
+      remote.update_attributes! local.attributes
     end
   end
   
-  class Ticket
-    def milestone
-      @milestone ||= unless milestone_id.blank?
-        # ::Milestone.find_by_remote_id(milestone_id) || 
-        Milestone.find(milestone_id, :params => @prefix_options)
-      end
-    end
-  end
-end
-
-class Synchronizer
-  class Lighthouse
-    include ::Lighthouse
-    
-    def initialize(project_id)
-      @project_id = project_id
-    end
-  
-    def project
-      @project ||= Project.find(@project_id)
-    end
-    
-    def users
-      project.memberships.map{|m| User.find m.user_id }
-    end
-
-    def updated_tickets(since)
-      project.updated_tickets(since)
-    end
-  
-    def method_missing(method, *args)
-      project.send method, *args
-    end
-  end
-end
-
-class Synchronizer
-  attr_accessor :project
-  cattr_accessor :sync
-  @@sync = true
-  
-  class << self
-    def with_no_sync
-      old_sync, self.sync = self.sync, false # TODO not threadsafe
-      yield
-      self.sync = old_sync
-    end
-    
-    alias :sync? :sync
-    
-    def no_sync!
-      self.sync = false
-    end
-  end
-
-  def initialize(project_id)
-    @project = ::Project.find(project_id) if project_id
-    ::Lighthouse.account = @project.lighthouse_account
-    ::Lighthouse.token = @project.lighthouse_token
-  end
-  
-  def run!
-    return unless self.class.sync?
-    pull_users
-    pull_milestones
-    pull_tickets
+  def pull!
+    pull_users!
+    pull_milestones!
+    pull_tickets!
     project.update_attributes! :synced_at => Time.now
   end
   
-  def project_id
-    @project.id
+  def pull_users!
+    lighthouse.users.each{|u| update_local(u) }
   end
-  
-  def push_ticket(ticket)
-    return unless self.class.sync?
-    attributes = { :number => ticket.remote_id, :project_id => @project.remote_id }
-    ticket.changes.each do |name, values|
-      case name
-      when 'user_id'
-        attributes['assigned_user_id'] = ticket.user.remote_id if ticket.user 
-      when 'sprint_id'
-        attributes['milestone_id'] = ticket.sprint.remote_id if ticket.sprint
-      when 'release_id'
-        attributes['milestone_id'] = ticket.release.remote_id if ticket.release
-      end
-    end
-    return if attributes.keys.size == 2
-    ticket = ::Lighthouse::Ticket.new(attributes)
-    # ::Lighthouse::Ticket.logger = RAILS_DEFAULT_LOGGER
-    # RAILS_DEFAULT_LOGGER.info(ticket.inspect)
-    ticket.save
+
+  def pull_milestones!
+    lighthouse.milestones.each{|m| update_local(m) }
+  end
+
+  def pull_tickets!
+    lighthouse.updated_tickets(project.synced_at).each{|t| update_local(t) }
   end
   
   def id; end; def new_record?; true end # make form_for happy
   
   protected
-  
-    def pull_users
-      lighthouse.users.each do |remote_user|
-        User.sync_from_remote_user!(remote_user)
-      end
+    
+    def update_local(remote)
+      klass = local_class remote
+      local = klass.find_or_initialize_by_remote_id remote.id
+      attributes = remote.attributes_for_local
+      attributes.update!(:project => @project) if local.respond_to?(:project=)
+      local.update_attributes! attributes
     end
-  
-    def pull_tickets
-      lighthouse.updated_tickets(project.synced_at).each do |remote_ticket|
-        Ticket.sync_from_remote_ticket!(@project, remote_ticket)
+    
+    def local_class(object)
+      if object.is_a? Lighthouse::Milestone
+        object.name =~ /Release/i ? Release : Sprint
+      else
+        object.class.name.demodulize.constantize
       end
-    end
-  
-    def pull_milestones
-      lighthouse.milestones.each do |remote_milestone|
-        Milestone.sync_from_remote_milestone!(@project, remote_milestone)
-      end
-    end
-  
-    def lighthouse
-      @lighthouse ||= Lighthouse.new(@project.remote_id)
     end
 end
+
+
+  # cattr_accessor :sync
+  # @@sync = true
+  # 
+  # class << self
+  #   def with_no_sync
+  #     old_sync, self.sync = self.sync, false # TODO not threadsafe
+  #     yield
+  #     self.sync = old_sync
+  #   end
+  #   
+  #   alias :sync? :sync
+  #   
+  #   def no_sync!
+  #     self.sync = false
+  #   end
+  # end
+
+  # def project_id
+  #   @project.id
+  # end
+  # 
+  # def push_ticket(ticket)
+  #   return unless self.class.sync?
+  #   attributes = { :number => ticket.remote_id, :project_id => @project.remote_id }
+  #   ticket.changes.each do |name, values|
+  #     case name
+  #     when 'user_id'
+  #       attributes['assigned_user_id'] = ticket.user.remote_id if ticket.user 
+  #     when 'sprint_id'
+  #       attributes['milestone_id'] = ticket.sprint.remote_id if ticket.sprint
+  #     when 'release_id'
+  #       attributes['milestone_id'] = ticket.release.remote_id if ticket.release
+  #     end
+  #   end
+  #   return if attributes.keys.size == 2
+  #   ticket = ::Lighthouse::Ticket.new(attributes)
+  #   ticket.save
+  # end
+  

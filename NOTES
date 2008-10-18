@@ -15,13 +15,6 @@ Ticket#number_and_title » helper
 
 http://github.com/hpoydar/lighthouse-pm
 
-make tickets versioned (git://github.com/technoweenie/acts_as_versioned.git)
-  * only track changes to the "estimated" column
-  * overwrite it so that it creates a new version per day and 
-    updates existing versions from the same day
-  * make the burndown chart use versioned estimated values per day
-  
-
 rename category to bin (?)
 make modules nested_sets (?)
 

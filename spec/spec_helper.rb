@@ -2,11 +2,21 @@
 # from the project root directory.
 ENV["RAILS_ENV"] = "test"
 require File.expand_path(File.dirname(__FILE__) + "/../config/environment")
+require 'active_resource/http_mock'
 require 'spec'
 require 'spec/rails'
 require 'rspec_on_rails_on_crack'
+require 'factory_girl'
 
-Synchronizer.no_sync!
+Dir[File.expand_path(File.dirname(__FILE__)) + "/spec_helper/*.rb"].each do |path|
+  require path
+end
+
+Dir[File.expand_path(File.dirname(__FILE__)) + "/factories/*.rb"].each do |path|
+  require path
+end
+
+# Synchronizer.no_sync!
 
 class Spec::Rails::Example::ControllerExampleGroup
   before :each do 
@@ -32,7 +42,7 @@ Spec::Runner.configure do |config|
   # do so right here. Just uncomment the next line and replace the fixture
   # names with your fixtures.
   #
-  config.global_fixtures = [:projects, :milestones, :components, :categories, :tickets, :ticket_versions]
+  # config.global_fixtures = [:projects, :milestones, :components, :categories, :tickets, :ticket_versions]
   #
   # If you declare global fixtures, be aware that they will be declared
   # for all of your examples, even those that don't use them.
