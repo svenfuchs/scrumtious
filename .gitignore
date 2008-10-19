@@ -1,4 +1,5 @@
 Capfile
+backup/*
 config/deploy.rb
 config/http_auth.yml
 db/*.sqlite3

@@ -13,6 +13,10 @@ class Schedule
     (0..(end_at - start_at).to_i).collect{|i| start_at + i.days } # TODO hu?
   end
   
+  def used_days
+    days [end_at, Time.zone.today].min
+  end
+  
   def hours(user, start_at = nil, end_at = nil)
     range = days_range(start_at, end_at)
     days = scheduled_days.select{|s| range.include?(s.day) and s.user_id == user.id }

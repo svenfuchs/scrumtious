@@ -12,11 +12,11 @@
 ActiveRecord::Schema.define(:version => 20081013124942) do
 
   create_table "activities", :force => true do |t|
-    t.integer  "ticket_id"
-    t.integer  "user_id"
+    t.integer  "ticket_id",  :limit => 11
+    t.integer  "user_id",    :limit => 11
     t.string   "text"
     t.date     "date"
-    t.integer  "minutes"
+    t.integer  "minutes",    :limit => 11
     t.datetime "started_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -24,28 +24,28 @@ ActiveRecord::Schema.define(:version => 20081013124942) do
   end
 
   create_table "categories", :force => true do |t|
-    t.integer  "project_id"
+    t.integer  "project_id", :limit => 11
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "components", :force => true do |t|
-    t.integer  "project_id"
+    t.integer  "project_id", :limit => 11
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "memberships", :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
+    t.integer "project_id", :limit => 11
+    t.integer "user_id",    :limit => 11
   end
 
   create_table "milestones", :force => true do |t|
-    t.integer  "remote_id"
-    t.integer  "project_id"
-    t.integer  "release_id"
+    t.integer  "remote_id",  :limit => 11
+    t.integer  "project_id", :limit => 11
+    t.integer  "release_id", :limit => 11
     t.string   "type"
     t.string   "name"
     t.text     "body"
@@ -58,7 +58,7 @@ ActiveRecord::Schema.define(:version => 20081013124942) do
   create_table "projects", :force => true do |t|
     t.string   "lighthouse_account"
     t.string   "lighthouse_token"
-    t.integer  "remote_id"
+    t.integer  "remote_id",          :limit => 11
     t.string   "name"
     t.text     "body"
     t.datetime "synced_at"
@@ -67,15 +67,15 @@ ActiveRecord::Schema.define(:version => 20081013124942) do
   end
 
   create_table "scheduled_days", :force => true do |t|
-    t.integer "project_id"
-    t.integer "user_id"
+    t.integer "project_id", :limit => 11
+    t.integer "user_id",    :limit => 11
     t.date    "day"
-    t.integer "hours"
+    t.integer "hours",      :limit => 11
   end
 
   create_table "ticket_versions", :force => true do |t|
-    t.integer  "ticket_id"
-    t.integer  "version"
+    t.integer  "ticket_id",  :limit => 11
+    t.integer  "version",    :limit => 11
     t.float    "estimated"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -83,29 +83,29 @@ ActiveRecord::Schema.define(:version => 20081013124942) do
   end
 
   create_table "tickets", :force => true do |t|
-    t.integer  "remote_id"
-    t.integer  "parent_id"
-    t.integer  "project_id"
-    t.integer  "release_id"
-    t.integer  "sprint_id"
-    t.integer  "category_id"
-    t.integer  "component_id"
-    t.integer  "user_id"
+    t.integer  "remote_id",    :limit => 11
+    t.integer  "parent_id",    :limit => 11
+    t.integer  "project_id",   :limit => 11
+    t.integer  "release_id",   :limit => 11
+    t.integer  "sprint_id",    :limit => 11
+    t.integer  "category_id",  :limit => 11
+    t.integer  "component_id", :limit => 11
+    t.integer  "user_id",      :limit => 11
     t.string   "title"
     t.text     "body"
     t.float    "estimated"
     t.float    "actual"
     t.string   "state"
-    t.integer  "closed"
-    t.integer  "local"
-    t.integer  "priority"
+    t.integer  "closed",       :limit => 11
+    t.integer  "local",        :limit => 11
+    t.integer  "priority",     :limit => 11
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "version"
+    t.integer  "version",      :limit => 11
   end
 
   create_table "users", :force => true do |t|
-    t.integer "remote_id"
+    t.integer "remote_id", :limit => 11
     t.string  "name"
   end
 

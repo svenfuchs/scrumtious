@@ -47,7 +47,6 @@ class Burndown
     chart.graphs << estimated = Ambling::Data::LineGraph.new([], :title => "estimated", :color => colors[0])
     chart.graphs << actual = Ambling::Data::LineGraph.new([], :title => "actual", :color => colors[1])
     chart.graphs << remaining = Ambling::Data::LineGraph.new([], :title => "remaining", :color => colors[2])
-    
     rows.each do |row|
       chart.series << Ambling::Data::Value.new(row.day.strftime('%a, %d.%m.'), :xid => row.day)
       
@@ -63,8 +62,10 @@ class Burndown
     def collect!
       rows.clear
       end_at = [Time.zone.today, @end_at].min
-      remaining = (@start_at..end_at).to_a.each do |day|
-        @rows << Row.new(day, estimated_at(day), actual_at(day))
+      actual_total = 0.0
+      (@start_at..end_at).to_a.each do |day|
+        actual_total = actual_total + actual_at(day)
+        @rows << Row.new(day, estimated_at(day), actual_total)
       end
     end
     

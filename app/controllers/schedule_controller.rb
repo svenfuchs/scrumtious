@@ -13,7 +13,7 @@ class ScheduleController < ApplicationController
           ScheduledDay.new(:project_id => project_id, :user_id => user_id, :day => day)
     day.hours = params[:hours]
     day.save!
-    render :text => :ok
+    head :ok
   end
   
   protected

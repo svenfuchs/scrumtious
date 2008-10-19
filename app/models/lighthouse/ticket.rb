@@ -1,4 +1,12 @@
 module Lighthouse  
+  class Version < Base
+    def initialize(attributes)
+      # remove some lighthouse' xml garbage to silence activeresource warnings
+      attributes.delete 'diffable_attributes'
+      super
+    end
+  end
+
   class Ticket
     class << self
       def attributes_from_local(ticket)
@@ -21,8 +29,7 @@ module Lighthouse
         :remote_id => id, 
         :title => title, 
         :state => state,
-        :closed => closed,
-        :user_id => user.id 
+        :closed => closed
       }
       attrs[:"#{milestone.class.name.underscore}_id"] = milestone.id if milestone
       attrs[:user_id] = user.id if user

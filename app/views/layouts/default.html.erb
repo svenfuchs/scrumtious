@@ -47,6 +47,10 @@
   </style>
 
   <script>
+    // http://ejohn.org/blog/qualified-selectors-in-jquery
+    jQuery.parse.push(/^\s*(<)(\s*)(.*)$/);
+    jQuery.expr["<"] = jQuery.expr[":"].has;  
+  
     var authenticity_token = '<%= form_authenticity_token %>';
     
     function id_from_dom(element) {
@@ -61,7 +65,7 @@
     function update_resource_attribute(type, id, name, value) {
       var params = { '_method': 'put', 'authenticity_token': authenticity_token };
       params[type + "[" + name + "]"] = value;
-      $.post("/" + type + "s/" + id, params);
+      $.post("/" + type + "s/" + id + ".xml", params);
     }
     
     update_release = function(release_id, settings) {
@@ -90,7 +94,7 @@
       var user_id = tokens[2];
       var day = tokens.slice(3, 6).join('-');
       var params = { '_method': 'put', 'authenticity_token': authenticity_token, user_id: user_id, hours: hours };
-      $.post("/projects/" + project_id + "/schedule/" + day, params);
+      $.post("/projects/" + project_id + "/schedule/" + day + ".xml", params);
       return hours;
     }
     
@@ -105,19 +109,18 @@
       var component_id = row.parentNode.id.split('-')[1];
       params = { 
         '_method': 'put', 
-        'authenticity_token': authenticity_token,
-        'return_to': location.href
+        'authenticity_token': authenticity_token
       }
       params['tickets[' + id + '][component_id]'] = component_id;
       $.extend(params, table_sort_order(table));
-      $.post("/tickets/", params);
+      $.post("/tickets", params);
     }
     
     function update_empty_components(table) {
       $("tbody", table).each(function(){
-        if(this.rows.length > 1) {
+        if($('tr[class!=empty] < td', this).length > 0) {
           $('tr', this).remove('.empty');
-        } else {
+        } else if($('tr.empty', this).length == 0) {
           $(this).append('<tr class="empty"><td colspan="6">empty</td></tr>');
         }
       });

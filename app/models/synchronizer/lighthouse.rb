@@ -1,6 +1,7 @@
 class Synchronizer
   class Lighthouse
     include ::Lighthouse
+    include ActionView::Helpers::DateHelper
     
     def initialize(project)
       @project = project

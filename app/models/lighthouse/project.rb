@@ -1,7 +1,5 @@
 module Lighthouse
   class Project
-    include ActionView::Helpers::DateHelper
-    
     class << self
       def attributes_from_local(project)
         { :id => project.remote_id, :name => project.name, :body => project.body }

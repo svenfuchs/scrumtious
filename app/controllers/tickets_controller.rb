@@ -22,12 +22,16 @@ class TicketsController < ApplicationController
   end
 
   def update
-    if @ticket.update_attributes(params[:ticket])
-      @ticket.push! unless @ticket.local?
-      flash[:notice] = 'Ticket has been updated.'
-      redirect_back_or_default @ticket
-    else
-      render :action => "edit"
+    respond_to do |format|
+      if @ticket.update_attributes(params[:ticket])
+        @ticket.push! unless @ticket.local?
+        flash[:notice] = 'Ticket has been updated.'
+        format.html { redirect_back_or_default @ticket }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @ticket.errors, :status => :unprocessable_entity }
+      end
     end
   end
   

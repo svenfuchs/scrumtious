@@ -1,6 +1,6 @@
 module ActivitiesHelper
   def activities
-    Activity.all(:order => "started_at DESC, updated_at DESC", :limit => 100)
+    Activity.all(:order => "started_at DESC, updated_at DESC", :limit => 50)
   end
   
   def activity_lighthouse_link(activity)

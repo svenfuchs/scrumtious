@@ -62,7 +62,7 @@ class Ticket < ActiveRecord::Base
   
   def update_attributes(attributes)
     sprint_id, sprint = attributes.values_at :sprint_id, :sprint
-    if sprint_id or sprint
+    if !sprint_id.blank? or sprint
       sprint ||= Sprint.find(sprint_id)
       attributes[:release_id] = sprint ? sprint.release_id : nil
     end
