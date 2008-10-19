@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Synchronizer, '#push!' do
-  include RemoteMockHelper
+  include HttpMockHelper
 
   before :each do
     @project = Factory :scrumtious
@@ -15,7 +15,7 @@ describe Synchronizer, '#push!' do
 
   describe "with no remote_id" do
     before :each do
-      mock_post_to_ticket @project, @ticket.remote_id, @remote_ticket.to_xml
+      mock_post_to_tickets @project, @remote_ticket.to_xml, @ticket.remote_id
       @ticket.remote_id = nil
     end
 
@@ -51,7 +51,7 @@ describe Synchronizer, '#push!' do
 end
 
 describe Synchronizer, '#push! given a release' do
-  include RemoteMockHelper
+  include HttpMockHelper
 
   before :each do
     @project = Factory :scrumtious
@@ -66,7 +66,7 @@ describe Synchronizer, '#push! given a release' do
   describe "with no remote_id" do
     before :each do
       @release.remote_id = nil
-      mock_post_to_milestone @project, @release.remote_id, @remote_milestone.to_xml
+      mock_post_to_milestones @project, @remote_milestone.to_xml, @release.remote_id
     end
 
     it "instantiates and saves a new remote milestone" do
@@ -101,7 +101,7 @@ describe Synchronizer, '#push! given a release' do
 end
 
 describe Synchronizer, '#push! given a sprint' do
-  include RemoteMockHelper
+  include HttpMockHelper
 
   before :each do
     @project = Factory :scrumtious
@@ -115,7 +115,7 @@ describe Synchronizer, '#push! given a sprint' do
 
   describe "with no remote_id" do
     before :each do
-      mock_post_to_milestone @project, @sprint.remote_id, @remote_milestone.to_xml
+      mock_post_to_milestones @project, @remote_milestone.to_xml, @sprint.remote_id
       @sprint.remote_id = nil
     end
 
@@ -151,7 +151,7 @@ describe Synchronizer, '#push! given a sprint' do
 end
 
 describe Synchronizer, '#pull_users!' do
-  include RemoteMockHelper
+  include HttpMockHelper
 
   before :each do
     @synchronizer = Factory(:scrumtious).synchronizer

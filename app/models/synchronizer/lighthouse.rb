@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/../lighthouse.rb'
-
 class Synchronizer
   class Lighthouse
     include ::Lighthouse
@@ -22,20 +20,47 @@ class Synchronizer
       @remote_project ||= Project.find @project.remote_id
     end
     
+    def milestones(options = {})
+      Lighthouse::Milestone.find :all, :params => options.update(:project_id => @project.remote_id)
+    end
+    
     def milestone(id, options = {})
-      Milestone.find id, :params => options.update(:project_id => @project.remote_id)
+      Lighthouse::Milestone.find id, :params => options.update(:project_id => @project.remote_id)
     end
     
     def ticket(id, options = {})
-      Ticket.find id, :params => options.update(:project_id => @project.remote_id)
+      Lighthouse::Ticket.find id, :params => options.update(:project_id => @project.remote_id)
     end
     
     def users
-      remote_project.memberships.map{|m| User.find m.user_id }
+      memberships.map{|m| Lighthouse::User.find m.user_id }
     end
-
+    
+    def memberships(options = {})
+      Lighthouse::Membership.find :all, :params => options.update(:project_id => @project.remote_id)
+    end
+    
+    def tickets(options = {})
+      Ticket.find(:all, :params => options.update(:project_id => @project.remote_id))
+    end
+  
     def updated_tickets(since)
-      remote_project.updated_tickets(since)
+      if since
+        tickets :q => "updated:\"since #{time_ago_in_words(since - 1.minute)} ago\""
+      else
+        all_tickets
+      end
+    end
+    
+    def all_tickets
+      page = 1
+      result = paged = []
+      while page == 1 or !paged.empty?
+        paged = tickets(:q => :all, :page => page)
+        result += paged
+        page += 1
+      end
+      result.compact
     end
   end
 end

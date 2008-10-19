@@ -4,7 +4,8 @@ module Lighthouse
       def attributes_from_local(milestone)
         { :id => milestone.remote_id, 
           :title => milestone.name, 
-          :body => milestone.body }
+          :body => milestone.body,
+          :due_on => milestone.end_at ? milestone.end_at - 1.day : nil }
       end
     end
       

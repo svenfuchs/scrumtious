@@ -1,0 +1,1 @@
+Dir["#{File.dirname(__FILE__)}/integration/*.rb"].each{|path| require path }

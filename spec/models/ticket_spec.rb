@@ -15,7 +15,7 @@ end
 describe Ticket do
   include TicketScenarios
 
-  before :all do
+  before :each do
     bunch_of_tickets!
     @id = @ticket_1.id
   end
@@ -57,7 +57,7 @@ describe Ticket do
   end
   
   describe Ticket, 'save_version?' do
-    before :all do
+    before :each do
       @ticket = Ticket.new
       @yesterday = Time.zone.today.yesterday
       @ticket.stub!(:sprint_running?).and_return false
@@ -124,7 +124,7 @@ end
 
 
   # describe Ticket, '#update_attributes' do
-  #   before :all do
+  #   before :each do
   #     @sprint = Factory :sprint_1
   #     @ticket = Factory :ticket
   #     @ticket.update_attributes :release_id => nil

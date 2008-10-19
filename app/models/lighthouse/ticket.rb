@@ -14,17 +14,19 @@ module Lighthouse
     end
       
     def attributes_for_local
-      # TODO ... this could go wrong. how to recover?
       user = ::User.find_by_remote_id(assigned_user_id)
       milestone = ::Milestone.find_by_remote_id(milestone_id)
-      milestone_type = milestone.class.name.underscore
-      
-      { :remote_id => id, 
+
+      attrs = { 
+        :remote_id => id, 
         :title => title, 
         :state => state,
         :closed => closed,
-        :"#{milestone_type}_id" => milestone.id,
-        :user_id => user.id }
+        :user_id => user.id 
+      }
+      attrs[:"#{milestone.class.name.underscore}_id"] = milestone.id if milestone
+      attrs[:user_id] = user.id if user
+      attrs
     end
       
     def update_attributes!(attributes)

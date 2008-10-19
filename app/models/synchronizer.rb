@@ -53,13 +53,13 @@ class Synchronizer
       klass = local_class remote
       local = klass.find_or_initialize_by_remote_id remote.id
       attributes = remote.attributes_for_local
-      attributes.update!(:project => @project) if local.respond_to?(:project=)
+      attributes.update(:project => @project) if local.respond_to?(:project=)
       local.update_attributes! attributes
     end
     
     def local_class(object)
       if object.is_a? Lighthouse::Milestone
-        object.name =~ /Release/i ? Release : Sprint
+        object.title =~ /Release/i ? Release : Sprint
       else
         object.class.name.demodulize.constantize
       end

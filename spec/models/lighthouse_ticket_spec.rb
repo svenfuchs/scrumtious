@@ -49,7 +49,7 @@ describe Lighthouse::Ticket, '#attributes_for_local' do
 end
 
 describe Lighthouse::Ticket, '#update_attributes!' do
-  include RemoteMockHelper
+  include HttpMockHelper
   
   before :each do
     @project = Factory :scrumtious

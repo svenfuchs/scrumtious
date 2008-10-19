@@ -33,7 +33,16 @@ class Sprint < Milestone
   end
 
   def running?
-    start_at <= Time.zone.today and Time.zone.today <= end_at
+    # period.include?(Time.parse('2008-10-02'))
+    started? and !ended?
+  end
+  
+  def started?
+    start_at and start_at <= Time.zone.today
+  end
+  
+  def ended?
+    end_at and end_at < Time.zone.today
   end
   
   protected

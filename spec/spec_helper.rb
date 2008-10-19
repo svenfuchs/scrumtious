@@ -8,7 +8,8 @@ require 'spec/rails'
 require 'rspec_on_rails_on_crack'
 require 'factory_girl'
 
-Dir[File.expand_path(File.dirname(__FILE__)) + "/spec_helper/*.rb"].each do |path|
+
+Dir[File.expand_path(File.dirname(__FILE__)) + "/spec_helpers/*.rb"].each do |path|
   require path
 end
 

@@ -13,6 +13,10 @@
     <%= f.text_field :name %>
   </p>
   <p>
+    <%= f.label :body %><br />
+    <%= f.text_area :body %>
+  </p>
+  <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @release %>
   </p>
 <% end %>

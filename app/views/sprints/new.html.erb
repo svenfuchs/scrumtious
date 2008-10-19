@@ -9,6 +9,10 @@
   <%= f.error_messages %>
   <%= f.hidden_field :project_id %>
   <p>
+    <%= f.label :release_id, 'Release' %><br />
+    <%= f.collection_select :release_id, @project.releases, :id, :name, :include_blank => true %>
+  </p>
+  <p>
     <%= f.label :name %><br />
     <%= f.text_field :name %>
   </p>

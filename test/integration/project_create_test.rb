@@ -6,7 +6,7 @@ class ProjectCreateTest < ActionController::IntegrationTest
   end
   
   def test_user_creates_a_project
-    get projects_path
+    visits projects_path
     clicks_link 'new project'
     
     assert_difference 'Project.count' do
