@@ -4,7 +4,12 @@ require 'synchronizer'
 describe Lighthouse::Milestone, ".attributes_from_local" do
   it "maps local attributes to remote attributes" do
     milestone = Factory :release_001
-    attributes = { :id => milestone.remote_id, :title => milestone.name, :body => milestone.body }
+    attributes = { 
+      :id => milestone.remote_id, 
+      :title => milestone.name, 
+      :body => milestone.body,
+      :due_on => Date.parse('2008-11-30')
+    }
     Lighthouse::Milestone.attributes_from_local(milestone).should == attributes
   end
 end

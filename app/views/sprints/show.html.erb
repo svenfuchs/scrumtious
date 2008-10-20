@@ -1,7 +1,5 @@
 <div id="breadcrumbs">
-  <%= link_to 'Projects', projects_path %> »
-  <%= link_to h(@project.name), @project %> »
-  <%= link_to(h("Release #{@release.name}"), @release) + ' »' if @release %>
+  <%= link_to 'Overview', projects_path %> »
   <%= h "Sprint #{@sprint.name}" %>
 </div>
 

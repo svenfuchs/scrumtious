@@ -1,6 +1,5 @@
 class SprintsController < ApplicationController
   before_filter :set_sprint
-  before_filter :set_project
   
   def show
     params[:sort] ||= 'assigned'
@@ -35,20 +34,12 @@ class SprintsController < ApplicationController
 
   def destroy
     @sprint.destroy
-    redirect_to release_url(@sprint.release)
+    redirect_to projects_url
   end
   
   protected
   
     def set_sprint
       @sprint = params[:id] ? Sprint.find(params[:id]) : Sprint.new(params[:sprint])
-    end
-    
-    def set_project
-      if params[:project_id]
-        @project = @sprint.project = Project.find(params[:project_id]) 
-      elsif @sprint
-        @project = @sprint.project 
-      end
     end
 end

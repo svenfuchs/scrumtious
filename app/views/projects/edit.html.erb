@@ -1,5 +1,5 @@
 <div id="breadcrumbs">
-  <%= link_to 'Projects', projects_path %> »
+  <%= link_to 'Overview', projects_path %> »
   <%= link_to h(@project.name), @project %>
 </div>
 
@@ -12,7 +12,11 @@
   </p>
 <% end %>
 
+<br>
 <%= render :partial => "releases/list", :locals => {:components => @project.components } %>
+<br>
 <%= render :partial => "components/list", :locals => {:components => @project.components } %>
+<br>
 <%= render :partial => "categories/list", :locals => {:categories => @project.categories } %>
+<br>
 <%= render :partial => "members" %>

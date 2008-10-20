@@ -1,15 +1,18 @@
+<style>
+  #sprint_start_at_2i, #sprint_start_at_3i,
+  #sprint_end_at_2i, #sprint_end_at_3i {
+    margin-left: 0px !important;
+  }
+</style>
+
 <%= f.error_messages %>
-<p>
-  <%= f.label :release_id, 'Release' %>
-  <%= f.collection_select :release_id, @project.releases, :id, :name, :include_blank => true %>
-</p>
 <p>
   <%= f.label :name %>
   <%= f.text_field :name %>
 </p>
 <p>
   <%= f.label :body %>
-  <%= f.text_area :body %>
+  <%= f.text_area :body, :class => 'small' %>
 </p>
 <p>
   <%= f.label :start_at %>

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Schedule, '#days' do
   it "returns an array of days between start_at and end_at" do
     @start_at = Date.parse('2008-10-06')
-    schedule = Schedule.new mock('project'), @start_at
+    schedule = Schedule.new @start_at
     schedule.days.should == (@start_at..(@start_at + 4.weeks - 1.day)).to_a
   end
 end
@@ -13,7 +13,7 @@ describe Schedule, '#days_range' do
     @monday = Date.parse('2008-10-06')
     @thursday = Date.parse('2008-10-09')
     @sunday = Date.parse('2008-10-12')
-    @schedule = Schedule.new nil, @thursday
+    @schedule = Schedule.new @thursday
   end
   
   it "returns a range of days containing the given start day when no end day was given" do

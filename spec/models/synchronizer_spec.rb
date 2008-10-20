@@ -202,13 +202,13 @@ describe Synchronizer, '#local_class' do
   end
 
   it "returns Release when given Lighthouse::Milestone with a name starting with 'Release'" do
-    release = Lighthouse::Milestone.new(:name => 'Release 0.0.1')
+    release = Lighthouse::Milestone.new(:title => 'Release 0.0.1')
     @synchronizer.send(:local_class, release).should == Release
   end
 
   it "returns Sprint when given Lighthouse::Milestone with a name not starting with 'Release'" do
-    release = Lighthouse::Milestone.new(:name => 'Sprint #1')
-    @synchronizer.send(:local_class, release).should == Sprint
+    sprint = Lighthouse::Milestone.new(:title => 'Sprint #1')
+    @synchronizer.send(:local_class, sprint).should == Sprint
   end
 end
 

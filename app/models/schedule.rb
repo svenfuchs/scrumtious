@@ -1,8 +1,7 @@
 class Schedule
-  attr_reader :project, :start_at, :end_at
+  attr_reader :start_at, :end_at
   
-  def initialize(project, start_at = nil, end_at = nil)
-    @project = project
+  def initialize(start_at = nil, end_at = nil)
     @start_at = start_at || Time.zone.today
     @end_at = end_at || (@start_at + 27.days)
   end

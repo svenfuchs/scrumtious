@@ -123,5 +123,5 @@ describe SprintsController, "DELETE #destroy" do
   end
 
   it_assigns :sprint
-  it_redirects_to { release_path(@sprint.release) }
+  it_redirects_to { projects_path }
 end

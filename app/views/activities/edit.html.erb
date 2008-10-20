@@ -1,25 +1,31 @@
+<style>
+  #activity_date_2i, #activity_date_3i {
+    margin-left: 0px !important;
+  }
+</style>
+
 <h1>Activity</h1>
 
 <% form_for(@activity) do |f| %>
   <%= f.error_messages %>
   <p>
-    <%= f.label :ticket_id, 'Ticket' %><br />
+    <%= f.label :ticket_id, 'Ticket' %>
     <%= f.collection_select :ticket_id, Ticket.all(:order => :remote_id), :id, :number_and_title, :include_blank => true %>
   </p>
   <p>
-    <%= f.label :user_id, 'User' %><br />
+    <%= f.label :user_id, 'User' %>
     <%= f.collection_select :user_id, User.all, :id, :first_name, :include_blank => true %>
   </p>
   <p>
-    <%= f.label :date %><br />
-    <%= f.date_select :date %>
+    <%= f.label :date %>
+    <%= f.date_select :date, :class => 'date' %>
   </p>
   <p>
-    <%= f.label :hours %><br />
+    <%= f.label :hours %>
     <%= f.text_field :hours %>
   </p>
   <p>
-    <%= f.label :text, 'Note' %><br />
+    <%= f.label :text, 'Note' %>
     <%= f.text_area :text, :size => "50x5" %>
   </p>
   <p>

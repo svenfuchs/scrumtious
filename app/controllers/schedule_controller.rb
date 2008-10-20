@@ -23,7 +23,7 @@ class ScheduleController < ApplicationController
     end
     
     def set_schedule
-      @schedule = Schedule.new @project, first_week_day, first_week_day + 4.weeks
+      @schedule = Schedule.new first_week_day, first_week_day + 4.weeks
     end
   
     def first_week_day

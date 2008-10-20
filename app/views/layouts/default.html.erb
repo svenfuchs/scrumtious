@@ -12,20 +12,7 @@
   h1 {
     clear: both;
   }
-  .inline-select {
-    position: absolute;
-  }
-  .inline-edit {
-    position: absolute;
-  }
-  .inline-edit input {
-    width: 100% !important;
-    border: 0px;
-    font-size: 13px;
-    margin-left: -8px;
-    padding-top: 1px;
-    padding-left: 7px;
-  }
+  
   #tickets .inline-edit {
     width: 20px;
   }
@@ -73,20 +60,25 @@
     text-align: right; 
     color: #666; 
   }
-  #main input[type=text], #main select, #main textarea {
+  #main input[type=text], 
+  #main select, 
+  #main textarea {
     border: 1px solid #ddd;
     font-size: 1em;
   }
-  #main input[type=text], #main textarea {
+  #main input[type=text], 
+  #main textarea {
     padding: 2px 5px;
   }
   #main select {
     padding: 2px;
   }
-  #main .small input, .small select {
+  #main .small input, 
+  #main .small select {
     width: 100px;
   }
-  #main .medium input, .medium select {
+  #main .medium input, 
+  #main .medium select {
     width: 200px;
   }
   #main .big label {
@@ -97,19 +89,39 @@
     padding: 3px 5px;
     width: 84%;
   }
-  #main input, #main textarea, #main select { 
+  #main input, 
+  #main textarea, 
+  #main select { 
     margin-left: 15%; 
   }
   #main label.check, label.radio { 
     position: relative; 
     text-align: left; 
   }  
-  #main textarea {
-    
-  } 
   #main textarea.small {
-    
+    height: 100px;
   }
+  
+  #main .inline-select {
+    position: absolute !important;
+  }
+  #main .inline-select select {
+    margin-left: 0px;
+    border: auto;
+    font-size: 11px;
+  }
+  #main .inline-edit {
+    position: absolute !important;
+  }
+  #main .inline-edit input {
+    width: 100% !important;
+    border: 0px;
+    font-size: 13px;
+    margin-left: -8px;
+    padding-top: 1px;
+    padding-left: 7px;
+  }
+
   </style>
 
   <script>
