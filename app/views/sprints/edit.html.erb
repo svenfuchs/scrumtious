@@ -8,27 +8,7 @@
 <h1>Editing sprint</h1>
 
 <% form_for(@sprint) do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :release_id, 'Release' %><br />
-    <%= f.collection_select :release_id, @project.releases, :id, :name, :include_blank => true %>
-  </p>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </p>
-  <p>
-    <%= f.label :start_at %><br />
-    <%= f.date_select :start_at %>
-  </p>
-  <p>
-    <%= f.label :end_at %><br />
-    <%= f.date_select :end_at %>
-  </p>  
+  <%= render :partial => 'form', :locals => {:f => f} %>
   <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @sprint %>
   </p>

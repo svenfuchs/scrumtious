@@ -6,6 +6,12 @@ class Ticket < ActiveRecord::Base
   belongs_to :component
   belongs_to :category
   belongs_to :user
+  
+  class << self
+    def states
+      [:new, :open, :resolved, :hold, :invalid]
+    end
+  end
 
   has_many :activities, :dependent => :destroy do
     def in_range(from_day, to_day = nil)

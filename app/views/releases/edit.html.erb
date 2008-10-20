@@ -7,15 +7,7 @@
 <h1>Editing release</h1>
 
 <% form_for(@release) do |f| %>
-  <%= f.error_messages %>
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :body %><br />
-    <%= f.text_area :body %>
-  </p>
+  <%= render :partial => 'form', :locals => {:f => f} %>
   <p>
     <%= f.submit "Update" %> or <%= link_to 'back', @release %>
   </p>

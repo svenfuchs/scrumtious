@@ -1,0 +1,49 @@
+<%= hidden_field_tag :return_to, params[:return_to] %>
+<%= f.error_messages %>
+
+<fieldset>
+  <p class="big">
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </p>
+  <p class="small">
+    <%= f.label :user_id, 'Assigned to' %>
+    <%= f.collection_select :user_id, @project.members, :id, :first_name, { :include_blank => true } %>
+  </p>
+</fieldset>
+
+<fieldset>
+  <% unless @project.components.empty? %>
+    <p class="medium">
+      <%= f.label :component_id, 'Component' %>
+      <%= f.collection_select :component_id, @project.components, :id, :name, { :include_blank => true } %>
+    </p>
+  <% end %>
+  <% unless @project.releases.empty? %>
+    <p class="small">
+      <%= f.label :release_id, 'Release' %>
+      <%= f.collection_select :release_id, @project.releases, :id, :name, { :include_blank => true } %>
+    </p>
+  <% end %>
+</fieldset>
+
+<fieldset>
+  <% unless @project.sprints.empty? %>
+    <p class="small">
+      <%= f.label :sprint_id, 'Sprint' %>
+      <%= f.collection_select :sprint_id, @project.sprints, :id, :name, { :include_blank => true } %>
+    </p>
+  <% end %>
+  <p class="small">
+    <%= f.label :estimated %>
+    <%= f.text_field :estimated %>
+  </p>
+  <p class="small">
+    <%= f.label :state %>
+    <%= select :ticket, :state, Ticket.states.map(&:to_s), {} %>
+  </p>
+  <p>
+    <%= f.check_box :local %>
+    <%= f.label :local, 'Local', :class => 'check' %>
+  </p>
+</fieldset>

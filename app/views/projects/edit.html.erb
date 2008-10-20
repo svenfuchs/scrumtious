@@ -1,9 +1,9 @@
-<p>
+<div id="breadcrumbs">
   <%= link_to 'Projects', projects_path %> »
   <%= link_to h(@project.name), @project %>
-</p>
+</div>
 
-<h2>Settings</h2>
+<h1>Settings</h1>
 
 <% form_for(@project) do |f| %>
   <%= render :partial => 'form', :locals => {:f => f} %>

@@ -9,6 +9,9 @@
   <%= javascript_include_tag 'jquery-1.2.6.min', 'jquery.jeditable.mini', 'jquery.tablednd_0_5.js', :cache => true %>
   
   <style>
+  h1 {
+    clear: both;
+  }
   .inline-select {
     position: absolute;
   }
@@ -44,6 +47,69 @@
   #schedule .inline-edit {
     width: 60px;
   }  
+  
+  #main form { 
+    position: relative;
+    width: 80%;
+  }
+  #main fieldset { 
+    padding: 0.5em 0;
+    position: relative;
+    text-align: left; 
+    border: 0px;
+    border-bottom: 1px solid #ddd;
+    width: 99%;
+  }
+  #main legend { 
+    position: relative;
+    color: #666; 
+    margin-left: 10px;
+    padding-top: 1em;
+  }
+  #main label { 
+    position: absolute; 
+    width: 12%; 
+    padding-top: 1px;
+    text-align: right; 
+    color: #666; 
+  }
+  #main input[type=text], #main select, #main textarea {
+    border: 1px solid #ddd;
+    font-size: 1em;
+  }
+  #main input[type=text], #main textarea {
+    padding: 2px 5px;
+  }
+  #main select {
+    padding: 2px;
+  }
+  #main .small input, .small select {
+    width: 100px;
+  }
+  #main .medium input, .medium select {
+    width: 200px;
+  }
+  #main .big label {
+    padding-top: 5px;
+  }
+  #main .big input {
+    font-size: 1.5em;
+    padding: 3px 5px;
+    width: 84%;
+  }
+  #main input, #main textarea, #main select { 
+    margin-left: 15%; 
+  }
+  #main label.check, label.radio { 
+    position: relative; 
+    text-align: left; 
+  }  
+  #main textarea {
+    
+  } 
+  #main textarea.small {
+    
+  }
   </style>
 
   <script>
