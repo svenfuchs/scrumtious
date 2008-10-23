@@ -10,7 +10,7 @@
 <% form_for(@ticket) do |f| %>
   <%= hidden_field_tag :project_id, @project.id %>
   <%= render :partial => 'form', :locals => {:f => f} %>
-  <p>
+  <p class="buttons">
     <%= f.submit "Create" %> or <%= link_to 'back', @project %>
   </p>
 <% end %>

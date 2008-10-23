@@ -29,9 +29,12 @@ describe Sprint, '#tickets' do
 end
 
 describe Sprint, '#push!' do
+  include TicketScenarios
+  
   before do
     @project = Factory :scrumtious
-    @sprint = Factory :sprint_1, :project => @project
+    @sprint = Factory :sprint_1
+    @sprint.stub!(:projects).and_return [@project]
   end
   
   it "delegates to the projects synchronizer" do

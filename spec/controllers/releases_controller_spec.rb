@@ -124,3 +124,21 @@ describe ReleasesController, "DELETE #destroy" do
   it_assigns :release
   it_redirects_to { project_path(@release.project) }
 end
+
+describe ReleasesController, "#filter" do
+  before :each do
+    controller.params = {:filter => {:state => ['resolved'], :release => ['1'], :sprint => ['1']}}
+  end
+  
+  it "creates a state condition from the request params" do
+    controller.send(:filter).should =~ /state IN \('resolved'\)/
+  end
+  
+  it "creates a release condition from the request params" do
+    controller.send(:filter).should =~ /release_id IN \(1\)/
+  end
+  
+  it "creates a release condition from the request params" do
+    controller.send(:filter).should =~ /sprint_id IN \(1\)/
+  end
+end

@@ -49,4 +49,23 @@ class ReleasesController < ApplicationController
         @project = @release.project 
       end
     end
+    
+    def filter
+      return '' unless filter = params[:filter]
+      sql = []
+      sql << filter_state
+      sql << filter_association(:release)
+      sql << filter_association(:sprint)
+      sql.compact * ' AND '
+    end
+    
+    def filter_state
+      return nil unless states = params[:filter][:state]
+      'state IN (' + states.map{|state| "'#{state}'"} * ', ' + ')'
+    end
+    
+    def filter_association(type)
+      return nil unless ids = params[:filter][type]
+      "#{type}_id IN (" + ids * ', ' + ')' if ids
+    end
 end

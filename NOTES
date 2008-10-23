@@ -2,6 +2,9 @@ convert hours to minutes
 make ticket lists filterable
 
 make sprints not belong_to a release?
+  » this would mean that a sprint can not be sync'ed up to lighthouse anymore easily
+    it could be "split" up and sync'ed to all projects it contains tickets from
+
 make it possible to compose a sprint from multiple projects
 rake task for regularly synch'ing from lighthouse
 

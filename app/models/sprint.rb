@@ -1,4 +1,7 @@
 class Sprint < Milestone
+  has_many :projects, :through => :plain_tickets, :uniq => true
+  has_many :plain_tickets, :class_name => 'Ticket' # TODO find a better name
+  
   def ticket_groups(sort)
     tickets = self.tickets :order => order(sort)
     @groups ||= sort.to_sym == :assigned ? tickets.group_by(&:user) : [[nil, tickets]]
@@ -34,6 +37,10 @@ class Sprint < Milestone
   
   def ended?
     end_at and end_at < Time.zone.today
+  end
+  
+  def push!
+    projects.each{|project| project.synchronizer.push! self }
   end
   
   protected

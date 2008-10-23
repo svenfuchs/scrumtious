@@ -10,9 +10,11 @@ class Synchronizer
     @lighthouse = Synchronizer::Lighthouse.new(@project)
   end
   
+  # TODO only update relevant changes to Lighthouse
   def push!(local)
+    push! local.sprint if local.is_a?(Ticket) and local.sprint
+    
     if local.remote_id.blank?
-      # TODO only update relevant changes to Lighthouse
       remote = lighthouse.from_local(local)
       if remote.save
         local.update_attributes :remote_id => remote.id
@@ -65,44 +67,3 @@ class Synchronizer
       end
     end
 end
-
-
-  # cattr_accessor :sync
-  # @@sync = true
-  # 
-  # class << self
-  #   def with_no_sync
-  #     old_sync, self.sync = self.sync, false # TODO not threadsafe
-  #     yield
-  #     self.sync = old_sync
-  #   end
-  #   
-  #   alias :sync? :sync
-  #   
-  #   def no_sync!
-  #     self.sync = false
-  #   end
-  # end
-
-  # def project_id
-  #   @project.id
-  # end
-  # 
-  # def push_ticket(ticket)
-  #   return unless self.class.sync?
-  #   attributes = { :number => ticket.remote_id, :project_id => @project.remote_id }
-  #   ticket.changes.each do |name, values|
-  #     case name
-  #     when 'user_id'
-  #       attributes['assigned_user_id'] = ticket.user.remote_id if ticket.user 
-  #     when 'sprint_id'
-  #       attributes['milestone_id'] = ticket.sprint.remote_id if ticket.sprint
-  #     when 'release_id'
-  #       attributes['milestone_id'] = ticket.release.remote_id if ticket.release
-  #     end
-  #   end
-  #   return if attributes.keys.size == 2
-  #   ticket = ::Lighthouse::Ticket.new(attributes)
-  #   ticket.save
-  # end
-  
