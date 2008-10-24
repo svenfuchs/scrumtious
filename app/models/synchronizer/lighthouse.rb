@@ -12,6 +12,7 @@ class Synchronizer
       type = local.is_a?(::Milestone) ? 'Milestone' : local.class.name
       remote_class = "Lighthouse::#{type}".constantize
       attrs = remote_class.attributes_from_local(local)
+      attrs[:id] = local.remote_id(@project.id)
       returning remote_class.new(attrs) do |m|
         m.prefix_options = { :project_id => @project.remote_id }
       end

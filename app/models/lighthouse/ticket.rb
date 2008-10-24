@@ -10,7 +10,7 @@ module Lighthouse
   class Ticket
     class << self
       def attributes_from_local(ticket)
-        { :id => ticket.remote_id, 
+        { # :id => ticket.remote_id, 
           :number => ticket.remote_id, # weird ...
           :title => ticket.title, 
           :body => ticket.body,

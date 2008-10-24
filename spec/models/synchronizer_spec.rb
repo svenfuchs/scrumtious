@@ -115,7 +115,7 @@ describe Synchronizer, '#push! given a sprint' do
 
   describe "with no remote_id" do
     before :each do
-      mock_post_to_milestones @project, @remote_milestone.to_xml, @sprint.remote_id
+      mock_post_to_milestones @project, @remote_milestone.to_xml, 1
       @sprint.remote_id = nil
     end
 
@@ -135,11 +135,12 @@ describe Synchronizer, '#push! given a sprint' do
     before :each do
       @lighthouse.stub!(:milestone).and_return @remote_milestone
       @remote_milestone.stub!(:update_attributes!)
-      mock_get_to_milestone @project, @sprint.remote_id, @remote_milestone.to_xml
+      @remote_instance = RemoteInstance.create! :remote_id => 1, :project => @project, :local => @sprint
+      mock_get_to_milestone @project, @remote_instance.remote_id, @remote_milestone.to_xml
     end
 
     it "fetches the remote milestone" do
-      @lighthouse.should_receive(:milestone).with(@sprint.remote_id).and_return @remote_milestone
+      @lighthouse.should_receive(:milestone).with(@remote_instance.remote_id).and_return @remote_milestone
       @synchronizer.push! @sprint
     end
 
@@ -147,6 +148,31 @@ describe Synchronizer, '#push! given a sprint' do
       @remote_milestone.should_receive(:update_attributes!).with @sprint.attributes
       @synchronizer.push! @sprint
     end
+  end
+end
+
+describe Synchronizer, '#pull_milestones!' do
+  include HttpMockHelper
+
+  before :each do
+    @project = Factory :scrumtious
+    @synchronizer = @project.synchronizer
+    @remote_milestone = Lighthouse::Milestone.new :id => 1, :title => 'Sprint #1', :due_on => Time.parse('2008-10-10')
+    @sprint = Sprint.new
+    Sprint.stub!(:find_or_initialize_by_remote_id).and_return @sprint
+
+    @synchronizer.send(:lighthouse).stub!(:milestones).and_return [@remote_milestone]
+    @synchronizer.stub!(:update_local_remote_instance)
+  end
+
+  it "updates local milestones from remote milestones" do
+    @synchronizer.should_receive(:update_local).with(@remote_milestone).and_return @sprint
+    @synchronizer.pull_milestones!
+  end
+
+  it "updates local remote_instances from a remote milestone if it is a sprint" do
+    @synchronizer.should_receive(:update_local_remote_instance).with @sprint, @remote_milestone
+    @synchronizer.pull_milestones!
   end
 end
 
@@ -172,7 +198,7 @@ describe Synchronizer, "#update_local (given a User)" do
 
     @local_attributes = {:remote_id => 1, :name => 'John Doe'}
     @remote_user.stub!(:attributes_for_local).and_return @local_attributes
-    
+
     @user = User.new
     User.stub!(:find_or_initialize_by_remote_id).and_return @user
   end
@@ -185,6 +211,28 @@ describe Synchronizer, "#update_local (given a User)" do
   it "updates the user with mapped attributes from remote user" do
     @user.should_receive(:update_attributes!).with @local_attributes
     @synchronizer.send(:update_local, @remote_user)
+  end
+end
+
+describe Synchronizer, "#update_local_remote_instance (given a Sprint)" do
+  before :each do
+    @project = Factory :scrumtious
+    @synchronizer = @project.synchronizer
+    @remote_milestone = Lighthouse::Milestone.new :id => 1, :title => 'Sprint #1', :due_on => Time.parse('2008-10-10')
+    @sprint = Sprint.new
+  end
+
+  it "creates a new remote_instance for the sprint when it does not exist" do
+    @sprint.stub!(:remote_instance).and_return nil
+    attributes = {:local => @sprint, :project => @project, :remote_id => @remote_milestone.id}
+    @sprint.remote_instances.should_receive(:create!).with attributes
+    @synchronizer.send(:update_local_remote_instance, @sprint, @remote_milestone)
+  end
+
+  it "does not create a new remote_instance for the sprint when it already exists" do
+    @sprint.stub!(:remote_instance).and_return mock('remote_instance')
+    @sprint.remote_instances.should_not_receive :create!
+    @synchronizer.send(:update_local_remote_instance, @sprint, @remote_milestone)
   end
 end
 
@@ -211,23 +259,3 @@ describe Synchronizer, '#local_class' do
     @synchronizer.send(:local_class, sprint).should == Sprint
   end
 end
-
-
-# describe Synchronizer, "sync" do
-#   it "can read" do
-#     lambda{ Synchronizer.sync }.should_not raise_error
-#   end
-#
-#   it "can write" do
-#     lambda{ Synchronizer.sync = 'foo' }.should_not raise_error
-#     Synchronizer.sync.should == 'foo'
-#   end
-# end
-#
-# describe Synchronizer, "with_no_sync" do
-#   it "turns sync off while executing the block" do
-#     Synchronizer.with_no_sync do
-#       Synchronizer.sync?.should == false
-#     end
-#   end
-# end

@@ -17,6 +17,10 @@ class Project < ActiveRecord::Base
                      :order => 'milestones.name DESC, sprint_id DESC, tickets.state, tickets.priority, tickets.remote_id DESC, tickets.parent_id', 
                      :dependent => :destroy
 
+  def remote_id(project_id = nil)
+    self[:remote_id]
+  end
+  
   def synchronizer
     @synchronizer ||= Synchronizer.new self
   end

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081013124942) do
+ActiveRecord::Schema.define(:version => 20081023205708) do
 
   create_table "activities", :force => true do |t|
     t.integer  "ticket_id",  :limit => 11
@@ -64,6 +64,13 @@ ActiveRecord::Schema.define(:version => 20081013124942) do
     t.datetime "synced_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "remote_instances", :force => true do |t|
+    t.integer "project_id"
+    t.integer "local_id"
+    t.string  "local_type"
+    t.integer "remote_id"
   end
 
   create_table "scheduled_days", :force => true do |t|

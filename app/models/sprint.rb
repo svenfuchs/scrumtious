@@ -1,6 +1,19 @@
 class Sprint < Milestone
-  has_many :projects, :through => :plain_tickets, :uniq => true
-  has_many :plain_tickets, :class_name => 'Ticket' # TODO find a better name
+  has_many :projects, :through => :remote_instances
+  has_many :remote_instances, :as => :local
+  
+  def exists_remote?(project_id)
+    !!remote_instance(project_id)
+  end
+  
+  def remote_id(project_id)
+    instance = remote_instance(project_id)
+    instance.id if instance
+  end
+  
+  def remote_instance(project_id)
+    remote_instances.find_by_project_id project_id
+  end
   
   def ticket_groups(sort)
     tickets = self.tickets :order => order(sort)

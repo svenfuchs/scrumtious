@@ -8,6 +8,19 @@ make sprints not belong_to a release?
 make it possible to compose a sprint from multiple projects
 rake task for regularly synch'ing from lighthouse
 
+when ticket.push! happens:
+  if the sprint does not have a remte instance
+    create one and push it
+    push the ticket
+  
+when pull_milestones happens:
+  if the milestone is a sprint
+    if the sprint does not exist locally, create it
+    if there's no remote instance for the sprint, create it
+
+when pull_ticket happens:
+  find the ticket that has the remote_id and is not local
+
 
 
 

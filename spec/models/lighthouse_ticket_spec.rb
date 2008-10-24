@@ -5,13 +5,13 @@ describe Lighthouse::Ticket, ".attributes_from_local" do
   it "creates an instance from a local Ticket instance" do
     ticket = Factory :ticket, :project => Factory(:scrumtious), :sprint => Factory(:sprint_1)
     attributes = { 
-      :id => ticket.remote_id, 
+      # :id => ticket.remote_id, 
       :number => ticket.remote_id, 
       :title => ticket.title, 
       :body => ticket.body,
       :closed => 0,
       :state => 'new',
-      :milestone_id => ticket.sprint.remote_id,
+      :milestone_id => ticket.sprint.remote_id(ticket.project.id),
       :assigned_user_id => ticket.user.remote_id
     }
     Lighthouse::Ticket.attributes_from_local(ticket).should == attributes

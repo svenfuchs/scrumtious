@@ -8,4 +8,8 @@ class User < ActiveRecord::Base
   def first_name
     @first_name ||= name.split(/ /)[0]
   end
+  
+  def remote_id(project_id = nil)
+    self[:remote_id]
+  end
 end

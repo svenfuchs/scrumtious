@@ -57,24 +57,19 @@ class Ticket < ActiveRecord::Base
     alias_method_chain :validate_find_options, :time_range
   end
 
+  def remote_id(project_id = nil)
+    self[:remote_id]
+  end
+  
   def remote_user_id
     user.try(:remote_id)
   end
   
   def remote_milestone_id
     milestone = sprint ? sprint : release
-    milestone.try(:remote_id)
+    milestone.try(:remote_id, project_id)
   end
-  
-  def update_attributes(attributes)
-    sprint_id, sprint = attributes.values_at :sprint_id, :sprint
-    if !sprint_id.blank? or sprint
-      sprint ||= Sprint.find(sprint_id)
-      attributes[:release_id] = sprint ? sprint.release_id : nil
-    end
-    super
-  end
-  
+    
   def lighthouse_url
     "http://artweb-design.lighthouseapp.com/projects/#{project.remote_id}/tickets/#{remote_id}"
   end
@@ -102,6 +97,7 @@ class Ticket < ActiveRecord::Base
   end
   
   def push!
+    project.synchronizer.push! sprint unless sprint.exists_remote?(project_id)
     project.synchronizer.push! self unless local?
   end
   

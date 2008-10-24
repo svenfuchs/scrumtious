@@ -1,11 +1,11 @@
 module Lighthouse  
   class Milestone
     class << self
-      def attributes_from_local(milestone)
-        { :id => milestone.remote_id, 
-          :title => milestone.name, 
-          :body => milestone.body,
-          :due_on => milestone.end_at ? milestone.end_at - 1.day : nil }
+      def attributes_from_local(local)
+        { # :id => local.remote_id, 
+          :title => local.name, 
+          :body => local.body,
+          :due_on => local.end_at ? local.end_at - 1.day : nil }
       end
     end
       

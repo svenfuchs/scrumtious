@@ -28,10 +28,10 @@
 </fieldset>
 
 <fieldset>
-  <% unless @project.sprints.empty? %>
+  <% unless Sprint.all.empty? %>
     <p class="small">
       <%= f.label :sprint_id, 'Sprint' %>
-      <%= f.collection_select :sprint_id, @project.sprints, :id, :name, { :include_blank => true } %>
+      <%= f.collection_select :sprint_id, Sprint.all, :id, :name, { :include_blank => true } %>
     </p>
   <% end %>
   <p class="small">

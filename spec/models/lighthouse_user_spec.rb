@@ -7,7 +7,10 @@ describe Lighthouse::User, '#attributes_for_local' do
   end
   
   it "maps remote attributes to local attributes" do
-    expected = { :remote_id => @remote_user.id, :name => @remote_user.name }
+    expected = { 
+      # :remote_id => @remote_user.id, 
+      :name => @remote_user.name 
+    }
     @remote_user.attributes_for_local.should == expected
   end
 end

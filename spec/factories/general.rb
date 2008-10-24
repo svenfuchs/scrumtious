@@ -14,14 +14,12 @@ Factory.define :release_001, :class => Release do |r|
 end
 
 Factory.define :sprint_1, :class => Sprint do |r|
-  r.remote_id 2
   r.name '#1'
   r.start_at '2008-10-01'
   r.end_at '2008-10-07'
 end
 
 Factory.define :sprint_2, :class => Sprint do |r|
-  r.remote_id 3
   r.name '#2'
   r.start_at '2008-10-08'
   r.end_at '2008-10-14'
