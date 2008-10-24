@@ -27,9 +27,6 @@ h1 {
   line-height: 36px;
   clear: both;
 }  
-#tickets .inline-edit {
-  width: 20px !important;
-}
 #tickets .dragging,
 #tickets .dragging td {
   background-color: #ffffdd !important;
@@ -125,8 +122,13 @@ form:not(#filter) textarea.small {
   border: auto;
   font-size: 11px;
 }
+/*#tickets .inline-edit {
+  width: 100%;
+}*/
 #main .inline-edit {
-  position: absolute !important;
+  position: relative !important;
+	width: 125% !important;
+	margin-right: -20px;
 }
 #main .inline-edit input {
   width: 100% !important;

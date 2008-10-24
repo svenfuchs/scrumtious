@@ -9,7 +9,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :components
   map.resources :categories
   map.resources :synchronizers
-  map.resources :schedule, :path_prefix => "projects/:project_id"
+  map.resources :schedule
   
   map.resources :activities
   map.tickets_update_all "/tickets", :controller => 'tickets', :action => 'update_all', :conditions => {:method => :put}

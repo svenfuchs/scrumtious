@@ -1,16 +1,15 @@
 class ScheduleController < ApplicationController
-  before_filter :set_project
   before_filter :set_schedule, :only => :index
   
   def index
-    @members = @project.members.sort_by &:first_name
+    @members = Project.all.map(&:members).flatten.uniq.sort_by(&:first_name)
   end
   
   def update
-    project_id, user_id, day = params[:project_id], params[:user_id], params[:id]
-    conditions = ["project_id = ? and user_id = ? and date(day) = ?", project_id, user_id, day]
+    user_id, day = params[:user_id], params[:id]
+    conditions = ["user_id = ? and date(day) = ?", user_id, day]
     day = ScheduledDay.find(:first, :conditions => conditions) ||
-          ScheduledDay.new(:project_id => project_id, :user_id => user_id, :day => day)
+          ScheduledDay.new(:user_id => user_id, :day => day)
     day.hours = params[:hours]
     day.save!
     head :ok
@@ -18,10 +17,6 @@ class ScheduleController < ApplicationController
   
   protected
   
-    def set_project
-      @project = Project.find params[:project_id]
-    end
-    
     def set_schedule
       @schedule = Schedule.new first_week_day, first_week_day + 4.weeks
     end

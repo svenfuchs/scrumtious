@@ -14,8 +14,8 @@
     <% if tracking  %>
       <th><%= link_to 'Hours', sorted_sprint_path(:hours) %></th>
       <th>Actual</th>
-      <% @sprint.schedule.used_days.each do |day| %>
-        <th class="day"><%= day.strftime('%d.%m.') %></th>
+      <% @sprint.schedule.used_days.each_with_index do |day, i| %>
+        <th class="day<%= ' collapse' if i < @sprint.schedule.used_days.size - 7 %>"><%= day.strftime('%d.%m.') %></th>
       <% end %>
     <% else %>
       <th>Hours</th>
@@ -29,12 +29,12 @@
     <% if user %>
     <tr class="totals">
       <th><%= user.first_name %></th>
-      <th><%= link_to 'scheduled', schedule_index_path(@project) %></th>
+      <th><%= link_to 'scheduled', schedule_index_path %></th>
       <th></th>
       <td class="scheduled"><%= @sprint.schedule.hours(user) %></td>
-      <% @sprint.schedule.used_days.each do |day| %>
+      <% @sprint.schedule.used_days.each_with_index do |day, i| %>
         <% if day <= Time.zone.today %>
-          <td class="scheduled day"><%= @sprint.schedule.hours(user, day).to_i %></td>
+          <td class="scheduled day<%= ' collapse' if i < @sprint.schedule.used_days.size - 7 %>"><%= @sprint.schedule.hours(user, day).to_i %></td>
         <% end %>
       <% end %>
       <td></td>
@@ -49,8 +49,8 @@
         <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
         <td class="estimated"><%= hours ticket.estimated, :zero => '-' %></td>
         <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period), :zero => '-' %></td>
-        <% @sprint.schedule.used_days.each do |day| %>
-          <td class="day"><%= to_hours ticket.activities.total(day) %></td>
+        <% @sprint.schedule.used_days.each_with_index do |day, i| %>
+          <td class="day<%= ' collapse' if i < @sprint.schedule.used_days.size - 7 %>"><%= to_hours ticket.activities.total(day) %></td>
         <% end %>
         <td class="activity-toggle"><%= toggle_ticket_activity_link(ticket) %></td>
       </tr>
@@ -61,13 +61,13 @@
       </th>
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= to_hours tickets.map{|t| t.activities.total(*@sprint.period) }.sum %></td>
-      <% @sprint.schedule.used_days.each do |day| %>
-        <td class="day"><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
+        <% @sprint.schedule.used_days.each_with_index do |day, i| %>
+        <td class="day<%= ' collapse' if i < @sprint.schedule.used_days.size - 7 %>"><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
       <% end %>
       <td></td>
     </tr>
     <% if user and @ticket_groups.last.first != user %>
-      <tr><td colspan="<%= 5 + @sprint.schedule.used_days.size %>">&nbsp;</td></tr>
+      <tr><td colspan="<%= 5 + [@sprint.schedule.used_days.size, 7].min %>">&nbsp;</td></tr>
     <% end %>
   </tbody>
 <% end %>

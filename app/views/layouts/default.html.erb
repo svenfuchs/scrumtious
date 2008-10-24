@@ -9,6 +9,9 @@
   <%= javascript_include_tag 'jquery-1.2.6.min', 'jquery.jeditable.mini', 'jquery.tablednd_0_5.js', :cache => true %>
   
   <style>
+    #tickets .collapse {
+      display: none;
+    }
     #main th.collapse-days {
       padding: 0px;
     }
@@ -67,11 +70,10 @@
     
     update_scheduled_hours = function(hours, settings) {
       var tokens = this.id.split('-');
-      var project_id = tokens[1];
-      var user_id = tokens[2];
-      var day = tokens.slice(3, 6).join('-');
+      var user_id = tokens[1];
+      var day = tokens.slice(2, 5).join('-');
       var params = { '_method': 'put', 'authenticity_token': authenticity_token, user_id: user_id, hours: hours };
-      $.post("/projects/" + project_id + "/schedule/" + day + ".xml", params);
+      $.post("/schedule/" + day + ".xml", params);
       return hours;
     }
     
@@ -115,7 +117,7 @@
     }
 
     var collapsable_day_cells = Array();
-    var collapse_day_columns = false;
+    var collapse_day_columns = true;
     
     function init_collapse_day_columns() {
       var table = $('#tickets');
@@ -128,8 +130,8 @@
           $('td.day', tr).slice(0, days_count - 7).each(collect_days);
         });
         collapsable_day_cells = $(collapsable_day_cells);
-        
-        toggle_collapse_day_columns();
+      
+        update_collapse_days_link();
       }
     }
     
@@ -139,7 +141,11 @@
       collapsable_day_cells.each(function(i, element) {
         collapse_day_columns ? $(element).hide() : $(element).show();
       });
+      
+      update_collapse_days_link();
+    }
 
+    function update_collapse_days_link() {
       $('th.collapse-days a').remove();      
       if(collapse_day_columns) {
         $('th.collapse-days').append('<a href="#" id="expand-days" class="toggle-days">«</a>');

@@ -46,7 +46,7 @@ describe ReleasesController, "POST #create" do
 
     it_assigns :release, :flash => { :notice => :not_nil }
     it_redirects_to { release_path(@release) }
-    
+
     it "syncs the release to its remote milestone" do
       @release.should_receive(:push!)
       act!
@@ -55,11 +55,11 @@ describe ReleasesController, "POST #create" do
 
   describe "(unsuccessful creation)" do
     act! { post :create, :release => @attributes }
-  
+
     before do
       @release.stub!(:save).and_return(false)
     end
-  
+
     it_assigns :release
     it_renders :template, :new
   end
@@ -93,7 +93,7 @@ describe ReleasesController, "PUT #update" do
 
     it_assigns :release, :flash => { :notice => :not_nil }
     it_redirects_to { release_path(@release) }
-    
+
     it "syncs the release to its remote milestone" do
       @release.should_receive(:push!)
       act!
@@ -125,20 +125,20 @@ describe ReleasesController, "DELETE #destroy" do
   it_redirects_to { project_path(@release.project) }
 end
 
-describe ReleasesController, "#filter" do
-  before :each do
-    controller.params = {:filter => {:state => ['resolved'], :release => ['1'], :sprint => ['1']}}
-  end
-  
-  it "creates a state condition from the request params" do
-    controller.send(:filter).should =~ /state IN \('resolved'\)/
-  end
-  
-  it "creates a release condition from the request params" do
-    controller.send(:filter).should =~ /release_id IN \(1\)/
-  end
-  
-  it "creates a release condition from the request params" do
-    controller.send(:filter).should =~ /sprint_id IN \(1\)/
-  end
-end
+# describe ReleasesController, "#filter" do
+#   before :each do
+#     controller.params = {:filter => {:state => ['resolved'], :release => ['1'], :sprint => ['1']}}
+#   end
+#
+#   it "creates a state condition from the request params" do
+#     controller.send(:filter).should =~ /state IN \('resolved'\)/
+#   end
+#
+#   it "creates a release condition from the request params" do
+#     controller.send(:filter).should =~ /release_id IN \(1\)/
+#   end
+#
+#   it "creates a release condition from the request params" do
+#     controller.send(:filter).should =~ /sprint_id IN \(1\)/
+#   end
+# end

@@ -1,4 +1,6 @@
-make ticket lists filterable
+
+make schedule independent from project
+make team members independent from project
 
 rake task for regularly synch'ing from lighthouse
 

@@ -2,7 +2,6 @@ class Project < ActiveRecord::Base
   has_many :components, :dependent => :destroy, :order => 'name'
   has_many :categories, :dependent => :destroy
   has_many :releases, :dependent => :destroy
-  has_many :scheduled_days
 
   has_many :memberships, :dependent => :destroy
   has_many :members, :through => :memberships, :source => :user
