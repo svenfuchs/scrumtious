@@ -28,7 +28,7 @@ h1 {
   clear: both;
 }  
 #tickets .inline-edit {
-  width: 20px;
+  width: 20px !important;
 }
 #tickets .dragging,
 #tickets .dragging td {
