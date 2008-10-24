@@ -25,6 +25,116 @@ body {
 h1 {
   font-size: 18px;
   line-height: 36px;
+  clear: both;
+}  
+#tickets .inline-edit {
+  width: 20px;
+}
+#tickets .dragging,
+#tickets .dragging td {
+  background-color: #ffffdd !important;
+}
+#tickets .ticket {
+  cursor: move;
+}
+#schedule {
+  margin-top: 1em;
+  width: auto !important;
+}
+#schedule td {
+  text-align: center;
+  width: 50px;
+}
+#schedule .inline-edit {
+  width: 60px;
+}  
+
+#main form:not(#filter) { 
+  position: relative;
+  width: 80%;
+}
+form:not(#filter) fieldset { 
+  padding: 0.5em 0;
+  position: relative;
+  text-align: left; 
+  border: 0px;
+  border-bottom: 1px solid #ddd;
+  width: 99%;
+}
+form:not(#filter) legend { 
+  position: relative;
+  color: #666; 
+  margin-left: 10px;
+  padding-top: 1em;
+}
+form:not(#filter) label { 
+  position: absolute; 
+  width: 12%; 
+  padding-top: 1px;
+  text-align: right; 
+  color: #666; 
+}
+form:not(#filter) input[type=text], 
+form:not(#filter) select, 
+form:not(#filter) textarea {
+  border: 1px solid #ddd;
+  font-size: 1em;
+}
+form:not(#filter) input[type=text], 
+form:not(#filter) textarea {
+  padding: 2px 5px;
+}
+form:not(#filter) select {
+  padding: 2px;
+}
+form:not(#filter) .small input, 
+form:not(#filter) .small select {
+  width: 100px;
+}
+form:not(#filter) .medium input, 
+form:not(#filter) .medium select {
+  width: 200px;
+}
+form:not(#filter) .big label {
+  padding-top: 5px;
+}
+form:not(#filter) .big input {
+  font-size: 1.5em;
+  padding: 3px 5px;
+  width: 84%;
+}
+.buttons input, 
+form:not(#filter) input, 
+form:not(#filter) textarea, 
+form:not(#filter) select { 
+  margin-left: 15%; 
+}
+form:not(#filter) label.check, label.radio { 
+  position: relative; 
+  text-align: left; 
+}  
+form:not(#filter) textarea.small {
+  height: 100px;
+}
+
+#main .inline-select {
+  position: absolute !important;
+}
+#main .inline-select select {
+  margin-left: 0px;
+  border: auto;
+  font-size: 11px;
+}
+#main .inline-edit {
+  position: absolute !important;
+}
+#main .inline-edit input {
+  width: 100% !important;
+  border: 0px;
+  font-size: 13px;
+  margin-left: -8px;
+  padding-top: 1px;
+  padding-left: 7px;
 }
 #flash {
 	z-index: 1;
@@ -104,8 +214,12 @@ tr, td {
 }
 
 #header form {
-	float: right;
-	margin: 9px 10px;
+	position: absolute;
+	top: 9px;
+	right: 10px;
+}
+#header select {
+  margin: 0;
 }
 
 #main #breadcrumbs {

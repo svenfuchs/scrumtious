@@ -1,27 +1,11 @@
-convert hours to minutes
 make ticket lists filterable
 
-make sprints not belong_to a release?
-  » this would mean that a sprint can not be sync'ed up to lighthouse anymore easily
-    it could be "split" up and sync'ed to all projects it contains tickets from
-
-make it possible to compose a sprint from multiple projects
 rake task for regularly synch'ing from lighthouse
 
-when ticket.push! happens:
-  if the sprint does not have a remte instance
-    create one and push it
-    push the ticket
-  
-when pull_milestones happens:
-  if the milestone is a sprint
-    if the sprint does not exist locally, create it
-    if there's no remote instance for the sprint, create it
-
-when pull_ticket happens:
-  find the ticket that has the remote_id and is not local
-
-
+when a remote ticket get's pulled and the ticket is assigned to a sprint
+  » figure out which of the project's releases is currently being worked on and 
+    assign it to the sprint
+change ticket create/edit form to reflect that
 
 
 convert everything to use minutes then use a helper in views: <%= hrs ticket.estimated %>

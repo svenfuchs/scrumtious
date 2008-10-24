@@ -1,5 +1,17 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  def all_projects_members
+    Project.all.map(&:members).flatten.uniq.sort_by(&:name)
+  end
+  
+  def to_hours(minutes, options = {:zero => ''})
+    hours (minutes.to_f / 60).round(1), options
+  end
+  
+  def hours(hours, options = {:zero => ''})
+    hours > 0 ? hours : options[:zero]
+  end
+  
   def release_select_data_json
     jsonify_objects_for_select(@project.releases, :id, :name) if @project
   end

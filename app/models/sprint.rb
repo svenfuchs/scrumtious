@@ -2,6 +2,20 @@ class Sprint < Milestone
   has_many :projects, :through => :remote_instances
   has_many :remote_instances, :as => :local
   
+  class << self
+    # returns an existing sprint with a remote_instance for the project if exists
+    # returns an existing sprint by name if exists and instantiates a new remote_instance
+    # otherwise returns a new sprint with a new remote instance
+    def find_or_initialize_for(project, remote)
+      conditions = ["remote_instances.project_id = ? AND remote_instances.remote_id = ?", project.id, remote.id]
+      find(:first, :include => :remote_instances, :conditions => conditions) || begin
+        returning find_or_initialize_by_name(remote.title) do |sprint|
+          sprint.remote_instances << RemoteInstance.new(:project => project, :remote_id => remote.id)
+        end
+      end
+    end
+  end
+  
   def exists_remote?(project_id)
     !!remote_instance(project_id)
   end

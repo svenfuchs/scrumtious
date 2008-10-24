@@ -1,6 +1,6 @@
 module ActivitiesHelper
   def activities
-    Activity.all(:order => "started_at DESC, updated_at DESC", :limit => 50)
+    Activity.all(:order => "started_at DESC, updated_at DESC", :limit => 1)
   end
   
   def activity_lighthouse_link(activity)
@@ -53,10 +53,5 @@ module ActivitiesHelper
   
   def activity_total_time_in_words(activity)
     distance_of_time_in_words Time.now + activity.total_minutes.minutes, Time.now, false
-  end
-  
-  def to_hours(minutes)
-    hours = (minutes.to_f / 60).round(1)
-    hours > 0 ? hours : ''
   end
 end

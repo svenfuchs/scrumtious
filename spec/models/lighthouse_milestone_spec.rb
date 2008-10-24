@@ -5,8 +5,7 @@ describe Lighthouse::Milestone, ".attributes_from_local" do
   it "maps local attributes to remote attributes" do
     milestone = Factory :release_001
     attributes = { 
-      # :id => milestone.remote_id, 
-      :title => milestone.name, 
+      :title => "Release #{milestone.name}", 
       :body => milestone.body,
       :due_on => Date.parse('2008-11-30')
     }

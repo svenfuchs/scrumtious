@@ -1,6 +1,8 @@
 class ReleasesController < ApplicationController
   before_filter :set_release
   before_filter :set_project
+  before_filter :set_filter, :only => :show
+  before_filter :set_tickets, :only => :show
   
   def show
   end
@@ -50,22 +52,11 @@ class ReleasesController < ApplicationController
       end
     end
     
-    def filter
-      return '' unless filter = params[:filter]
-      sql = []
-      sql << filter_state
-      sql << filter_association(:release)
-      sql << filter_association(:sprint)
-      sql.compact * ' AND '
+    def set_tickets
+      @tickets = @release.tickets.find :all, :conditions => @filter.sql
     end
     
-    def filter_state
-      return nil unless states = params[:filter][:state]
-      'state IN (' + states.map{|state| "'#{state}'"} * ', ' + ')'
-    end
-    
-    def filter_association(type)
-      return nil unless ids = params[:filter][type]
-      "#{type}_id IN (" + ids * ', ' + ')' if ids
+    def set_filter
+      @filter = TicketListFilter.new @project, params[:filter]
     end
 end

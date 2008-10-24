@@ -34,26 +34,32 @@ class Synchronizer
   end
   
   def pull_users!
-    lighthouse.users.each{|u| update_local(u) }
+    lighthouse.users.each do |remote| 
+      local = User.find_or_initialize_by_remote_id(remote.id)
+      update_local local, remote
+    end
   end
 
   def pull_milestones!
-    lighthouse.milestones.each do |m| 
-      local = update_local(m)
+    lighthouse.milestones.each do |remote|
+      klass = remote.title =~ /Release/i ? Release : Sprint
+      local = klass.find_or_initialize_for(@project, remote)
+      update_local local, remote
     end
   end
 
   def pull_tickets!
-    lighthouse.updated_tickets(project.synced_at).each{|t| update_local(t) }
+    lighthouse.updated_tickets(project.synced_at).each do |remote|
+      ticket = Ticket.find_or_initialize_by_remote_id_and_local(remote.id, 0)
+      update_local ticket, remote
+    end
   end
   
   def id; end; def new_record?; true end # make form_for happy
   
   protected
     
-    def update_local(remote)
-      klass = local_class remote
-      local = klass.find_or_initialize_by_remote_id(remote.id)
+    def update_local(local, remote)
       attributes = remote.attributes_for_local
       attributes.update(:project => @project) if local.respond_to?(:project=)
       local.update_attributes! attributes
@@ -63,13 +69,5 @@ class Synchronizer
     def update_local_remote_instance(local, remote)
       return if local.remote_instance(@project.id)
       local.remote_instances.create! :project => @project, :local => local, :remote_id => remote.id
-    end
-    
-    def local_class(object)
-      if object.is_a? Lighthouse::Milestone
-        object.title =~ /Release/i ? Release : Sprint
-      else
-        object.class.name.demodulize.constantize
-      end
     end
 end

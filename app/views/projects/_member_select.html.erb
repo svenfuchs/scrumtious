@@ -1,7 +1,7 @@
-<% if @project and @project.members.any? %>
+<% if (members = all_projects_members).any? %>
   <form action="<%= login_path %>" method="post">
     <%= hidden_field_tag :return_to, request.request_uri %>
     <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-    <%= collection_select :current_user, :id, @project.members, :id, :first_name, {:prompt => 'Current user'}, :onchange => "this.form.submit()" %>
+    <%= collection_select :current_user, :id, members, :id, :first_name, {:prompt => 'Current user'}, :onchange => "this.form.submit()" %>
   </form>
 <% end %>

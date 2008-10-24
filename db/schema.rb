@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081023205708) do
+ActiveRecord::Schema.define(:version => 20081024142257) do
 
   create_table "activities", :force => true do |t|
     t.integer  "ticket_id",  :limit => 11
@@ -77,7 +77,7 @@ ActiveRecord::Schema.define(:version => 20081023205708) do
     t.integer "project_id", :limit => 11
     t.integer "user_id",    :limit => 11
     t.date    "day"
-    t.integer "hours",      :limit => 11
+    t.integer "minutes",    :limit => 11
   end
 
   create_table "ticket_versions", :force => true do |t|
@@ -100,8 +100,8 @@ ActiveRecord::Schema.define(:version => 20081023205708) do
     t.integer  "user_id",      :limit => 11
     t.string   "title"
     t.text     "body"
-    t.float    "estimated"
-    t.float    "actual"
+    t.integer  "estimated"
+    t.integer  "actual"
     t.string   "state"
     t.integer  "closed",       :limit => 11
     t.integer  "local",        :limit => 11

@@ -9,7 +9,7 @@ class Ticket < ActiveRecord::Base
   
   class << self
     def states
-      [:new, :open, :resolved, :hold, :invalid]
+      [:new, :open, :hold, :resolved, :invalid]
     end
   end
 
@@ -72,6 +72,23 @@ class Ticket < ActiveRecord::Base
     
   def lighthouse_url
     "http://artweb-design.lighthouseapp.com/projects/#{project.remote_id}/tickets/#{remote_id}"
+  end
+  
+  def estimated=(estimated)
+    write_attribute :estimated, estimated.to_f * 60
+  end
+  
+  def estimated
+    read_attribute(:estimated).to_f / 60
+  end
+  alias :estimated_before_type_cast :estimated
+  
+  def actual=(actual)
+    write_attribute :actual, actual.to_f * 60
+  end
+  
+  def actual
+    read_attribute(:actual).to_f / 60
   end
   
   def number_and_title

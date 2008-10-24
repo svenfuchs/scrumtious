@@ -9,120 +9,18 @@
   <%= javascript_include_tag 'jquery-1.2.6.min', 'jquery.jeditable.mini', 'jquery.tablednd_0_5.js', :cache => true %>
   
   <style>
-  h1 {
-    clear: both;
-  }
-  
-  #tickets .inline-edit {
-    width: 20px;
-  }
-  #tickets .dragging,
-  #tickets .dragging td {
-    background-color: #ffffdd !important;
-  }
-  #tickets .ticket {
-    cursor: move;
-  }
-  #schedule {
-    margin-top: 1em;
-    width: auto !important;
-  }
-  #schedule td {
-    text-align: center;
-    width: 50px;
-  }
-  #schedule .inline-edit {
-    width: 60px;
-  }  
-  
-  #main form { 
-    position: relative;
-    width: 80%;
-  }
-  #main form fieldset { 
-    padding: 0.5em 0;
-    position: relative;
-    text-align: left; 
-    border: 0px;
-    border-bottom: 1px solid #ddd;
-    width: 99%;
-  }
-  #main fieldset legend { 
-    position: relative;
-    color: #666; 
-    margin-left: 10px;
-    padding-top: 1em;
-  }
-  #main fieldset label { 
-    position: absolute; 
-    width: 12%; 
-    padding-top: 1px;
-    text-align: right; 
-    color: #666; 
-  }
-  #main fieldset input[type=text], 
-  #main fieldset select, 
-  #main fieldset textarea {
-    border: 1px solid #ddd;
-    font-size: 1em;
-  }
-  #main fieldset input[type=text], 
-  #main fieldset textarea {
-    padding: 2px 5px;
-  }
-  #main fieldset select {
-    padding: 2px;
-  }
-  #main fieldset .small input, 
-  #main fieldset .small select {
-    width: 100px;
-  }
-  #main fieldset .medium input, 
-  #main fieldset .medium select {
-    width: 200px;
-  }
-  #main fieldset .big label {
-    padding-top: 5px;
-  }
-  #main fieldset .big input {
-    font-size: 1.5em;
-    padding: 3px 5px;
-    width: 84%;
-  }
-  #main .buttons input, 
-  #main fieldset input, 
-  #main fieldset textarea, 
-  #main fieldset select { 
-    margin-left: 15%; 
-  }
-  #main fieldset label.check, label.radio { 
-    position: relative; 
-    text-align: left; 
-  }  
-  #main fieldset textarea.small {
-    height: 100px;
-  }
-  
-  #main .inline-select {
-    position: absolute !important;
-  }
-  #main .inline-select select {
-    margin-left: 0px;
-    border: auto;
-    font-size: 11px;
-  }
-  #main .inline-edit {
-    position: absolute !important;
-  }
-  #main .inline-edit input {
-    width: 100% !important;
-    border: 0px;
-    font-size: 13px;
-    margin-left: -8px;
-    padding-top: 1px;
-    padding-left: 7px;
-  }
-
+    #main th.collapse-days {
+      padding: 0px;
+    }
+    a.toggle-days {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+      padding: 2px 1px;
+      font-style: normal;
+      font-weight: bold;
+    }
   </style>
 
   <script>
@@ -216,6 +114,42 @@
       return order;
     }
 
+    var collapsable_day_cells = Array();
+    var collapse_day_columns = false;
+    
+    function init_collapse_day_columns() {
+      var table = $('#tickets');
+      var days_count = $('th.day').length;
+      if (days_count > 7) {
+        collect_days = function(i, e){ collapsable_day_cells.unshift(e) }
+        
+        $('#tickets th.day').slice(0, days_count - 7).each(collect_days);
+        $('#tickets tr').each(function(ix, tr) {
+          $('td.day', tr).slice(0, days_count - 7).each(collect_days);
+        });
+        collapsable_day_cells = $(collapsable_day_cells);
+        
+        toggle_collapse_day_columns();
+      }
+    }
+    
+    function toggle_collapse_day_columns() {
+      collapse_day_columns = !collapse_day_columns;      
+      
+      collapsable_day_cells.each(function(i, element) {
+        collapse_day_columns ? $(element).hide() : $(element).show();
+      });
+
+      $('th.collapse-days a').remove();      
+      if(collapse_day_columns) {
+        $('th.collapse-days').append('<a href="#" id="expand-days" class="toggle-days">«</a>');
+      } else {
+        $('th.collapse-days').append('<a href="#" id="collapse-days" class="toggle-days">»</a>');
+      }
+      $('th.collapse-days a').click(toggle_collapse_day_columns);
+    }
+    
+
     $(document).ready(function () {
       $("#flash").animate({opacity: 1.0}, 3000).fadeOut(1000);
       $("#tickets tbody .estimated").editable(update_estimated, { cssclass: "inline-edit" });
@@ -225,6 +159,7 @@
       $("#schedule .scheduled_hours").editable(update_scheduled_hours, { cssclass: 'inline-edit' });
       $("#tickets.project").tableDnD({ onDrop: drop_ticket, onAllowDrop: can_drop_ticket, onDragClass: 'dragging', dragHandle: 'ticket' });
       $("#tickets a").click(function(e){ e.stopPropagation(); });
+      init_collapse_day_columns();
     });
   </script>
 

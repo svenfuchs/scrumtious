@@ -10,5 +10,5 @@
   <%= link_to 'destroy', @release, :confirm => 'Are you sure?', :method => :delete %>
 </div>
 
-<%= render :partial => "tickets/list", :locals => {:tickets => @release.tickets, :tracking => false } %>
+<%= render :partial => "tickets/list", :locals => {:tickets => @tickets, :tracking => false } %>
 

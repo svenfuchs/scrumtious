@@ -10,4 +10,5 @@
   <%= link_to 'destroy', @project, :confirm => 'Are you sure?', :method => :delete %>
 </div>
 
-<%= render :partial => "tickets/list", :locals => {:tickets => @project.tickets, :tracking => false, :headline => 'Project backlog' } %>
+<%= render :partial => 'tickets/filter' %>
+<%= render :partial => "tickets/list", :locals => {:tickets => @tickets, :tracking => false, :headline => 'Project backlog' } %>

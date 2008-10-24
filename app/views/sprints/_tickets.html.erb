@@ -1,4 +1,9 @@
 <table id="tickets">
+  <col></col>
+  <col></col>
+  <col></col>
+  <col></col>
+  <col></col>
 <thead>
   <tr>
     <% unless params[:sort] == 'assigned' %>
@@ -10,12 +15,12 @@
       <th><%= link_to 'Hours', sorted_sprint_path(:hours) %></th>
       <th>Actual</th>
       <% @sprint.schedule.used_days.each do |day| %>
-        <th><%= day.strftime('%d.%m.') %></th>
+        <th class="day"><%= day.strftime('%d.%m.') %></th>
       <% end %>
     <% else %>
       <th>Hours</th>
     <% end %>
-    <th></th>
+    <th class="collapse-days"></th>
   </tr>
 </thead>
 
@@ -29,7 +34,7 @@
       <td class="scheduled"><%= @sprint.schedule.hours(user) %></td>
       <% @sprint.schedule.used_days.each do |day| %>
         <% if day <= Time.zone.today %>
-          <td class="scheduled"><%= @sprint.schedule.hours(user, day).to_i %></td>
+          <td class="scheduled day"><%= @sprint.schedule.hours(user, day).to_i %></td>
         <% end %>
       <% end %>
       <td></td>
@@ -42,10 +47,10 @@
         <% end %>
         <td class="remote-url"><%= link_to "##{ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
         <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
-        <td class="estimated"><%= ticket.estimated.to_i %></td>
-        <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period) %></td>
+        <td class="estimated"><%= hours ticket.estimated, :zero => '-' %></td>
+        <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period), :zero => '-' %></td>
         <% @sprint.schedule.used_days.each do |day| %>
-          <td><%= to_hours ticket.activities.total(day) %></td>
+          <td class="day"><%= to_hours ticket.activities.total(day) %></td>
         <% end %>
         <td class="activity-toggle"><%= toggle_ticket_activity_link(ticket) %></td>
       </tr>
@@ -57,7 +62,7 @@
       <td class="estimated"><%= tickets.map{|t| t.estimated.to_f }.sum %></td>
       <td class="actual"><%= to_hours tickets.map{|t| t.activities.total(*@sprint.period) }.sum %></td>
       <% @sprint.schedule.used_days.each do |day| %>
-        <td><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
+        <td class="day"><%= to_hours tickets.map{|t| t.activities.total(day) }.sum %></td>
       <% end %>
       <td></td>
     </tr>

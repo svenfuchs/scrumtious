@@ -15,7 +15,7 @@
 <h1>Editing ticket</h1>
 
 
-<% form_for(@ticket) do |f| %>
+<% form_for(@ticket, :class => :default) do |f| %>
   <%= hidden_field_tag :return_to, params[:return_to] %>
   <%= render :partial => 'form', :locals => {:f => f} %>
   <p class="buttons">

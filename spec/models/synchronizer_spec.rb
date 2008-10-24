@@ -159,14 +159,14 @@ describe Synchronizer, '#pull_milestones!' do
     @synchronizer = @project.synchronizer
     @remote_milestone = Lighthouse::Milestone.new :id => 1, :title => 'Sprint #1', :due_on => Time.parse('2008-10-10')
     @sprint = Sprint.new
-    Sprint.stub!(:find_or_initialize_by_remote_id).and_return @sprint
+    Sprint.stub!(:find_or_initialize_for).and_return @sprint
 
     @synchronizer.send(:lighthouse).stub!(:milestones).and_return [@remote_milestone]
     @synchronizer.stub!(:update_local_remote_instance)
   end
 
   it "updates local milestones from remote milestones" do
-    @synchronizer.should_receive(:update_local).with(@remote_milestone).and_return @sprint
+    @synchronizer.should_receive(:update_local).with(@sprint, @remote_milestone)
     @synchronizer.pull_milestones!
   end
 
@@ -183,10 +183,12 @@ describe Synchronizer, '#pull_users!' do
     @synchronizer = Factory(:scrumtious).synchronizer
     @remote_user = Lighthouse::User.new :id => 1, :name => 'John Doe'
     @synchronizer.send(:lighthouse).stub!(:users).and_return [@remote_user]
+    @user = mock('user')
+    User.stub!(:find_or_initialize_by_remote_id).and_return @user
   end
 
   it "updates local users from remote users" do
-    @synchronizer.should_receive(:update_local).with @remote_user
+    @synchronizer.should_receive(:update_local).with @user, @remote_user
     @synchronizer.pull_users!
   end
 end
@@ -198,19 +200,12 @@ describe Synchronizer, "#update_local (given a User)" do
 
     @local_attributes = {:remote_id => 1, :name => 'John Doe'}
     @remote_user.stub!(:attributes_for_local).and_return @local_attributes
-
-    @user = User.new
-    User.stub!(:find_or_initialize_by_remote_id).and_return @user
-  end
-
-  it "fetches a user instance with :find_or_initialize" do
-    User.should_receive(:find_or_initialize_by_remote_id).with(@remote_user.id).and_return @user
-    @synchronizer.send(:update_local, @remote_user)
+    @user = mock('user')
   end
 
   it "updates the user with mapped attributes from remote user" do
     @user.should_receive(:update_attributes!).with @local_attributes
-    @synchronizer.send(:update_local, @remote_user)
+    @synchronizer.send(:update_local, @user, @remote_user)
   end
 end
 
@@ -233,29 +228,5 @@ describe Synchronizer, "#update_local_remote_instance (given a Sprint)" do
     @sprint.stub!(:remote_instance).and_return mock('remote_instance')
     @sprint.remote_instances.should_not_receive :create!
     @synchronizer.send(:update_local_remote_instance, @sprint, @remote_milestone)
-  end
-end
-
-describe Synchronizer, '#local_class' do
-  before :each do
-    @synchronizer = Factory(:scrumtious).synchronizer
-  end
-
-  it "returns User when given Lighthouse::User" do
-    @synchronizer.send(:local_class, Lighthouse::User.new).should == User
-  end
-
-  it "returns Project when given Lighthouse::Project" do
-    @synchronizer.send(:local_class, Lighthouse::Project.new).should == Project
-  end
-
-  it "returns Release when given Lighthouse::Milestone with a name starting with 'Release'" do
-    release = Lighthouse::Milestone.new(:title => 'Release 0.0.1')
-    @synchronizer.send(:local_class, release).should == Release
-  end
-
-  it "returns Sprint when given Lighthouse::Milestone with a name not starting with 'Release'" do
-    sprint = Lighthouse::Milestone.new(:title => 'Sprint #1')
-    @synchronizer.send(:local_class, sprint).should == Sprint
   end
 end

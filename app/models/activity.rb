@@ -46,7 +46,7 @@ class Activity < ActiveRecord::Base
   end
   
   def hours=(hours)
-    self.minutes = hours.to_f * 60
+    self.minutes = hours * 60
   end
   
   def hours
