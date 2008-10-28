@@ -1,6 +1,9 @@
 
-make schedule independent from project
-make team members independent from project
+
+
+
+
+Team.has_many :members # independent from projects
 
 rake task for regularly synch'ing from lighthouse
 
@@ -10,38 +13,5 @@ when a remote ticket get's pulled and the ticket is assigned to a sprint
 change ticket create/edit form to reflect that
 
 
-convert everything to use minutes then use a helper in views: <%= hrs ticket.estimated %>
-
-spec everything about syncs
-
-Ticket#lighthouse_url » helper
-Ticket#number_and_title » helper
-
-
-
 http://github.com/hpoydar/lighthouse-pm
 
-rename category to bin (?)
-make modules nested_sets (?)
-
-ScheduledDay
-  belongs_to user
-  date
-  hours
-
-User
-
-
-
-# Browse tickets
-
-List tickets directly from Lighthouse. 
-Be able to assign tickets to a sprint.
-
-
-# pull from lighthouse: 
-#  fetch all tickets, save new tickets locally, mark missing tickets deleted locally
-#
-# push to lighthouse: 
-#  merge: fetch all tickets from lighthouse, check if any ticket has been changed
-#  since last pull, complain about conflicts if any

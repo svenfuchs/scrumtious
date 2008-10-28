@@ -4,7 +4,7 @@ module ActivitiesHelper
   end
   
   def activity_lighthouse_link(activity)
-    link_to "##{h(activity.ticket.remote_id)}", activity.ticket.lighthouse_url
+    link_to "##{h(activity.ticket.remote_id)}", lighthouse_url(activity.ticket)
   end
   
   def activity_ticket_link(activity)

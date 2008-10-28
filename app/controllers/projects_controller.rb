@@ -4,7 +4,8 @@ class ProjectsController < ApplicationController
   before_filter :set_tickets, :only => :show
 
   def index
-    @projects = Project.find(:all)
+    @projects = Project.all
+    @sprints = Sprint.all :order => "name DESC"
   end
 
   def show

@@ -45,7 +45,7 @@
         <% unless params[:sort] == 'assigned' %>
           <td><%= ticket.user ? h(ticket.user.first_name) : '-' %></td>
         <% end %>
-        <td class="remote-url"><%= link_to "##{ticket.remote_id}", ticket.lighthouse_url if ticket.remote_id %></td>
+        <td class="remote-url"><%= link_to "##{ticket.remote_id}", lighthouse_url(ticket) if ticket.remote_id %></td>
         <td class="ticket"><%= link_to ticket.title, edit_ticket_path(ticket, :return_to => request.url) %></td>
         <td class="estimated"><%= hours ticket.estimated, :zero => '-' %></td>
         <td class="actual"><%= to_hours ticket.activities.total(*@sprint.period), :zero => '-' %></td>

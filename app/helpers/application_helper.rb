@@ -1,5 +1,9 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  def lighthouse_url(ticket)
+    "http://artweb-design.lighthouseapp.com/projects/#{ticket.project.remote_id}/tickets/#{ticket.remote_id}"
+  end
+  
   def all_projects_members
     Project.all.map(&:members).flatten.uniq.sort_by(&:name)
   end

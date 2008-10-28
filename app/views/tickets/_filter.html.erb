@@ -35,11 +35,9 @@
 
   <fieldset>
     <h5>State</h5>
-    <!-- <%= check_box_tag "filter[state][]", 'any', @filter.active?(:state, 'any'), :id => "filter_state_any" %>
-        <label for="filter_state_any>">any</label> -->
     <% Ticket.states.each do |state| %>
       <%= check_box_tag 'filter[state][]', state, @filter.active?(:state, state), :id => "filter_state_#{state}" %>
-      <label for="filter_state_#{state}"><%= state %></label>
+      <label for="filter_state_<%= state %>"><%= state %></label>
     <% end %>
   </fieldset>
   
@@ -51,8 +49,6 @@
       <%= check_box_tag "filter[release][]", release.id, @filter.active?(:release, release.id), :id => "filter_release_#{release.id}" %>
       <label for="filter_release_<%= release.id %>"><%= release.name %></label>
     <% end %>
-    <!-- <%= check_box_tag "filter[release][]", 'none', @filter.active?(:release, 'none'), :id => "filter_release_none" %>
-    <label for="filter_release_none>">none</label> -->
   </fieldset>
   
   <fieldset>  
@@ -63,8 +59,5 @@
       <%= check_box_tag "filter[sprint][]", sprint.id, @filter.active?(:sprint, sprint.id), :id => "filter_sprint_#{sprint.id}" %>
       <label for="filter_sprint_<%= sprint.id %>"><%= sprint.name %></label>
     <% end %>
-    <!-- <%= check_box_tag "filter[sprint][]", 'none', @filter.active?(:sprint, 'none'), :id => "filter_sprint_none" %>
-    <label for="filter_sprint_none>">none</label> -->
   </fieldset>
-
 </form>

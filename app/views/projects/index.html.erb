@@ -3,11 +3,24 @@
 <p><%= link_to 'new project', new_project_path %></p>
 
 <ul>
-<% for project in @projects %>
+<% @projects.each do |project| %>
   <li><%= link_to h(project.name), project %></li>
 <% end %>
 </ul>
 
+
+<h1>Sprints</h1>
+
 <p>
   <%= link_to 'new sprint', new_sprint_path %>
 </p>
+
+<ul>
+<% @sprints.each do |sprint| %>
+  <li><%= link_to h(sprint.name), sprint %></li>
+<% end %>
+</ul>
+
+<h1>Team</h1>
+
+<%= link_to 'Schedule', schedule_index_path %>

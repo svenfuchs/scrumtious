@@ -69,10 +69,6 @@ class Ticket < ActiveRecord::Base
     milestone = sprint ? sprint : release
     milestone.try(:remote_id, project_id)
   end
-    
-  def lighthouse_url
-    "http://artweb-design.lighthouseapp.com/projects/#{project.remote_id}/tickets/#{remote_id}"
-  end
   
   def estimated=(estimated)
     write_attribute :estimated, estimated.to_f * 60
@@ -114,7 +110,7 @@ class Ticket < ActiveRecord::Base
   end
   
   def push!
-    project.synchronizer.push! sprint unless sprint.exists_remote?(project_id)
+    project.synchronizer.push! sprint if sprint and sprint.exists_remote?(project_id)
     project.synchronizer.push! self unless local?
   end
   
