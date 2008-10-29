@@ -22,7 +22,7 @@ class Sprint < Milestone
   
   def remote_id(project_id)
     instance = remote_instance(project_id)
-    instance.id if instance
+    instance.remote_id if instance
   end
   
   def remote_instance(project_id)
