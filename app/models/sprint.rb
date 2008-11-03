@@ -36,8 +36,8 @@ class Sprint < Milestone
 
   def tickets(options = {})
     options.reverse_merge! :conditions => {"#{Ticket.versioned_table_name}.sprint_id" => id},
-                           :include => [:versions, :user, :activities],
-                           :to => end_at
+                           :include => [:versions, :user, :activities] #,
+                           # :to => end_at
     @tickets ||= Ticket.all options
   end
 
